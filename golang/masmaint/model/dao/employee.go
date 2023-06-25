@@ -9,23 +9,14 @@ import (
 )
 
 
-type EmployeeDao interface {
-	Insert(e *entity.Employee) error
-	Select(id int) (entity.Employee, error)
-	Update(e *entity.Employee) error
-	Delete(id int) error
-	SelectAll() ([]entity.Employee, error)
-}
-
-
-type employeeDao struct {
+type EmployeeDao struct {
 	db *sql.DB
 }
 
 
 func NewEmployeeDao() EmployeeDao {
 	db := db.GetDB()
-	return &employeeDao{db}
+	return &EmployeeDao{db}
 }
 
 

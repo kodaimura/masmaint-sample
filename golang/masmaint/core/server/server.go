@@ -4,8 +4,8 @@ import (
 	"github.com/gin-gonic/gin"
 
 	"masmaint/config"
-	"masmaint/internal/core/logger"
-	"masmaint/internal/controller"
+	"masmaint/core/logger"
+	"masmaint/controller"
 )
 
 func Run() {

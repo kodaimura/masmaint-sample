@@ -1,7 +1,7 @@
 package main
  
 import (
-	"masmaint/internal/core/server"
+	"masmaint/core/server"
 )
  
 func main() {

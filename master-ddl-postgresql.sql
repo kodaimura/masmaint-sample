@@ -5,7 +5,7 @@ create function set_update_time() returns trigger AS '
     END;
 ' language 'plpgsql';
 
-CREATE TABLE employees (
+CREATE TABLE employee (
   id INTEGER PRIMARY KEY,
   first_name TEXT NOT NULL,
   last_name TEXT,
@@ -18,7 +18,7 @@ CREATE TABLE employees (
   salary INTEGER
 );
 
-CREATE TABLE departments (
+CREATE TABLE department (
   id INTEGER PRIMARY KEY,
   name TEXT NOT NULL UNIQUE,
   description TEXT,
@@ -29,5 +29,5 @@ CREATE TABLE departments (
   updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
-create trigger trg_departments_upd AFTER UPDATE ON departments FOR EACH ROW
+create trigger trg_department_upd AFTER UPDATE ON department FOR EACH ROW
   execute procedure set_update_time();

@@ -28,7 +28,7 @@ func NewEmployeeService() *EmployeeService {
 }
 
 
-func (serv *EmployeeService) CreateEmployee(e *dto.EmployeeDto) error {
+func (serv *EmployeeService) CreateEmployee(e *dto.EmployeeDto) ([]entity.Employee, error) {
 	var employee entity.Employee
 	employee.FirstName = e.FirstName
 	employee.LastName = e.LastName
@@ -46,11 +46,11 @@ func (serv *EmployeeService) CreateEmployee(e *dto.EmployeeDto) error {
 		logger.LogError(err.Error())
 	}
 
-	return err
+	return serv.GetEmployees()
 }
 
 
-func (serv *EmployeeService) UpdateEmployee(e *dto.EmployeeDto) error {
+func (serv *EmployeeService) UpdateEmployee(e *dto.EmployeeDto) (entity.Employee, error) {
 	var employee entity.Employee
 	employee.Id = e.Id
 	employee.FirstName = e.FirstName
@@ -69,11 +69,11 @@ func (serv *EmployeeService) UpdateEmployee(e *dto.EmployeeDto) error {
 		logger.LogError(err.Error())
 	}
 
-	return err
+	return serv.GetEmployee(e.Id)
 }
 
 
-func (serv *userService) DeleteEmployee(id int) err {
+func (serv *userService) DeleteEmployee(id int) error {
 	err := serv.eDao.Delete(id)
 
 	if err != nil {
@@ -85,7 +85,18 @@ func (serv *userService) DeleteEmployee(id int) err {
 
 
 func (serv *userService) GetEmployees() ([]entity.Employee, error) {
-	employee, err := serv.eDao.SelectAll()
+	employees, err := serv.eDao.SelectAll()
+
+	if err != nil {
+		logger.LogError(err.Error())
+	}
+
+	return employees, err
+}
+
+
+func (serv *userService) GetEmployee(id int) (entity.Employee, error) {
+	employee, err := serv.eDao.Select(id)
 
 	if err != nil {
 		logger.LogError(err.Error())

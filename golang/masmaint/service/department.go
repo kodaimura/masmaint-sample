@@ -28,7 +28,7 @@ func NewDepartmentService() *DepartmentService {
 }
 
 
-func (serv *DepartmentService) CreateDepartment(d *dto.DepartmentDto) error {
+func (serv *DepartmentService) CreateDepartment(d *dto.DepartmentDto) ([]entity.Department, error) {
 	var department entity.Department
 	department.Name = d.Name
 	department.Description = d.Description
@@ -42,11 +42,11 @@ func (serv *DepartmentService) CreateDepartment(d *dto.DepartmentDto) error {
 		logger.LogError(err.Error())
 	}
 
-	return err
+	return serv.GetDepartments()
 }
 
 
-func (serv *DepartmentService) UpdateDepartment(d *dto.DepartmentDto) error {
+func (serv *DepartmentService) UpdateDepartment(d *dto.DepartmentDto) (entity.Department, error) {
 	var department entity.Department
 	department.Id = d.Id
 	department.Name = d.Name
@@ -61,11 +61,11 @@ func (serv *DepartmentService) UpdateDepartment(d *dto.DepartmentDto) error {
 		logger.LogError(err.Error())
 	}
 
-	return err
+	return serv.GetDepartment(d.Id)
 }
 
 
-func (serv *DepartmentService) DeleteDepartment(id int) err {
+func (serv *DepartmentService) DeleteDepartment(id int) error {
 	err := serv.dDao.Delete(id)
 
 	if err != nil {
@@ -84,5 +84,16 @@ func (serv *DepartmentService) GetDepartments() ([]entity.Department, error) {
 	}
 
 	return departments, err
+}
+
+
+func (serv *DepartmentService) GetDepartment(id int) (entity.Department, error) {
+	department, err := serv.dDao.Select(id)
+
+	if err != nil {
+		logger.LogError(err.Error())
+	}
+
+	return department, err
 }
 

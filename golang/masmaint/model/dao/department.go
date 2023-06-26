@@ -1,6 +1,5 @@
 package dao
 
-
 import (
 	"database/sql"
 
@@ -9,27 +8,18 @@ import (
 )
 
 
-type DepartmentDao interface {
-	Insert(d *entity.Department) error
-	Select(id int) (entity.Department, error)
-	Update(d *entity.Department) error
-	Delete(id int) error
-	SelectAll() ([]entity.Department, error)
-}
-
-
-type departmentDao struct {
+type DepartmentDao struct {
 	db *sql.DB
 }
 
 
-func NewDepartmentDao() DepartmentDao {
+func NewDepartmentDao() *DepartmentDao {
 	db := db.GetDB()
-	return &departmentDao{db}
+	return &DepartmentDao{db}
 }
 
 
-func (rep *departmentDao) Insert(d *entity.Department) error {
+func (rep *DepartmentDao) Insert(d *entity.Department) error {
 	_, err := rep.db.Exec(
 		`INSERT INTO department (
 			name,
@@ -49,38 +39,7 @@ func (rep *departmentDao) Insert(d *entity.Department) error {
 }
 
 
-func (rep *departmentDao) Select(id int) (entity.Department, error) {
-	var ret entity.Department
-
-	err := rep.db.QueryRow(
-		`SELECT
-			id,
-			name,
-			description,
-			manager_id,
-			location,
-			budget,
-			create_at,
-			update_at
-		 FROM department
-		 WHERE id = $1`,
-		id,
-	).Scan(
-		&ret.Id,
-		&ret.Name,
-		&ret.Description,
-		&ret.ManagerId,
-		&ret.Location,
-		&ret.Budget,
-		&ret.CreateAt,
-		&ret.UpdateAt,
-	)
-
-	return ret, err
-}
-
-
-func (rep *departmentDao) Update(d *entity.Department) error {
+func (rep *DepartmentDao) Update(d *entity.Department) error {
 	_, err := rep.db.Exec(
 		`UPDATE department
 		 SET
@@ -102,18 +61,18 @@ func (rep *departmentDao) Update(d *entity.Department) error {
 }
 
 
-func (rep *departmentDao) Delete(id int) error {
+func (rep *DepartmentDao) Delete(d *entity.Department) error {
 	_, err := rep.db.Exec(
 		`DELETE FROM department
 		 WHERE id = $1`,
-		id,
+		d.Id,
 	)
 
 	return err
 }
 
 
-func (rep *departmentDao) SelectAll() ([]entity.Department, error) {
+func (rep *DepartmentDao) SelectAll() ([]entity.Department, error) {
 	var ret []entity.Department
 
 	rows, err := rep.db.Query(
@@ -150,6 +109,37 @@ func (rep *departmentDao) SelectAll() ([]entity.Department, error) {
 		}
 		ret = append(ret, d)
 	}
+
+	return ret, err
+}
+
+
+func (rep *DepartmentDao) Select(id int) (entity.Department, error) {
+	var ret entity.Department
+
+	err := rep.db.QueryRow(
+		`SELECT
+			id,
+			name,
+			description,
+			manager_id,
+			location,
+			budget,
+			create_at,
+			update_at
+		 FROM department
+		 WHERE id = $1`,
+		id,
+	).Scan(
+		&ret.Id,
+		&ret.Name,
+		&ret.Description,
+		&ret.ManagerId,
+		&ret.Location,
+		&ret.Budget,
+		&ret.CreateAt,
+		&ret.UpdateAt,
+	)
 
 	return ret, err
 }

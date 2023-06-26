@@ -14,13 +14,13 @@ type EmployeeDao struct {
 }
 
 
-func NewEmployeeDao() EmployeeDao {
+func NewEmployeeDao() *EmployeeDao {
 	db := db.GetDB()
 	return &EmployeeDao{db}
 }
 
 
-func (rep *employeeDao) Insert(e *entity.Employee) error {
+func (rep *EmployeeDao) Insert(e *entity.Employee) error {
 	_, err := rep.db.Exec(
 		`INSERT INTO employee (
 			first_name,
@@ -48,7 +48,48 @@ func (rep *employeeDao) Insert(e *entity.Employee) error {
 }
 
 
-func (rep *employeeDao) Select(id int) (entity.Employee, error) {
+func (rep *EmployeeDao) Update(e *entity.Employee) error {
+	_, err := rep.db.Exec(
+		`UPDATE employee
+		 SET
+			first_name = $1,
+			last_name = $2,
+			email = $3,
+			phone_number = $4,
+			address = $5,
+			hire_date = $6,
+			job_title = $7,
+			department_id = $8,
+			salary = $9
+		 WHERE id = $10`,
+		e.FirstName,
+		e.LastName,
+		e.Email,
+		e.PhoneNumber,
+		e.Address,
+		e.HireDate,
+		e.JobTitle,
+		e.DepartmentId,
+		e.Salary,
+		e.Id,
+	)
+
+	return err
+}
+
+
+func (rep *EmployeeDao) Delete(e *entity.Employee) error {
+	_, err := rep.db.Exec(
+		`DELETE FROM employee
+		 WHERE id = $1`,
+		e.Id,
+	)
+
+	return err
+}
+
+
+func (rep *EmployeeDao) Select(id int) (entity.Employee, error) {
 	var ret entity.Employee
 
 	err := rep.db.QueryRow(
@@ -83,48 +124,7 @@ func (rep *employeeDao) Select(id int) (entity.Employee, error) {
 }
 
 
-func (rep *employeeDao) Update(e *entity.Employee) error {
-	_, err := rep.db.Exec(
-		`UPDATE employee
-		 SET
-			first_name = $1,
-			last_name = $2,
-			email = $3,
-			phone_number = $4,
-			address = $5,
-			hire_date = $6,
-			job_title = $7,
-			department_id = $8,
-			salary = $9
-		 WHERE id = $10`,
-		e.FirstName,
-		e.LastName,
-		e.Email,
-		e.PhoneNumber,
-		e.Address,
-		e.HireDate,
-		e.JobTitle,
-		e.DepartmentId,
-		e.Salary,
-		e.Id,
-	)
-
-	return err
-}
-
-
-func (rep *employeeDao) Delete(id int) error {
-	_, err := rep.db.Exec(
-		`DELETE FROM employee
-		 WHERE id = $1`,
-		id,
-	)
-
-	return err
-}
-
-
-func (rep *employeeDao) SelectAll() ([]entity.Employee, error) {
+func (rep *EmployeeDao) SelectAll() ([]entity.Employee, error) {
 	var ret []entity.Employee
 
 	rows, err := rep.db.Query(
@@ -158,7 +158,7 @@ func (rep *employeeDao) SelectAll() ([]entity.Employee, error) {
 			&e.HireDate,
 			&e.JobTitle,
 			&e.DepartmentId,
-			&e.Salary
+			&e.Salary,
 		)
 		if err != nil {
 			break

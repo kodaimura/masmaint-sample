@@ -9,16 +9,15 @@ import (
 
 
 type DepartmentDao interface {
-	Insert(e *entity.Department) error
-	Select(id int) (entity.Department, error)
-	Update(e *entity.Department) error
-	Delete(id int) error
+	Insert(d *entity.Department) error
+	Update(d *entity.Department) error
+	Delete(d *entity.Department) error
 	SelectAll() ([]entity.Department, error)
+	Select(id int) (entity.Department, error)
 }
 
-
 type DepartmentService struct {
-	dDao dao.DepartmentDao
+	dDao *dao.DepartmentDao
 }
 
 
@@ -28,45 +27,15 @@ func NewDepartmentService() *DepartmentService {
 }
 
 
-func (serv *DepartmentService) CreateDepartment(d *dto.DepartmentDto) ([]entity.Department, error) {
-	var department entity.Department
-	department.Name = d.Name
-	department.Description = d.Description
-	department.ManagerId = d.ManagerId
-	department.Location = d.Location
-	department.Budget = d.Budget
+func (serv *DepartmentService) Create(dDto *dto.DepartmentDto) error {
+	var d entity.Department
+	d.Name = dDto.Name
+	d.Description = dDto.Description
+	d.ManagerId = dDto.ManagerId
+	d.Location = dDto.Location
+	d.Budget = dDto.Budget
 
-	err = serv.dDao.Insert(&department)
-
-	if err != nil {
-		logger.LogError(err.Error())
-	}
-
-	return serv.GetDepartments()
-}
-
-
-func (serv *DepartmentService) UpdateDepartment(d *dto.DepartmentDto) (entity.Department, error) {
-	var department entity.Department
-	department.Id = d.Id
-	department.Name = d.Name
-	department.Description = d.Description
-	department.ManagerId = d.ManagerId
-	department.Location = d.Location
-	department.Budget = d.Budget
-
-	err := serv.dDao.Update(&department)
-
-	if err != nil {
-		logger.LogError(err.Error())
-	}
-
-	return serv.GetDepartment(d.Id)
-}
-
-
-func (serv *DepartmentService) DeleteDepartment(id int) error {
-	err := serv.dDao.Delete(id)
+	err := serv.dDao.Insert(&d)
 
 	if err != nil {
 		logger.LogError(err.Error())
@@ -76,24 +45,57 @@ func (serv *DepartmentService) DeleteDepartment(id int) error {
 }
 
 
-func (serv *DepartmentService) GetDepartments() ([]entity.Department, error) {
-	departments, err := serv.dDao.SelectAll()
+func (serv *DepartmentService) Update(dDto *dto.DepartmentDto) error {
+	var d entity.Department
+	d.Id = dDto.Id
+	d.Name = dDto.Name
+	d.Description = dDto.Description
+	d.ManagerId = dDto.ManagerId
+	d.Location = dDto.Location
+	d.Budget = dDto.Budget
+
+	err := serv.dDao.Update(&d)
 
 	if err != nil {
 		logger.LogError(err.Error())
 	}
 
-	return departments, err
+	return err
 }
 
 
-func (serv *DepartmentService) GetDepartment(id int) (entity.Department, error) {
-	department, err := serv.dDao.Select(id)
+func (serv *DepartmentService) Delete(dDto *dto.DepartmentDto) error {
+	var d entity.Department
+	d.Id = dDto.Id
+
+	err := serv.dDao.Delete(&d)
 
 	if err != nil {
 		logger.LogError(err.Error())
 	}
 
-	return department, err
+	return err
+}
+
+
+func (serv *DepartmentService) GetAll() ([]entity.Department, error) {
+	ds, err := serv.dDao.SelectAll()
+
+	if err != nil {
+		logger.LogError(err.Error())
+	}
+
+	return ds, err
+}
+
+
+func (serv *DepartmentService) GetOne(id int) (entity.Department, error) {
+	d, err := serv.dDao.Select(id)
+
+	if err != nil {
+		logger.LogError(err.Error())
+	}
+
+	return d, err
 }
 

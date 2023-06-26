@@ -4,3 +4,15 @@ footer{
     position: absolute;
     bottom: 0;
 }
+
+table input{
+    border: none;
+}
+
+table input[type="text"]:focus {
+    outline: 0;
+}
+
+.changed {
+    background-color: #f26651;
+}

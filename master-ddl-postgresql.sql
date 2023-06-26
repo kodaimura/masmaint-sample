@@ -6,7 +6,7 @@ create function set_update_time() returns trigger AS '
 ' language 'plpgsql';
 
 CREATE TABLE employee (
-  id INTEGER PRIMARY KEY,
+  id SERIAL PRIMARY KEY,
   first_name TEXT NOT NULL,
   last_name TEXT,
   email TEXT,
@@ -19,7 +19,7 @@ CREATE TABLE employee (
 );
 
 CREATE TABLE department (
-  id INTEGER PRIMARY KEY,
+  id SERIAL PRIMARY KEY,
   name TEXT NOT NULL UNIQUE,
   description TEXT,
   manager_id INTEGER,

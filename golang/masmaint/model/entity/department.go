@@ -8,6 +8,6 @@ type Department struct {
 	ManagerId int `db:"manager_id" json:"manager_id"`
 	Location string `db:"location" json:"location"`
 	Budget float32 `db:"budget" json:"budget"`
-	CreateAt string `db:"create_at" json:"create_at"`
-	UpdateAt string `db:"update_at" json:"update_at"`
+	CreatedAt string `db:"created_at" json:"created_at"`
+	UpdatedAt string `db:"updated_at" json:"updated_at"`
 }

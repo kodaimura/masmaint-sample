@@ -83,8 +83,8 @@ func (rep *DepartmentDao) SelectAll() ([]entity.Department, error) {
 			manager_id,
 			location,
 			budget,
-			create_at,
-			update_at
+			created_at,
+			updated_at
 		 FROM department`,
 	)
 
@@ -101,8 +101,8 @@ func (rep *DepartmentDao) SelectAll() ([]entity.Department, error) {
 			&d.ManagerId,
 			&d.Location,
 			&d.Budget,
-			&d.CreateAt,
-			&d.UpdateAt,
+			&d.CreatedAt,
+			&d.UpdatedAt,
 		)
 		if err != nil {
 			break
@@ -125,8 +125,8 @@ func (rep *DepartmentDao) Select(id int) (entity.Department, error) {
 			manager_id,
 			location,
 			budget,
-			create_at,
-			update_at
+			created_at,
+			updated_at
 		 FROM department
 		 WHERE id = $1`,
 		id,
@@ -137,8 +137,8 @@ func (rep *DepartmentDao) Select(id int) (entity.Department, error) {
 		&ret.ManagerId,
 		&ret.Location,
 		&ret.Budget,
-		&ret.CreateAt,
-		&ret.UpdateAt,
+		&ret.CreatedAt,
+		&ret.UpdatedAt,
 	)
 
 	return ret, err

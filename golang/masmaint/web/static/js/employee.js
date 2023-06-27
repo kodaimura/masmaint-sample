@@ -21,7 +21,7 @@ const setData = async (data) => {
 const renderTbody = (data) => {
 	let tbody= '';
 	for (const elem of data) {
-		tbody += `<tr><td>${elem.id}</td>`
+		tbody += `<tr><td><input type="text" value=${elem.id} readonly></td>`
 		+ `<td><input type="text" name="first_name" value=${elem.first_name}><input type="hidden" name="first_name_bk" value=${elem.first_name}></td>`
 		+ `<td><input type="text" name="last_name" value=${elem.last_name}><input type="hidden" name="last_name_bk" value=${elem.last_name}></td>`
 		+ `<td><input type="text" name="email" value=${elem.email}><input type="hidden" name="email_bk" value=${elem.email}></td>`

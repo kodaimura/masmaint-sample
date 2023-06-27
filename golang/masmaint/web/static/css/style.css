@@ -13,6 +13,13 @@ table input[type="text"]:focus {
     outline: 0;
 }
 
+table td {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 130px;
+}
+
 .changed {
     background-color: #f26651;
 }

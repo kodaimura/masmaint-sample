@@ -8,6 +8,6 @@ type DepartmentDto struct {
 	ManagerId int `json:"manager_id"`
 	Location string `json:"location"`
 	Budget float32 `json:"budget"`
-	CreateAt string `json:"create_at"`
-	UpdateAt string `json:"update_at"`
+	CreatedAt string `json:"created_at"`
+	UpdatedAt string `json:"updated_at"`
 }

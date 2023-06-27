@@ -11,8 +11,8 @@ import (
 
 
 type DepartmentDao interface {
-	Insert(d *entity.Department) error
-	Update(d *entity.Department) error
+	Insert(d *entity.Department) (entity.Department, error)
+	Update(d *entity.Department) (entity.Department, error)
 	Delete(d *entity.Department) error
 	SelectAll() ([]entity.Department, error)
 	Select(d *entity.Department) (entity.Department, error)
@@ -29,42 +29,46 @@ func NewDepartmentService() *DepartmentService {
 }
 
 
-func (serv *DepartmentService) Create(dDto *dto.DepartmentDto) error {
-	var d *entity.Department = entity.NewDepartment()
-	d.SetName(dDto.Name)
-	d.SetDescription(dDto.Description)
-	d.SetManagerId(dDto.ManagerId)
-	d.SetLocation(dDto.Location)
-	d.SetBudget(dDto.Budget)
-
-	err := serv.dDao.Insert(d)
-
-	if err != nil {
-		logger.LogError(err.Error())
-	}
-
-	return err
-}
-
-
-func (serv *DepartmentService) Update(dDto *dto.DepartmentDto) error {
+func (serv *DepartmentService) Create(dDto *dto.DepartmentDto) (dto.DepartmentDto, error) {
 	var d *entity.Department = entity.NewDepartment()
 
-	if d.SetId(dDto.Id) != nil || d.SetName(dDto.Name) != nil || 
+	if d.SetName(dDto.Name) != nil || 
 	d.SetDescription(dDto.Description) != nil || 
 	d.SetManagerId(dDto.ManagerId) != nil || 
 	d.SetLocation(dDto.Location) != nil || 
 	d.SetBudget(dDto.Budget) != nil {
-		return errors.New("不正な値があります。")
+		return dto.DepartmentDto{}, errors.New("不正な値があります。")
 	}
 
-	err := serv.dDao.Update(d)
+	ret, err := serv.dDao.Insert(d)
 
 	if err != nil {
 		logger.LogError(err.Error())
 	}
 
-	return err
+	return ret.ToDepartmentDto(), err
+}
+
+
+func (serv *DepartmentService) Update(dDto *dto.DepartmentDto) (dto.DepartmentDto, error) {
+	var d *entity.Department = entity.NewDepartment()
+
+	if d.SetId(dDto.Id) != nil || 
+	d.SetName(dDto.Name) != nil || 
+	d.SetDescription(dDto.Description) != nil || 
+	d.SetManagerId(dDto.ManagerId) != nil || 
+	d.SetLocation(dDto.Location) != nil || 
+	d.SetBudget(dDto.Budget) != nil {
+		return dto.DepartmentDto{}, errors.New("不正な値があります。")
+	}
+
+	ret, err := serv.dDao.Update(d)
+
+	if err != nil {
+		logger.LogError(err.Error())
+	}
+
+	return ret.ToDepartmentDto(), err
 }
 
 

@@ -19,28 +19,50 @@ func NewDepartmentDao() *DepartmentDao {
 }
 
 
-func (rep *DepartmentDao) Insert(d *entity.Department) error {
-	_, err := rep.db.Exec(
+func (rep *DepartmentDao) Insert(d *entity.Department) (entity.Department, error) {
+	var ret entity.Department
+
+	err := rep.db.QueryRow(
 		`INSERT INTO department (
 			name,
 			description,
 			manager_id,
 			location,
 			budget
-		 ) VALUES($1,$2,$3,$4,$5)`,
+		 ) VALUES($1,$2,$3,$4,$5) 
+		 RETURNING
+		 	id,
+			name,
+			description,
+			manager_id,
+			location,
+			budget,
+			created_at,
+			updated_at`,
 		d.Name,
 		d.Description,
 		d.ManagerId,
 		d.Location,
 		d.Budget,
+	).Scan(
+		&ret.Id,
+		&ret.Name,
+		&ret.Description,
+		&ret.ManagerId,
+		&ret.Location,
+		&ret.Budget,
+		&ret.CreatedAt,
+		&ret.UpdatedAt,
 	)
 
-	return err
+	return ret, err
 }
 
 
-func (rep *DepartmentDao) Update(d *entity.Department) error {
-	_, err := rep.db.Exec(
+func (rep *DepartmentDao) Update(d *entity.Department) (entity.Department, error) {
+	var ret entity.Department
+
+	err := rep.db.QueryRow(
 		`UPDATE department
 		 SET
 			name = $1,
@@ -48,16 +70,34 @@ func (rep *DepartmentDao) Update(d *entity.Department) error {
 			manager_id = $3,
 			location = $4,
 			budget = $5
-		 WHERE id = $6`,
+		 WHERE id = $6
+		 RETURNING 
+		 	id,
+			name,
+			description,
+			manager_id,
+			location,
+			budget,
+			created_at,
+			updated_at`,
 		d.Name,
 		d.Description,
 		d.ManagerId,
 		d.Location,
 		d.Budget,
 		d.Id,
+	).Scan(
+		&ret.Id,
+		&ret.Name,
+		&ret.Description,
+		&ret.ManagerId,
+		&ret.Location,
+		&ret.Budget,
+		&ret.CreatedAt,
+		&ret.UpdatedAt,
 	)
 
-	return err
+	return ret, err
 }
 
 
@@ -85,7 +125,8 @@ func (rep *DepartmentDao) SelectAll() ([]entity.Department, error) {
 			budget,
 			created_at,
 			updated_at
-		 FROM department`,
+		 FROM department
+		 ORDER BY id ASC `,
 	)
 
 	if err != nil {

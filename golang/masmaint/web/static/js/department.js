@@ -4,7 +4,10 @@ window.addEventListener('DOMContentLoaded', (event) => {
 	.then(data  => setData(data));
 });
 
-document.getElementById('save-all').addEventListener('click', (event) => putAll())
+document.getElementById('save-all').addEventListener('click', (event) => {
+	doPutAll();
+	doPost();
+})
 
 
 const setData = async (data) => {
@@ -18,18 +21,39 @@ const setData = async (data) => {
 
 const renderTbody = (data) => {
 	let tbody= '';
+	console.log(data)
 	for (const elem of data) {
-		tbody += `<tr><td><input type="text" name="id" value=${elem.id} readonly></td>`
-		+ `<td><input type="text" name="name" value=${elem.name}><input type="hidden" name="name_bk" value=${elem.name}></td>`
-		+ `<td><input type="text" name="description" value=${elem.description}><input type="hidden" name="description_bk" value=${elem.description}></td>`
-		+ `<td><input type="text" name="manager_id" value=${elem.manager_id}><input type="hidden" name="manager_id_bk" value=${elem.manager_id}></td>`
-		+ `<td><input type="text" name="location" value=${elem.location}><input type="hidden" name="location_bk" value=${elem.location}></td>`
-		+ `<td><input type="text" name="budget" value=${elem.budget}><input type="hidden" name="budget_bk" value=${elem.budget}></td>`
-		+ `<td><input type="text" name="created_at" value=${elem.created_at} readonly></td>`
-		+ `<td><input type="text" name="updated_at" value=${elem.updated_at} readonly></td></tr>`
+		tbody += createTr(elem);
 	}
+	tbody += createTrNew();
 
 	document.getElementById('list-body').innerHTML = tbody;
+}
+
+const createTr = (elem) => {
+	return `<tr><td><input type="text" name="id" value=${nullToEmpty(elem.id)} readonly></td>`
+		+ `<td><input type="text" name="name" value=${nullToEmpty(elem.name)}><input type="hidden" name="name_bk" value=${nullToEmpty(elem.name)}></td>`
+		+ `<td><input type="text" name="description" value=${nullToEmpty(elem.description)}><input type="hidden" name="description_bk" value=${nullToEmpty(elem.description)}></td>`
+		+ `<td><input type="text" name="manager_id" value=${nullToEmpty(elem.manager_id)}><input type="hidden" name="manager_id_bk" value=${nullToEmpty(elem.manager_id)}></td>`
+		+ `<td><input type="text" name="location" value=${nullToEmpty(elem.location)}><input type="hidden" name="location_bk" value=${nullToEmpty(elem.location)}></td>`
+		+ `<td><input type="text" name="budget" value=${nullToEmpty(elem.budget)}><input type="hidden" name="budget_bk" value=${nullToEmpty(elem.budget)}></td>`
+		+ `<td><input type="text" name="created_at" value=${nullToEmpty(elem.created_at)} readonly></td>`
+		+ `<td><input type="text" name="updated_at" value=${nullToEmpty(elem.updated_at)} readonly></td></tr>`;
+} 
+
+const createTrNew = (elem) => {
+	return `<tr id="new"><td><input type="text" readonly></td>`
+		+ `<td><input type="text" id="name_new"></td>`
+		+ `<td><input type="text" id="description_new"></td>`
+		+ `<td><input type="text" id="manager_id_new"></td>`
+		+ `<td><input type="text" id="location_new"></td>`
+		+ `<td><input type="text" id="budget_new"></td>`
+		+ `<td><input type="text" readonly></td>`
+		+ `<td><input type="text" readonly></td></tr>`;
+} 
+
+const nullToEmpty = (s) => {
+	return (s == null)? "" : s;
 }
 
 const addChangedAction = (columnName) => {
@@ -46,7 +70,7 @@ const addChangedAction = (columnName) => {
 	}
 } 
 
-const putAll = () => {
+const doPutAll = () => {
 	let id = document.getElementsByName('id');
 	let created_at = document.getElementsByName('created_at');
 	let updated_at = document.getElementsByName('updated_at');
@@ -117,3 +141,54 @@ const putAll = () => {
 		}
 	}
 } 
+
+const doPost = () => {
+	let name = document.getElementById('name_new').value;
+	let description = document.getElementById('description_new').value;
+	let managerId = document.getElementById('manager_id_new').value;
+	let location = document.getElementById('location_new').value;
+	let budget = document.getElementById('budget_new').value;
+
+	if ((name !== '') 
+		|| (description !== '') 
+		|| (managerId !== '') 
+		|| (location !== '')
+		|| (budget !== ''))
+	{
+		let requestBody = {
+			name: name,
+			description: description,
+			manager_id: managerId,
+			location: location,
+			budget: budget
+		}
+
+		fetch('api/department', {
+			method: "POST",
+			headers: {"Content-Type": "application/json"},
+			body: JSON.stringify(requestBody)
+		})
+		.then(response => {
+			if (!response.ok){
+				throw new Error(response.statusText);
+			}
+  			return response.json();
+  		})
+		.then(data => {
+			document.getElementById('new').remove();
+
+			let tmpElem = document.createElement('tbody');
+			tmpElem.innerHTML = createTr(data);
+			document.getElementById('list-body').appendChild(tmpElem.firstChild);
+
+			tmpElem = document.createElement('tbody');
+			tmpElem.innerHTML = createTrNew();
+			document.getElementById('list-body').appendChild(tmpElem.firstChild);
+			
+
+		}).catch(error => {
+			console.log(error)
+		})
+	}
+	
+}

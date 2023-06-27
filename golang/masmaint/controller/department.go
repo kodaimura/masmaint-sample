@@ -5,15 +5,14 @@ import (
 
 	"masmaint/service"
 	"masmaint/dto"
-	"masmaint/model/entity"
 )
 
 type DepartmentService interface {
-	Create(dDto *dto.DepartmentDto) error
-	Update(dDto *dto.DepartmentDto) error
+	Create(dDto *dto.DepartmentDto) (dto.DepartmentDto, error)
+	Update(dDto *dto.DepartmentDto) (dto.DepartmentDto, error)
 	Delete(dDto *dto.DepartmentDto) error
-	GetAll() ([]entity.Department, error)
-	GetOne(id int64) (entity.Department, error)
+	GetAll() ([]dto.DepartmentDto, error)
+	GetOne(id int64) ([]dto.DepartmentDto, error)
 }
 
 type DepartmentController struct {
@@ -55,13 +54,15 @@ func (ctr *DepartmentController) PostDepartment(c *gin.Context) {
 		return
 	}
 
-	if err := ctr.dServ.Create(&dDto); err != nil {
+	ret, err := ctr.dServ.Create(&dDto)
+
+	if err != nil {
 		c.JSON(500, gin.H{})
 		c.Abort()
 		return
 	}
 
-	c.JSON(200, gin.H{})
+	c.JSON(200, ret)
 }
 
 //PUT /api/employee
@@ -74,22 +75,15 @@ func (ctr *DepartmentController) PutDepartment(c *gin.Context) {
 		return
 	}
 
-	if err := ctr.dServ.Update(&dDto); err != nil {
-		c.JSON(500, gin.H{})
-		c.Abort()
-		return
-	}
+	ret, err := ctr.dServ.Update(&dDto)
 
-
-	d, err := ctr.dServ.GetOne(&dDto)
-
-	if err != nil {
+	if  err != nil {
 		c.JSON(500, gin.H{})
 		c.Abort()
 		return
 	}
 	
-	c.JSON(200, d)
+	c.JSON(200, ret)
 }
 
 //DELETE /api/employee

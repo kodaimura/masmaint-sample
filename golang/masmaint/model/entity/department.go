@@ -1,11 +1,10 @@
 package entity
 
 import (
-	"strconv"
-	"errors"
 	"database/sql"
 
 	"masmaint/dto"
+	"masmaint/core/utils"
 )
 
 type Department struct {
@@ -24,31 +23,16 @@ func NewDepartment() *Department {
 }
 
 func (d *Department) SetId(id any) error {
-	switch id.(type) {
-	case int:
-		d.Id = id.(int64)
-
-	case string:
-		x, err := strconv.Atoi(id.(string))
-		if err != nil {
-			return err
-		}
-		d.Id = int64(x)
-	default:
-		return errors.New("type error")
+	x, err := utils.ToInt64(id)
+	if err != nil {
+		return err
 	}
-
+	d.Id = x
 	return nil
 }
 
 func (d *Department) SetName(name any) error {
-	switch name.(type) {
-	case string:
-		d.Name = name.(string)
-	default:
-		return errors.New("type error")
-	}
-
+	d.Name = utils.ToString(name)
 	return nil
 }
 
@@ -58,42 +42,27 @@ func (d *Department) SetDescription(description any) error {
 		return nil
 	} 
 
-	switch description.(type) {
-	case string:
-		d.Description.String = description.(string)
-		d.Description.Valid = true
-	default:
-		return errors.New("type error")
-	}
-
+	d.Description.String = utils.ToString(description)
+	d.Description.Valid = true
 	return nil
 }
 
 func (d *Department) SetManagerId(managerId any) error {
 	if managerId == nil {
 		d.ManagerId.Valid = false
-		return nil	
+		return nil
+	} 
+	if managerId == "" {
+		d.ManagerId.Valid = false
+		return nil
 	} 
 
-	switch managerId.(type) {
-	case int:
-		d.ManagerId.Int64 = managerId.(int64)
-		d.ManagerId.Valid = true
-	case string:
-		if managerId == "" {
-			d.ManagerId.Valid = false
-		} else {
-			x, err := strconv.Atoi(managerId.(string))
-			if err != nil {
-				return err
-			}
-			d.ManagerId.Int64 = int64(x)
-			d.ManagerId.Valid = true
-		}
-	default:
-		return errors.New("type error")
+	x, err := utils.ToInt64(managerId)
+	if err != nil {
+		return err
 	}
-
+	d.ManagerId.Int64 = x
+	d.ManagerId.Valid = true
 	return nil
 }
 
@@ -103,14 +72,8 @@ func (d *Department) SetLocation(location any) error {
 		return nil
 	} 
 
-	switch location.(type) {
-	case string:
-		d.Location.String = location.(string)
-		d.Location.Valid = true
-	default:
-		return errors.New("type error")
-	}
-
+	d.Location.String = utils.ToString(location)
+	d.Location.Valid = true
 	return nil
 }
 
@@ -119,26 +82,17 @@ func (d *Department) SetBudget(budget any) error {
 		d.Budget.Valid = false
 		return nil	
 	}
-
-	switch budget.(type) {
-	case int32,int64,float32,float64:
-		d.Budget.Float64 = budget.(float64)
-		d.Budget.Valid = true
-	case string:
-		if budget == "" {
-			d.Budget.Valid = false
-		} else {
-			x, err := strconv.ParseFloat(budget.(string), 64)
-			if err != nil {
-				return err
-			}
-			d.Budget.Float64 = float64(x)
-			d.Budget.Valid = true
-		}
-	default:
-		return errors.New("type error")
+	if budget == "" {
+		d.Budget.Valid = false
+		return nil
 	}
 
+	x, err := utils.ToFloat64(budget)
+	if err != nil {
+		return err
+	}
+	d.Budget.Float64 = x
+	d.Budget.Valid = true
 	return nil
 }
 

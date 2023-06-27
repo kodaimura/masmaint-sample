@@ -74,7 +74,10 @@ func (serv *DepartmentService) Update(dDto *dto.DepartmentDto) (dto.DepartmentDt
 
 func (serv *DepartmentService) Delete(dDto *dto.DepartmentDto) error {
 	var d *entity.Department = entity.NewDepartment()
-	d.SetId(dDto.Id)
+
+	if d.SetId(dDto.Id) != nil {
+		return errors.New("不正な値があります。")
+	}
 
 	err := serv.dDao.Delete(d)
 

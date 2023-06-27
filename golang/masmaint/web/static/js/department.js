@@ -1,7 +1,5 @@
 window.addEventListener('DOMContentLoaded', (event) => {
-	fetch('api/department')
-	.then(response => response.json())
-	.then(data  => setData(data));
+	setUp();
 });
 
 document.getElementById('save-all').addEventListener('click', (event) => {
@@ -9,6 +7,15 @@ document.getElementById('save-all').addEventListener('click', (event) => {
 	doPost();
 })
 
+document.getElementById('delete-all').addEventListener('click', (event) => {
+	doDeleteAll();
+})
+
+const setUp = () => {
+	fetch('api/department')
+	.then(response => response.json())
+	.then(data  => setData(data));
+}
 
 const setData = async (data) => {
 	await renderTbody(data);
@@ -21,7 +28,6 @@ const setData = async (data) => {
 
 const renderTbody = (data) => {
 	let tbody= '';
-	console.log(data)
 	for (const elem of data) {
 		tbody += createTr(elem);
 	}
@@ -31,7 +37,8 @@ const renderTbody = (data) => {
 }
 
 const createTr = (elem) => {
-	return `<tr><td><input type="text" name="id" value=${nullToEmpty(elem.id)} readonly></td>`
+	return `<tr><td><input class="form-check-input" type="checkbox" name="del" value=${JSON.stringify(elem)}></td>`
+		+ `<td><input type="text" name="id" value=${nullToEmpty(elem.id)} readonly></td>`
 		+ `<td><input type="text" name="name" value=${nullToEmpty(elem.name)}><input type="hidden" name="name_bk" value=${nullToEmpty(elem.name)}></td>`
 		+ `<td><input type="text" name="description" value=${nullToEmpty(elem.description)}><input type="hidden" name="description_bk" value=${nullToEmpty(elem.description)}></td>`
 		+ `<td><input type="text" name="manager_id" value=${nullToEmpty(elem.manager_id)}><input type="hidden" name="manager_id_bk" value=${nullToEmpty(elem.manager_id)}></td>`
@@ -42,7 +49,8 @@ const createTr = (elem) => {
 } 
 
 const createTrNew = (elem) => {
-	return `<tr id="new"><td><input type="text" readonly></td>`
+	return `<tr id="new"><td></td>`
+		+ `<td><input type="text" readonly></td>`
 		+ `<td><input type="text" id="name_new"></td>`
 		+ `<td><input type="text" id="description_new"></td>`
 		+ `<td><input type="text" id="manager_id_new"></td>`
@@ -190,5 +198,36 @@ const doPost = () => {
 			console.log(error)
 		})
 	}
-	
+}
+
+const doDeleteAll = async () => {
+	let ls = getDeleteTarget();
+
+	for (let x of ls) {
+		await fetch('api/department', {
+			method: "DELETE",
+			headers: {"Content-Type": "application/json"},
+			body: x
+		})
+		.then(response => {
+			if (!response.ok){
+				throw new Error(response.statusText);
+			}
+  		}).catch(error => {
+			console.log(error);
+		})
+	}
+	setUp();
+}
+
+const getDeleteTarget = () => {
+	let dels = document.getElementsByName("del");
+	let ret = [];
+
+	for (let x of dels) {
+		if (x.checked) {
+			ret.push(x.value);
+		}
+	}
+	return ret
 }

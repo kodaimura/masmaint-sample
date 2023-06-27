@@ -13,7 +13,7 @@ type DepartmentService interface {
 	Update(dDto *dto.DepartmentDto) error
 	Delete(dDto *dto.DepartmentDto) error
 	GetAll() ([]entity.Department, error)
-	GetOne(id int) (entity.Department, error)
+	GetOne(id int64) (entity.Department, error)
 }
 
 type DepartmentController struct {
@@ -80,7 +80,8 @@ func (ctr *DepartmentController) PutDepartment(c *gin.Context) {
 		return
 	}
 
-	d, err := ctr.dServ.GetOne(dDto.Id)
+
+	d, err := ctr.dServ.GetOne(&dDto)
 
 	if err != nil {
 		c.JSON(500, gin.H{})

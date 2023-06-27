@@ -114,7 +114,7 @@ func (rep *DepartmentDao) SelectAll() ([]entity.Department, error) {
 }
 
 
-func (rep *DepartmentDao) Select(id int) (entity.Department, error) {
+func (rep *DepartmentDao) Select(d *entity.Department) (entity.Department, error) {
 	var ret entity.Department
 
 	err := rep.db.QueryRow(
@@ -129,7 +129,7 @@ func (rep *DepartmentDao) Select(id int) (entity.Department, error) {
 			updated_at
 		 FROM department
 		 WHERE id = $1`,
-		id,
+		d.Id,
 	).Scan(
 		&ret.Id,
 		&ret.Name,

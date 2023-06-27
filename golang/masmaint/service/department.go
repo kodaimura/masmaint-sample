@@ -1,6 +1,8 @@
 package service
 
 import (
+	"errors"
+
 	"masmaint/core/logger"
 	"masmaint/model/entity"
 	"masmaint/model/dao"
@@ -13,7 +15,7 @@ type DepartmentDao interface {
 	Update(d *entity.Department) error
 	Delete(d *entity.Department) error
 	SelectAll() ([]entity.Department, error)
-	Select(id int) (entity.Department, error)
+	Select(d *entity.Department) (entity.Department, error)
 }
 
 type DepartmentService struct {
@@ -28,14 +30,14 @@ func NewDepartmentService() *DepartmentService {
 
 
 func (serv *DepartmentService) Create(dDto *dto.DepartmentDto) error {
-	var d entity.Department
-	d.Name = dDto.Name
-	d.Description = dDto.Description
-	d.ManagerId = dDto.ManagerId
-	d.Location = dDto.Location
-	d.Budget = dDto.Budget
+	var d *entity.Department = entity.NewDepartment()
+	d.SetName(dDto.Name)
+	d.SetDescription(dDto.Description)
+	d.SetManagerId(dDto.ManagerId)
+	d.SetLocation(dDto.Location)
+	d.SetBudget(dDto.Budget)
 
-	err := serv.dDao.Insert(&d)
+	err := serv.dDao.Insert(d)
 
 	if err != nil {
 		logger.LogError(err.Error())
@@ -46,15 +48,17 @@ func (serv *DepartmentService) Create(dDto *dto.DepartmentDto) error {
 
 
 func (serv *DepartmentService) Update(dDto *dto.DepartmentDto) error {
-	var d entity.Department
-	d.Id = dDto.Id
-	d.Name = dDto.Name
-	d.Description = dDto.Description
-	d.ManagerId = dDto.ManagerId
-	d.Location = dDto.Location
-	d.Budget = dDto.Budget
+	var d *entity.Department = entity.NewDepartment()
 
-	err := serv.dDao.Update(&d)
+	if d.SetId(dDto.Id) != nil || d.SetName(dDto.Name) != nil || 
+	d.SetDescription(dDto.Description) != nil || 
+	d.SetManagerId(dDto.ManagerId) != nil || 
+	d.SetLocation(dDto.Location) != nil || 
+	d.SetBudget(dDto.Budget) != nil {
+		return errors.New("不正な値があります。")
+	}
+
+	err := serv.dDao.Update(d)
 
 	if err != nil {
 		logger.LogError(err.Error())
@@ -65,10 +69,10 @@ func (serv *DepartmentService) Update(dDto *dto.DepartmentDto) error {
 
 
 func (serv *DepartmentService) Delete(dDto *dto.DepartmentDto) error {
-	var d entity.Department
-	d.Id = dDto.Id
+	var d *entity.Department = entity.NewDepartment()
+	d.SetId(dDto.Id)
 
-	err := serv.dDao.Delete(&d)
+	err := serv.dDao.Delete(d)
 
 	if err != nil {
 		logger.LogError(err.Error())
@@ -78,24 +82,31 @@ func (serv *DepartmentService) Delete(dDto *dto.DepartmentDto) error {
 }
 
 
-func (serv *DepartmentService) GetAll() ([]entity.Department, error) {
+func (serv *DepartmentService) GetAll() ([]dto.DepartmentDto, error) {
 	ds, err := serv.dDao.SelectAll()
 
 	if err != nil {
 		logger.LogError(err.Error())
 	}
 
-	return ds, err
+	var ret []dto.DepartmentDto
+	for _, d := range ds {
+		ret = append(ret, d.ToDepartmentDto())
+	}
+
+	return ret, err
 }
 
 
-func (serv *DepartmentService) GetOne(id int) (entity.Department, error) {
-	d, err := serv.dDao.Select(id)
+func (serv *DepartmentService) GetOne(dDto *dto.DepartmentDto) (dto.DepartmentDto, error) {
+	var d *entity.Department = entity.NewDepartment()
+	d.SetId(dDto.Id)
+	ret, err := serv.dDao.Select(d)
 
 	if err != nil {
 		logger.LogError(err.Error())
 	}
 
-	return d, err
+	return ret.ToDepartmentDto(), err
 }
 

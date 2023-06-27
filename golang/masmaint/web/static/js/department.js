@@ -70,12 +70,12 @@ const putAll = () => {
 			|| (budget[i].value !== budget_bk[i].value)) {
 
 			let requestBody = {
-				id: Number(id[i].value),
+				id: id[i].value,
 				name: name[i].value,
 				description: description[i].value,
-				manager_id: Number(manager_id[i].value),
+				manager_id: manager_id[i].value,
 				location: location[i].value,
-				budget: Number(budget[i].value),
+				budget: budget[i].value,
 				created_at: created_at[i].value,
 				updated_at: updated_at[i].value
 			}

@@ -2,12 +2,12 @@ package dto
 
 
 type DepartmentDto struct {
-	Id int `json:"id"`
-	Name string `json:"name"`
-	Description string `json:"description"`
-	ManagerId int `json:"manager_id"`
-	Location string `json:"location"`
-	Budget float32 `json:"budget"`
-	CreatedAt string `json:"created_at"`
-	UpdatedAt string `json:"updated_at"`
+	Id any `json:"id"`
+	Name any `json:"name"`
+	Description any `json:"description"`
+	ManagerId any `json:"manager_id"`
+	Location any `json:"location"`
+	Budget any `json:"budget"`
+	CreatedAt any `json:"created_at"`
+	UpdatedAt any `json:"updated_at"`
 }

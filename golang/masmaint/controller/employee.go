@@ -5,15 +5,14 @@ import (
 
 	"masmaint/service"
 	"masmaint/dto"
-	"masmaint/model/entity"
 )
 
 type EmployeeService interface {
-	Create(eDto *dto.EmployeeDto) error
-	Update(eDto *dto.EmployeeDto) error
+	Create(eDto *dto.EmployeeDto) (dto.EmployeeDto, error)
+	Update(eDto *dto.EmployeeDto) (dto.EmployeeDto, error)
 	Delete(eDto *dto.EmployeeDto) error
-	GetAll() ([]entity.Employee, error)
-	GetOne(id int) (entity.Employee, error)
+	GetAll() ([]dto.EmployeeDto, error)
+	GetOne(id int64) ([]dto.EmployeeDto, error)
 }
 
 type EmployeeController struct {
@@ -34,7 +33,7 @@ func (ctr *EmployeeController) GetEmployeePage(c *gin.Context) {
 
 //GET /api/employee
 func (ctr *EmployeeController) GetEmployee(c *gin.Context) {
-	es, err := ctr.eServ.GetAll()
+	ret, err := ctr.eServ.GetAll()
 
 	if err != nil {
 		c.JSON(500, gin.H{})
@@ -42,7 +41,7 @@ func (ctr *EmployeeController) GetEmployee(c *gin.Context) {
 		return
 	}
 
-	c.JSON(200, es)
+	c.JSON(200, ret)
 }
 
 //POST /api/employee
@@ -55,13 +54,15 @@ func (ctr *EmployeeController) PostEmployee(c *gin.Context) {
 		return
 	}
 
-	if err := ctr.eServ.Create(&eDto); err != nil {
+	ret, err := ctr.eServ.Create(&eDto)
+
+	if err != nil {
 		c.JSON(500, gin.H{})
 		c.Abort()
 		return
 	}
 
-	c.JSON(200, gin.H{})
+	c.JSON(200, ret)
 }
 
 //PUT /api/employee
@@ -74,21 +75,15 @@ func (ctr *EmployeeController) PutEmployee(c *gin.Context) {
 		return
 	}
 
-	if err := ctr.eServ.Update(&eDto); err != nil {
-		c.JSON(500, gin.H{})
-		c.Abort()
-		return
-	}
+	ret, err := ctr.eServ.Update(&eDto)
 
-	e, err := ctr.eServ.GetOne(eDto.Id)
-
-	if err != nil {
+	if  err != nil {
 		c.JSON(500, gin.H{})
 		c.Abort()
 		return
 	}
 	
-	c.JSON(200, e)
+	c.JSON(200, ret)
 }
 
 //DELETE /api/employee

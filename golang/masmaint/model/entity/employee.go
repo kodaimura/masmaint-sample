@@ -1,15 +1,177 @@
 package entity
 
+import (
+	"database/sql"
+
+	"masmaint/dto"
+	"masmaint/core/utils"
+)
 
 type Employee struct {
-	Id int `db:"id" json:"id"`
-	FirstName string `db:"first_name" json:"first_name"`
-	LastName string `db:"last_name" json:"last_name"`
-	Email string `db:"email" json:"email"`
-	PhoneNumber string `db:"phone_number" json:"phone_number"`
-	Address string `db:"address" json:"address"`
-	HireDate string `db:"hire_date" json:"hire_date"`
-	JobTitle string `db:"job_title" json:"job_title"`
-	DepartmentId int `db:"department_id" json:"department_id"`
-	Salary int `db:"salary" json:"salary"`
+	Id int64 `db:"id"`
+	FirstName string `db:"first_name"`
+	LastName sql.NullString `db:"last_name"`
+	Email sql.NullString `db:"email"`
+	PhoneNumber sql.NullString `db:"phone_number"`
+	Address sql.NullString `db:"address"`
+	HireDate sql.NullString `db:"hire_date"`
+	JobTitle sql.NullString `db:"job_title"`
+	DepartmentId sql.NullInt64 `db:"department_id"`
+	Salary sql.NullInt64 `db:"salary"`
+}
+
+func NewEmployee() *Employee {
+	return &Employee{}
+}
+
+func (e *Employee) SetId(id any) error {
+	x, err := utils.ToInt64(id)
+	if err != nil {
+		return err
+	}
+	e.Id = x
+	return nil
+}
+
+func (e *Employee) SetFirstName(firstName any) error {
+	e.FirstName = utils.ToString(firstName)
+	return nil
+}
+
+func (e *Employee) SetLastName(lastName any) error {
+	if lastName == nil {
+		e.LastName.Valid = false
+		return nil
+	} 
+
+	e.LastName.String = utils.ToString(lastName)
+	e.LastName.Valid = true
+	return nil
+}
+
+func (e *Employee) SetEmail(email any) error {
+	if email == nil {
+		e.Email.Valid = false
+		return nil
+	} 
+
+	e.Email.String = utils.ToString(email)
+	e.Email.Valid = true
+	return nil
+}
+
+func (e *Employee) SetPhoneNumber(phoneNumber any) error {
+	if phoneNumber == nil {
+		e.PhoneNumber.Valid = false
+		return nil
+	} 
+
+	e.PhoneNumber.String = utils.ToString(phoneNumber)
+	e.PhoneNumber.Valid = true
+	return nil
+}
+
+func (e *Employee) SetAddress(address any) error {
+	if address == nil {
+		e.Address.Valid = false
+		return nil
+	} 
+
+	e.Address.String = utils.ToString(address)
+	e.Address.Valid = true
+	return nil
+}
+
+func (e *Employee) SetHireDate(hireDate any) error {
+	//日付型は "" の時は null 扱いとする。
+	if hireDate == nil || hireDate == ""{
+		e.HireDate.Valid = false
+		return nil
+	} 
+
+	e.HireDate.String = utils.ToString(hireDate)
+	e.HireDate.Valid = true
+	return nil
+}
+
+func (e *Employee) SetJobTitle(jobTitle any) error {
+	if jobTitle == nil {
+		e.JobTitle.Valid = false
+		return nil
+	} 
+
+	e.JobTitle.String = utils.ToString(jobTitle)
+	e.JobTitle.Valid = true
+	return nil
+}
+
+func (e *Employee) SetDepartmentId(departmentId any) error {
+	if departmentId == nil {
+		e.DepartmentId.Valid = false
+		return nil
+	} 
+	if departmentId == "" {
+		e.DepartmentId.Valid = false
+		return nil
+	} 
+
+	x, err := utils.ToInt64(departmentId)
+	if err != nil {
+		return err
+	}
+	e.DepartmentId.Int64 = x
+	e.DepartmentId.Valid = true
+	return nil
+}
+
+func (e *Employee) SetSalary(salary any) error {
+	if salary == nil {
+		e.Salary.Valid = false
+		return nil
+	} 
+	if salary == "" {
+		e.Salary.Valid = false
+		return nil
+	} 
+
+	x, err := utils.ToInt64(salary)
+	if err != nil {
+		return err
+	}
+	e.Salary.Int64 = x
+	e.Salary.Valid = true
+	return nil
+}
+
+func (e *Employee) ToEmployeeDto() dto.EmployeeDto {
+	var eDto dto.EmployeeDto
+
+	eDto.Id = e.Id
+	eDto.FirstName = e.FirstName
+	if e.LastName.Valid != false {
+		eDto.LastName = e.LastName.String
+	}
+	if e.Email.Valid != false {
+		eDto.Email = e.Email.String
+	}
+	if e.PhoneNumber.Valid != false {
+		eDto.PhoneNumber = e.PhoneNumber.String
+	}
+	if e.Address.Valid != false {
+		eDto.Address = e.Address.String
+	}
+	if e.HireDate.Valid != false {
+		eDto.HireDate = e.HireDate.String
+	}
+	if e.JobTitle.Valid != false {
+		eDto.JobTitle = e.JobTitle.String
+	}
+	if e.DepartmentId.Valid != false {
+		eDto.DepartmentId = e.DepartmentId.Int64
+	}
+	if e.Salary.Valid != false {
+		eDto.Salary = e.Salary.Int64
+	}
+
+	return eDto
 }

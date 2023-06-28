@@ -33,7 +33,7 @@ func (ctr *DepartmentController) GetDepartmentPage(c *gin.Context) {
 
 //GET /api/department
 func (ctr *DepartmentController) GetDepartment(c *gin.Context) {
-	ds, err := ctr.dServ.GetAll()
+	ret, err := ctr.dServ.GetAll()
 
 	if err != nil {
 		c.JSON(500, gin.H{})
@@ -41,7 +41,7 @@ func (ctr *DepartmentController) GetDepartment(c *gin.Context) {
 		return
 	}
 
-	c.JSON(200, ds)
+	c.JSON(200, ret)
 }
 
 //POST /api/department

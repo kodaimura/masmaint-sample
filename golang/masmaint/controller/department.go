@@ -26,12 +26,12 @@ func NewDepartmentController() *DepartmentController {
 }
 
 
-//GET /employee
+//GET /department
 func (ctr *DepartmentController) GetDepartmentPage(c *gin.Context) {
 	c.HTML(200, "department.html", gin.H{})
 }
 
-//GET /api/employee
+//GET /api/department
 func (ctr *DepartmentController) GetDepartment(c *gin.Context) {
 	ds, err := ctr.dServ.GetAll()
 
@@ -44,7 +44,7 @@ func (ctr *DepartmentController) GetDepartment(c *gin.Context) {
 	c.JSON(200, ds)
 }
 
-//POST /api/employee
+//POST /api/department
 func (ctr *DepartmentController) PostDepartment(c *gin.Context) {
 	var dDto dto.DepartmentDto 
 
@@ -65,7 +65,7 @@ func (ctr *DepartmentController) PostDepartment(c *gin.Context) {
 	c.JSON(200, ret)
 }
 
-//PUT /api/employee
+//PUT /api/department
 func (ctr *DepartmentController) PutDepartment(c *gin.Context) {
 	var dDto dto.DepartmentDto 
 
@@ -86,7 +86,7 @@ func (ctr *DepartmentController) PutDepartment(c *gin.Context) {
 	c.JSON(200, ret)
 }
 
-//DELETE /api/employee
+//DELETE /api/department
 func (ctr *DepartmentController) DeleteDepartment(c *gin.Context) {
 	var dDto dto.DepartmentDto 
 

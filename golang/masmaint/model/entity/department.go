@@ -22,38 +22,38 @@ func NewDepartment() *Department {
 	return &Department{}
 }
 
-func (d *Department) SetId(id any) error {
+func (e *Department) SetId(id any) error {
 	x, err := utils.ToInt64(id)
 	if err != nil {
 		return err
 	}
-	d.Id = x
+	e.Id = x
 	return nil
 }
 
-func (d *Department) SetName(name any) error {
-	d.Name = utils.ToString(name)
+func (e *Department) SetName(name any) error {
+	e.Name = utils.ToString(name)
 	return nil
 }
 
-func (d *Department) SetDescription(description any) error {
+func (e *Department) SetDescription(description any) error {
 	if description == nil {
-		d.Description.Valid = false
+		e.Description.Valid = false
 		return nil
 	} 
 
-	d.Description.String = utils.ToString(description)
-	d.Description.Valid = true
+	e.Description.String = utils.ToString(description)
+	e.Description.Valid = true
 	return nil
 }
 
-func (d *Department) SetManagerId(managerId any) error {
+func (e *Department) SetManagerId(managerId any) error {
 	if managerId == nil {
-		d.ManagerId.Valid = false
+		e.ManagerId.Valid = false
 		return nil
 	} 
 	if managerId == "" {
-		d.ManagerId.Valid = false
+		e.ManagerId.Valid = false
 		return nil
 	} 
 
@@ -61,29 +61,29 @@ func (d *Department) SetManagerId(managerId any) error {
 	if err != nil {
 		return err
 	}
-	d.ManagerId.Int64 = x
-	d.ManagerId.Valid = true
+	e.ManagerId.Int64 = x
+	e.ManagerId.Valid = true
 	return nil
 }
 
-func (d *Department) SetLocation(location any) error {
+func (e *Department) SetLocation(location any) error {
 	if location == nil {
-		d.Location.Valid = false
+		e.Location.Valid = false
 		return nil
 	} 
 
-	d.Location.String = utils.ToString(location)
-	d.Location.Valid = true
+	e.Location.String = utils.ToString(location)
+	e.Location.Valid = true
 	return nil
 }
 
-func (d *Department) SetBudget(budget any) error {
+func (e *Department) SetBudget(budget any) error {
 	if budget == nil {
-		d.Budget.Valid = false
+		e.Budget.Valid = false
 		return nil	
 	}
 	if budget == "" {
-		d.Budget.Valid = false
+		e.Budget.Valid = false
 		return nil
 	}
 
@@ -91,31 +91,31 @@ func (d *Department) SetBudget(budget any) error {
 	if err != nil {
 		return err
 	}
-	d.Budget.Float64 = x
-	d.Budget.Valid = true
+	e.Budget.Float64 = x
+	e.Budget.Valid = true
 	return nil
 }
 
 
-func (d *Department) ToDepartmentDto() dto.DepartmentDto {
+func (e *Department) ToDepartmentDto() dto.DepartmentDto {
 	var dDto dto.DepartmentDto
 
-	dDto.Id = d.Id
-	dDto.Name = d.Name
-	if d.Description.Valid != false {
-		dDto.Description = d.Description.String
+	dDto.Id = e.Id
+	dDto.Name = e.Name
+	if e.Description.Valid != false {
+		dDto.Description = e.Description.String
 	}
-	if d.ManagerId.Valid != false {
-		dDto.ManagerId = d.ManagerId.Int64
+	if e.ManagerId.Valid != false {
+		dDto.ManagerId = e.ManagerId.Int64
 	}
-	if d.Location.Valid != false {
-		dDto.Location = d.Location.String
+	if e.Location.Valid != false {
+		dDto.Location = e.Location.String
 	}
-	if d.Budget.Valid != false {
-		dDto.Budget = d.Budget.Float64
+	if e.Budget.Valid != false {
+		dDto.Budget = e.Budget.Float64
 	}
-	dDto.CreatedAt = d.CreatedAt
-	dDto.UpdatedAt = d.UpdatedAt
+	dDto.CreatedAt = e.CreatedAt
+	dDto.UpdatedAt = e.UpdatedAt
 
 	return dDto
 }

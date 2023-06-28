@@ -12,7 +12,7 @@ type EmployeeService interface {
 	Update(eDto *dto.EmployeeDto) (dto.EmployeeDto, error)
 	Delete(eDto *dto.EmployeeDto) error
 	GetAll() ([]dto.EmployeeDto, error)
-	GetOne(id int64) ([]dto.EmployeeDto, error)
+	GetOne(eDto *dto.EmployeeDto) ([]dto.EmployeeDto, error)
 }
 
 type EmployeeController struct {

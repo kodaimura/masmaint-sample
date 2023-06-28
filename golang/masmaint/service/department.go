@@ -40,13 +40,13 @@ func (serv *DepartmentService) Create(dDto *dto.DepartmentDto) (dto.DepartmentDt
 		return dto.DepartmentDto{}, errors.New("不正な値があります。")
 	}
 
-	ret, err := serv.dDao.Insert(d)
+	row, err := serv.dDao.Insert(d)
 
 	if err != nil {
 		logger.LogError(err.Error())
 	}
 
-	return ret.ToDepartmentDto(), err
+	return row.ToDepartmentDto(), err
 }
 
 
@@ -62,13 +62,13 @@ func (serv *DepartmentService) Update(dDto *dto.DepartmentDto) (dto.DepartmentDt
 		return dto.DepartmentDto{}, errors.New("不正な値があります。")
 	}
 
-	ret, err := serv.dDao.Update(d)
+	row, err := serv.dDao.Update(d)
 
 	if err != nil {
 		logger.LogError(err.Error())
 	}
 
-	return ret.ToDepartmentDto(), err
+	return row.ToDepartmentDto(), err
 }
 
 
@@ -90,15 +90,15 @@ func (serv *DepartmentService) Delete(dDto *dto.DepartmentDto) error {
 
 
 func (serv *DepartmentService) GetAll() ([]dto.DepartmentDto, error) {
-	ds, err := serv.dDao.SelectAll()
+	rows, err := serv.dDao.SelectAll()
 
 	if err != nil {
 		logger.LogError(err.Error())
 	}
 
 	var ret []dto.DepartmentDto
-	for _, d := range ds {
-		ret = append(ret, d.ToDepartmentDto())
+	for _, row := range rows {
+		ret = append(ret, row.ToDepartmentDto())
 	}
 
 	return ret, err
@@ -108,12 +108,12 @@ func (serv *DepartmentService) GetAll() ([]dto.DepartmentDto, error) {
 func (serv *DepartmentService) GetOne(dDto *dto.DepartmentDto) (dto.DepartmentDto, error) {
 	var d *entity.Department = entity.NewDepartment()
 	d.SetId(dDto.Id)
-	ret, err := serv.dDao.Select(d)
+	row, err := serv.dDao.Select(d)
 
 	if err != nil {
 		logger.LogError(err.Error())
 	}
 
-	return ret.ToDepartmentDto(), err
+	return row.ToDepartmentDto(), err
 }
 

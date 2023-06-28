@@ -74,7 +74,7 @@ const renderTbody = (data) => {
 	}
 	tbody += createTrNew();
 
-	document.getElementById('list-body').innerHTML = tbody;
+	document.getElementById('records').innerHTML = tbody;
 }
 
 /* チェンジアクション */
@@ -180,6 +180,7 @@ const doPutAll = async () => {
 				manager_id[i].classList.remove('changed');
 				location[i].classList.remove('changed');
 				budget[i].classList.remove('changed');
+
 				successCount += 1;
 			}).catch(error => {
 				errorCount += 1;				
@@ -195,20 +196,20 @@ const doPutAll = async () => {
 const doPost = () => {
 	let name = document.getElementById('name_new').value;
 	let description = document.getElementById('description_new').value;
-	let managerId = document.getElementById('manager_id_new').value;
+	let manager_id = document.getElementById('manager_id_new').value;
 	let location = document.getElementById('location_new').value;
 	let budget = document.getElementById('budget_new').value;
 
 	if ((name !== '') 
 		|| (description !== '') 
-		|| (managerId !== '') 
+		|| (manager_id !== '') 
 		|| (location !== '')
 		|| (budget !== ''))
 	{
 		let requestBody = {
 			name: name,
 			description: description,
-			manager_id: managerId,
+			manager_id: manager_id,
 			location: location,
 			budget: budget
 		}
@@ -230,11 +231,11 @@ const doPost = () => {
 			let tmpElem = document.createElement('tbody');
 			tmpElem.innerHTML = createTr(data);
 			tmpElem.firstChild.addEventListener('change', changeAction);
-			document.getElementById('list-body').appendChild(tmpElem.firstChild);
+			document.getElementById('records').appendChild(tmpElem.firstChild);
 
 			tmpElem = document.createElement('tbody');
 			tmpElem.innerHTML = createTrNew();
-			document.getElementById('list-body').appendChild(tmpElem.firstChild);
+			document.getElementById('records').appendChild(tmpElem.firstChild);
 
 			renderMessage("登録", 1, true);
 		}).catch(error => {

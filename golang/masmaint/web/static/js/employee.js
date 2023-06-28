@@ -78,7 +78,7 @@ const renderTbody = (data) => {
 	}
 	tbody += createTrNew();
 
-	document.getElementById('list-body').innerHTML = tbody;
+	document.getElementById('records').innerHTML = tbody;
 }
 
 /* チェンジアクション */
@@ -210,6 +210,7 @@ const doPutAll = async () => {
 				job_title[i].classList.remove('changed');
 				department_id[i].classList.remove('changed');
 				salary[i].classList.remove('changed');
+				
 				successCount += 1;
 			}).catch(error => {
 				errorCount += 1;				
@@ -272,11 +273,11 @@ const doPost = () => {
 			let tmpElem = document.createElement('tbody');
 			tmpElem.innerHTML = createTr(data);
 			tmpElem.firstChild.addEventListener('change', changeAction);
-			document.getElementById('list-body').appendChild(tmpElem.firstChild);
+			document.getElementById('records').appendChild(tmpElem.firstChild);
 
 			tmpElem = document.createElement('tbody');
 			tmpElem.innerHTML = createTrNew();
-			document.getElementById('list-body').appendChild(tmpElem.firstChild);
+			document.getElementById('records').appendChild(tmpElem.firstChild);
 
 			renderMessage("登録", 1, true);
 		}).catch(error => {

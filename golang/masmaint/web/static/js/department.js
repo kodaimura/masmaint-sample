@@ -5,20 +5,36 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
 /* リロードボタン押下 */
 document.getElementById('reload').addEventListener('click', (event) => {
+	clearMessage();
 	document.getElementById('list-body').innerHTML = '';
 	setUp();
 })
 
 /* 保存モーダル確定ボタン押下 */
 document.getElementById('ModalSaveAllOk').addEventListener('click', (event) => {
+	clearMessage();
 	doPutAll();
 	doPost();
 })
 
 /* 削除モーダル確定ボタン押下 */
 document.getElementById('ModalDeleteAllOk').addEventListener('click', (event) => {
+	clearMessage();
 	doDeleteAll();
 })
+
+const renderMessage = (msg, count, isSuccess) => {
+	if (count !== 0) {
+		let message = document.createElement('div');
+		message.textContent = `${count}件の${msg}に${isSuccess? "成功" : "失敗"}しました。`
+		message.className = `alert alert-${isSuccess? "success" : "danger"} alert-custom my-1`;
+		document.getElementById('message').appendChild(message);
+	}
+}
+
+const clearMessage = () => {
+	document.getElementById('message').innerHTML = '';
+}
 
 const nullToEmpty = (s) => {
 	return (s == null)? "" : s;
@@ -95,8 +111,11 @@ const setUp = () => {
 }
 
 
-/* 一括更新 （更新後に更新箇所反映するまで）*/
-const doPutAll = () => {
+/* 一括更新 */
+const doPutAll = async () => {
+	let successCount = 0;
+	let errorCount = 0;
+
 	let id = document.getElementsByName('id');
 	let created_at = document.getElementsByName('created_at');
 	let updated_at = document.getElementsByName('updated_at');
@@ -130,7 +149,7 @@ const doPutAll = () => {
 				updated_at: updated_at[i].value
 			}
 
-			fetch('api/department', {
+			await fetch('api/department', {
 				method: "PUT",
 				headers: {"Content-Type": "application/json"},
 				body: JSON.stringify(requestBody)
@@ -161,14 +180,18 @@ const doPutAll = () => {
 				manager_id[i].classList.remove('changed');
 				location[i].classList.remove('changed');
 				budget[i].classList.remove('changed');
+				successCount += 1;
 			}).catch(error => {
-				console.log(error)
+				errorCount += 1;				
 			})
 		}
 	}
+
+	renderMessage("更新", successCount, true);
+	renderMessage("更新", errorCount, false);
 } 
 
-/* 新規登録 （登録後に末尾に追加するまで）*/
+/* 新規登録 */
 const doPost = () => {
 	let name = document.getElementById('name_new').value;
 	let description = document.getElementById('description_new').value;
@@ -212,10 +235,10 @@ const doPost = () => {
 			tmpElem = document.createElement('tbody');
 			tmpElem.innerHTML = createTrNew();
 			document.getElementById('list-body').appendChild(tmpElem.firstChild);
-			
 
+			renderMessage("登録", 1, true);
 		}).catch(error => {
-			console.log(error)
+			renderMessage("登録", 1, false);
 		})
 	}
 }
@@ -234,9 +257,11 @@ const getDeleteTarget = () => {
 	return ret
 }
 
-/* 一括削除 （削除後に画面リロードまで）*/
+/* 一括削除 */
 const doDeleteAll = async () => {
 	let ls = getDeleteTarget();
+	let successCount = 0;
+	let errorCount = 0;
 
 	for (let x of ls) {
 		await fetch('api/department', {
@@ -248,9 +273,14 @@ const doDeleteAll = async () => {
 			if (!response.ok){
 				throw new Error(response.statusText);
 			}
-			setUp();
+			successCount += 1;
   		}).catch(error => {
-			console.log(error);
-		})
+			errorCount += 1;
+		});
 	}
+
+	setUp();
+
+	renderMessage("削除", successCount, true);
+	renderMessage("削除", errorCount, false);
 }

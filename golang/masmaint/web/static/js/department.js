@@ -1,45 +1,30 @@
+/* 初期設定 */
 window.addEventListener('DOMContentLoaded', (event) => {
 	setUp();
 });
 
-document.getElementById('get-all').addEventListener('click', (event) => {
+/* リロードボタン押下 */
+document.getElementById('reload').addEventListener('click', (event) => {
+	document.getElementById('list-body').innerHTML = '';
 	setUp();
 })
 
-document.getElementById('save-all').addEventListener('click', (event) => {
+/* 保存モーダル確定ボタン押下 */
+document.getElementById('ModalSaveAllOk').addEventListener('click', (event) => {
 	doPutAll();
 	doPost();
 })
 
-document.getElementById('delete-all').addEventListener('click', (event) => {
+/* 削除モーダル確定ボタン押下 */
+document.getElementById('ModalDeleteAllOk').addEventListener('click', (event) => {
 	doDeleteAll();
 })
 
-const setUp = () => {
-	fetch('api/department')
-	.then(response => response.json())
-	.then(data  => setData(data));
+const nullToEmpty = (s) => {
+	return (s == null)? "" : s;
 }
 
-const setData = async (data) => {
-	await renderTbody(data);
-	addChangedAction('name');
-	addChangedAction('description');
-	addChangedAction('manager_id');
-	addChangedAction('location');
-	addChangedAction('budget');
-}
-
-const renderTbody = (data) => {
-	let tbody= '';
-	for (const elem of data) {
-		tbody += createTr(elem);
-	}
-	tbody += createTrNew();
-
-	document.getElementById('list-body').innerHTML = tbody;
-}
-
+/* <tr></tr>を作成 */
 const createTr = (elem) => {
 	return `<tr><td><input class="form-check-input" type="checkbox" name="del" value=${JSON.stringify(elem)}></td>`
 		+ `<td><input type="text" name="id" value=${nullToEmpty(elem.id)} disabled></td>`
@@ -52,6 +37,7 @@ const createTr = (elem) => {
 		+ `<td><input type="text" name="updated_at" value=${nullToEmpty(elem.updated_at)} disabled></td></tr>`;
 } 
 
+/* <tr></tr>を作成 （tbody末尾の新規登録用レコード）*/
 const createTrNew = (elem) => {
 	return `<tr id="new"><td></td>`
 		+ `<td><input type="text" disabled></td>`
@@ -64,24 +50,52 @@ const createTrNew = (elem) => {
 		+ `<td><input type="text" disabled></td></tr>`;
 } 
 
-const nullToEmpty = (s) => {
-	return (s == null)? "" : s;
+/* <tbody></tbody>レンダリング */
+const renderTbody = (data) => {
+	let tbody= '';
+	for (const elem of data) {
+		tbody += createTr(elem);
+	}
+	tbody += createTrNew();
+
+	document.getElementById('list-body').innerHTML = tbody;
 }
 
+/* チェンジアクション */
+const changeAction = (event) => {
+	let target = event.target;
+	let target_bk = target.nextElementSibling;
+	if (target.value !== target_bk.value) {
+		target.classList.add('changed');
+	} else {
+		target.classList.remove('changed');
+	}
+}
+
+/* <tbody></tbody>内のレコードにチェンジアクション追加 */
 const addChangedAction = (columnName) => {
 	let elems = document.getElementsByName(columnName);
-	let elems_bk = document.getElementsByName(`${columnName}_bk`);
-	for (let i = 0; i < elems.length; i++) {
-		elems[i].addEventListener('change', () => {
-			if (elems[i].value !== elems_bk[i].value) {
-				elems[i].classList.add('changed');
-			} else {
-				elems[i].classList.remove('changed');
-			}
-		});
+	for (const elem of elems) {
+		elem.addEventListener('change', changeAction);
 	}
-} 
+}
 
+/* セットアップ */
+const setUp = () => {
+	fetch('api/department')
+	.then(response => response.json())
+	.then(data  => renderTbody(data))
+	.then(() => {
+		addChangedAction('name');
+		addChangedAction('description');
+		addChangedAction('manager_id');
+		addChangedAction('location');
+		addChangedAction('budget');
+	});
+}
+
+
+/* 一括更新 （更新後に更新箇所反映するまで）*/
 const doPutAll = () => {
 	let id = document.getElementsByName('id');
 	let created_at = document.getElementsByName('created_at');
@@ -154,6 +168,7 @@ const doPutAll = () => {
 	}
 } 
 
+/* 新規登録 （登録後に末尾に追加するまで）*/
 const doPost = () => {
 	let name = document.getElementById('name_new').value;
 	let description = document.getElementById('description_new').value;
@@ -191,6 +206,7 @@ const doPost = () => {
 
 			let tmpElem = document.createElement('tbody');
 			tmpElem.innerHTML = createTr(data);
+			tmpElem.firstChild.addEventListener('change', changeAction);
 			document.getElementById('list-body').appendChild(tmpElem.firstChild);
 
 			tmpElem = document.createElement('tbody');
@@ -204,6 +220,21 @@ const doPost = () => {
 	}
 }
 
+
+/* チェックボックスの選択一覧取得 */
+const getDeleteTarget = () => {
+	let dels = document.getElementsByName("del");
+	let ret = [];
+
+	for (let x of dels) {
+		if (x.checked) {
+			ret.push(x.value);
+		}
+	}
+	return ret
+}
+
+/* 一括削除 （削除後に画面リロードまで）*/
 const doDeleteAll = async () => {
 	let ls = getDeleteTarget();
 
@@ -217,21 +248,9 @@ const doDeleteAll = async () => {
 			if (!response.ok){
 				throw new Error(response.statusText);
 			}
+			setUp();
   		}).catch(error => {
 			console.log(error);
 		})
 	}
-	setUp();
-}
-
-const getDeleteTarget = () => {
-	let dels = document.getElementsByName("del");
-	let ret = [];
-
-	for (let x of dels) {
-		if (x.checked) {
-			ret.push(x.value);
-		}
-	}
-	return ret
 }

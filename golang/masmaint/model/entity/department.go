@@ -8,14 +8,14 @@ import (
 )
 
 type Department struct {
-	Id int64 `db:"id" json:"id"`
-	Name string `db:"name" json:"name"`
-	Description sql.NullString `db:"description" json:"description"`
-	ManagerId sql.NullInt64 `db:"manager_id" json:"manager_id"`
-	Location sql.NullString `db:"location" json:"location"`
-	Budget sql.NullFloat64 `db:"budget" json:"budget"`
-	CreatedAt string `db:"created_at" json:"created_at"`
-	UpdatedAt string `db:"updated_at" json:"updated_at"`
+	Id int64 `db:"id"`
+	Name string `db:"name"`
+	Description sql.NullString `db:"description"`
+	ManagerId sql.NullInt64 `db:"manager_id"`
+	Location sql.NullString `db:"location"`
+	Budget sql.NullFloat64 `db:"budget"`
+	CreatedAt string `db:"created_at"`
+	UpdatedAt string `db:"updated_at"`
 }
 
 func NewDepartment() *Department {

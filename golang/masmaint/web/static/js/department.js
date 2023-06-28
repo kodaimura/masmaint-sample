@@ -2,6 +2,10 @@ window.addEventListener('DOMContentLoaded', (event) => {
 	setUp();
 });
 
+document.getElementById('get-all').addEventListener('click', (event) => {
+	setUp();
+})
+
 document.getElementById('save-all').addEventListener('click', (event) => {
 	doPutAll();
 	doPost();
@@ -38,26 +42,26 @@ const renderTbody = (data) => {
 
 const createTr = (elem) => {
 	return `<tr><td><input class="form-check-input" type="checkbox" name="del" value=${JSON.stringify(elem)}></td>`
-		+ `<td><input type="text" name="id" value=${nullToEmpty(elem.id)} readonly></td>`
+		+ `<td><input type="text" name="id" value=${nullToEmpty(elem.id)} disabled></td>`
 		+ `<td><input type="text" name="name" value=${nullToEmpty(elem.name)}><input type="hidden" name="name_bk" value=${nullToEmpty(elem.name)}></td>`
 		+ `<td><input type="text" name="description" value=${nullToEmpty(elem.description)}><input type="hidden" name="description_bk" value=${nullToEmpty(elem.description)}></td>`
 		+ `<td><input type="text" name="manager_id" value=${nullToEmpty(elem.manager_id)}><input type="hidden" name="manager_id_bk" value=${nullToEmpty(elem.manager_id)}></td>`
 		+ `<td><input type="text" name="location" value=${nullToEmpty(elem.location)}><input type="hidden" name="location_bk" value=${nullToEmpty(elem.location)}></td>`
 		+ `<td><input type="text" name="budget" value=${nullToEmpty(elem.budget)}><input type="hidden" name="budget_bk" value=${nullToEmpty(elem.budget)}></td>`
-		+ `<td><input type="text" name="created_at" value=${nullToEmpty(elem.created_at)} readonly></td>`
-		+ `<td><input type="text" name="updated_at" value=${nullToEmpty(elem.updated_at)} readonly></td></tr>`;
+		+ `<td><input type="text" name="created_at" value=${nullToEmpty(elem.created_at)} disabled></td>`
+		+ `<td><input type="text" name="updated_at" value=${nullToEmpty(elem.updated_at)} disabled></td></tr>`;
 } 
 
 const createTrNew = (elem) => {
 	return `<tr id="new"><td></td>`
-		+ `<td><input type="text" readonly></td>`
+		+ `<td><input type="text" disabled></td>`
 		+ `<td><input type="text" id="name_new"></td>`
 		+ `<td><input type="text" id="description_new"></td>`
 		+ `<td><input type="text" id="manager_id_new"></td>`
 		+ `<td><input type="text" id="location_new"></td>`
 		+ `<td><input type="text" id="budget_new"></td>`
-		+ `<td><input type="text" readonly></td>`
-		+ `<td><input type="text" readonly></td></tr>`;
+		+ `<td><input type="text" disabled></td>`
+		+ `<td><input type="text" disabled></td></tr>`;
 } 
 
 const nullToEmpty = (s) => {

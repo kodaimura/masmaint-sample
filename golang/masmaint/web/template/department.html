@@ -1,24 +1,29 @@
 {{template "header" .}}
-<button type="button" class="btn btn-primary" id="save-all">保存</button>
-<button type="button" class="btn btn-danger" id="delete-all">削除</button>
-<div class="table-responsive">
-<table class="table table-hover">
-	<thead>
-		<tr>
-			<th>削除</th>
-			<th>ID</th>
-			<th>部署名</th>
-			<th>説明</th>
-			<th>マネージャーID</th>
-			<th>住所</th>
-			<th>予算</th>
-			<th></th>
-			<th></th>
-		</tr>
-	</thead>
-	<tbody id="list-body">
-	</tbody>
-</table>
+<h2 class="ps-2 my-2">department</h2>
+<hr class="mt-0">
+<div class="w-100 vh-100 px-3">
+	<button type="button" class="btn btn-danger" id="delete-all">削除</button>
+	<button type="button" class="btn btn-primary" id="save-all">保存</button>
+	<button type="button" class="btn btn-secondary" id="get-all">リロード</button>
+	<div class="table-responsive mt-2" style="height:75%">
+	<table class="table table-hover table-bordered table-sm">
+		<thead>
+			<tr class="fixed-table-header bg-light">
+				<th>削除</th>
+				<th>ID</th>
+				<th>部署名</th>
+				<th>説明</th>
+				<th>マネージャーID</th>
+				<th>住所</th>
+				<th>予算</th>
+				<th></th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody id="list-body">
+		</tbody>
+	</table>
+	</div>
 </div>
 <script src="/js/department.js"></script>
 {{template "footer" .}}

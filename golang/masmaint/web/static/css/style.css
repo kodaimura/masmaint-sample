@@ -1,5 +1,27 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
+html {
+    height: -webkit-fill-available;
+    width: -webkit-fill-available;
+}
+
+body {
+    min-height: 100vh;
+    min-height: -webkit-fill-available;
+    min-width: 100vw;
+    min-width: -webkit-fill-available;
+}
+
+main {
+    display: flex;
+    flex-wrap: nowrap;
+    height: 100vh;
+    height: -webkit-fill-available;
+    max-height: 100vh;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
 footer{
     position: absolute;
     bottom: 0;
@@ -17,9 +39,15 @@ table td {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 130px;
+    min-width: 50px;
 }
 
 .changed {
-    background-color: #f26651;
+    background-color: #ffc107;
+}
+
+.fixed-table-header {
+    position: sticky;
+    top: 0;
+    z-index: 1;
 }

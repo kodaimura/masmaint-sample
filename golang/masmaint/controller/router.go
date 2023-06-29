@@ -8,8 +8,6 @@ import (
 
 
 func SetRouter(r *gin.Engine) {
-	employeeController := NewEmployeeController()
-	departmentController := NewDepartmentController()
 
 	rm := r.Group("/mastertables", auth.NoopAuthMiddleware())
 	{
@@ -17,16 +15,19 @@ func SetRouter(r *gin.Engine) {
 			c.HTML(200, "index.html", gin.H{})
 		})
 
+		employeeController := NewEmployeeController()
 		rm.GET("/employee", employeeController.GetEmployeePage)
 		rm.GET("/api/employee", employeeController.GetEmployee)
 		rm.POST("/api/employee", employeeController.PostEmployee)
 		rm.PUT("/api/employee", employeeController.PutEmployee)
 		rm.DELETE("/api/employee", employeeController.DeleteEmployee)
 
+		departmentController := NewDepartmentController()
 		rm.GET("/department", departmentController.GetDepartmentPage)
 		rm.GET("/api/department", departmentController.GetDepartment)
 		rm.POST("/api/department", departmentController.PostDepartment)
 		rm.PUT("/api/department", departmentController.PutDepartment)
 		rm.DELETE("/api/department", departmentController.DeleteDepartment)
+		
 	}
 }

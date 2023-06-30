@@ -29,6 +29,35 @@ func NewDepartmentService() *DepartmentService {
 }
 
 
+func (serv *DepartmentService) GetAll() ([]dto.DepartmentDto, error) {
+	rows, err := serv.dDao.SelectAll()
+
+	if err != nil {
+		logger.LogError(err.Error())
+	}
+
+	var ret []dto.DepartmentDto
+	for _, row := range rows {
+		ret = append(ret, row.ToDepartmentDto())
+	}
+
+	return ret, err
+}
+
+
+func (serv *DepartmentService) GetOne(dDto *dto.DepartmentDto) (dto.DepartmentDto, error) {
+	var d *entity.Department = entity.NewDepartment()
+	d.SetId(dDto.Id)
+	row, err := serv.dDao.Select(d)
+
+	if err != nil {
+		logger.LogError(err.Error())
+	}
+
+	return row.ToDepartmentDto(), err
+}
+
+
 func (serv *DepartmentService) Create(dDto *dto.DepartmentDto) (dto.DepartmentDto, error) {
 	var d *entity.Department = entity.NewDepartment()
 
@@ -87,33 +116,3 @@ func (serv *DepartmentService) Delete(dDto *dto.DepartmentDto) error {
 
 	return err
 }
-
-
-func (serv *DepartmentService) GetAll() ([]dto.DepartmentDto, error) {
-	rows, err := serv.dDao.SelectAll()
-
-	if err != nil {
-		logger.LogError(err.Error())
-	}
-
-	var ret []dto.DepartmentDto
-	for _, row := range rows {
-		ret = append(ret, row.ToDepartmentDto())
-	}
-
-	return ret, err
-}
-
-
-func (serv *DepartmentService) GetOne(dDto *dto.DepartmentDto) (dto.DepartmentDto, error) {
-	var d *entity.Department = entity.NewDepartment()
-	d.SetId(dDto.Id)
-	row, err := serv.dDao.Select(d)
-
-	if err != nil {
-		logger.LogError(err.Error())
-	}
-
-	return row.ToDepartmentDto(), err
-}
-

@@ -11,11 +11,11 @@ import (
 
 
 type DepartmentDao interface {
+	SelectAll() ([]entity.Department, error)
+	Select(d *entity.Department) (entity.Department, error)
 	Insert(d *entity.Department) (entity.Department, error)
 	Update(d *entity.Department) (entity.Department, error)
 	Delete(d *entity.Department) error
-	SelectAll() ([]entity.Department, error)
-	Select(d *entity.Department) (entity.Department, error)
 }
 
 type DepartmentService struct {

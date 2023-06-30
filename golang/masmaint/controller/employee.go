@@ -8,11 +8,10 @@ import (
 )
 
 type EmployeeService interface {
+	GetAll() ([]dto.EmployeeDto, error)
 	Create(eDto *dto.EmployeeDto) (dto.EmployeeDto, error)
 	Update(eDto *dto.EmployeeDto) (dto.EmployeeDto, error)
 	Delete(eDto *dto.EmployeeDto) error
-	GetAll() ([]dto.EmployeeDto, error)
-	GetOne(eDto *dto.EmployeeDto) ([]dto.EmployeeDto, error)
 }
 
 type EmployeeController struct {

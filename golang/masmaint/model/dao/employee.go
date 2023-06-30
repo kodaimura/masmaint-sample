@@ -20,6 +20,87 @@ func NewEmployeeDao() *EmployeeDao {
 }
 
 
+func (rep *EmployeeDao) SelectAll() ([]entity.Employee, error) {
+	var ret []entity.Employee
+
+	rows, err := rep.db.Query(
+		`SELECT
+			id,
+			first_name,
+			last_name,
+			email,
+			phone_number,
+			address,
+			hire_date,
+			job_title,
+			department_id,
+			salary
+		 FROM employee`,
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	for rows.Next() {
+		e := entity.Employee{}
+		err = rows.Scan(
+			&e.Id,
+			&e.FirstName,
+			&e.LastName,
+			&e.Email,
+			&e.PhoneNumber,
+			&e.Address,
+			&e.HireDate,
+			&e.JobTitle,
+			&e.DepartmentId,
+			&e.Salary,
+		)
+		if err != nil {
+			break
+		}
+		ret = append(ret, e)
+	}
+
+	return ret, err
+}
+
+
+func (rep *EmployeeDao) Select(e *entity.Employee) (entity.Employee, error) {
+	var ret entity.Employee
+
+	err := rep.db.QueryRow(
+		`SELECT
+			id,
+			first_name,
+			last_name,
+			email,
+			phone_number,
+			address,
+			hire_date,
+			job_title,
+			department_id,
+			salary
+		 FROM employee
+		 WHERE id = $1`,
+		e.Id,
+	).Scan(
+		&ret.Id,
+		&ret.FirstName,
+		&ret.LastName,
+		&ret.Email,
+		&ret.PhoneNumber,
+		&ret.Address,
+		&ret.HireDate,
+		&ret.JobTitle,
+		&ret.DepartmentId,
+		&ret.Salary,
+	)
+
+	return ret, err
+}
+
+
 func (rep *EmployeeDao) Insert(e *entity.Employee) (entity.Employee, error) {
 	var ret entity.Employee
 
@@ -134,85 +215,4 @@ func (rep *EmployeeDao) Delete(e *entity.Employee) error {
 	)
 
 	return err
-}
-
-
-func (rep *EmployeeDao) SelectAll() ([]entity.Employee, error) {
-	var ret []entity.Employee
-
-	rows, err := rep.db.Query(
-		`SELECT
-			id,
-			first_name,
-			last_name,
-			email,
-			phone_number,
-			address,
-			hire_date,
-			job_title,
-			department_id,
-			salary
-		 FROM employee`,
-	)
-
-	if err != nil {
-		return nil, err
-	}
-
-	for rows.Next() {
-		e := entity.Employee{}
-		err = rows.Scan(
-			&e.Id,
-			&e.FirstName,
-			&e.LastName,
-			&e.Email,
-			&e.PhoneNumber,
-			&e.Address,
-			&e.HireDate,
-			&e.JobTitle,
-			&e.DepartmentId,
-			&e.Salary,
-		)
-		if err != nil {
-			break
-		}
-		ret = append(ret, e)
-	}
-
-	return ret, err
-}
-
-
-func (rep *EmployeeDao) Select(e *entity.Employee) (entity.Employee, error) {
-	var ret entity.Employee
-
-	err := rep.db.QueryRow(
-		`SELECT
-			id,
-			first_name,
-			last_name,
-			email,
-			phone_number,
-			address,
-			hire_date,
-			job_title,
-			department_id,
-			salary
-		 FROM employee
-		 WHERE id = $1`,
-		e.Id,
-	).Scan(
-		&ret.Id,
-		&ret.FirstName,
-		&ret.LastName,
-		&ret.Email,
-		&ret.PhoneNumber,
-		&ret.Address,
-		&ret.HireDate,
-		&ret.JobTitle,
-		&ret.DepartmentId,
-		&ret.Salary,
-	)
-
-	return ret, err
 }

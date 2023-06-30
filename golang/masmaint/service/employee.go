@@ -11,11 +11,11 @@ import (
 
 
 type EmployeeDao interface {
+	SelectAll() ([]entity.Employee, error)
+	Select(e *entity.Employee) (entity.Employee, error)
 	Insert(e *entity.Employee) (entity.Employee, error)
 	Update(e *entity.Employee) (entity.Employee, error)
 	Delete(e *entity.Employee) error
-	SelectAll() ([]entity.Employee, error)
-	Select(e *entity.Employee) (entity.Employee, error)
 }
 
 type EmployeeService struct {
@@ -26,6 +26,35 @@ type EmployeeService struct {
 func NewEmployeeService() *EmployeeService {
 	eDao := dao.NewEmployeeDao()
 	return &EmployeeService{eDao}
+}
+
+
+func (serv *EmployeeService) GetAll() ([]dto.EmployeeDto, error) {
+	rows, err := serv.eDao.SelectAll()
+
+	if err != nil {
+		logger.LogError(err.Error())
+	}
+
+	var ret []dto.EmployeeDto
+	for _, row := range rows {
+		ret = append(ret, row.ToEmployeeDto())
+	}
+
+	return ret, err
+}
+
+
+func (serv *EmployeeService) GetOne(eDto *dto.EmployeeDto) (dto.EmployeeDto, error) {
+	var e *entity.Employee = entity.NewEmployee()
+	e.SetId(eDto.Id)
+	row, err := serv.eDao.Select(e)
+
+	if err != nil {
+		logger.LogError(err.Error())
+	}
+
+	return row.ToEmployeeDto(), err
 }
 
 
@@ -95,33 +124,3 @@ func (serv *EmployeeService) Delete(eDto *dto.EmployeeDto) error {
 
 	return err
 }
-
-
-func (serv *EmployeeService) GetAll() ([]dto.EmployeeDto, error) {
-	rows, err := serv.eDao.SelectAll()
-
-	if err != nil {
-		logger.LogError(err.Error())
-	}
-
-	var ret []dto.EmployeeDto
-	for _, row := range rows {
-		ret = append(ret, row.ToEmployeeDto())
-	}
-
-	return ret, err
-}
-
-
-func (serv *EmployeeService) GetOne(eDto *dto.EmployeeDto) (dto.EmployeeDto, error) {
-	var e *entity.Employee = entity.NewEmployee()
-	e.SetId(eDto.Id)
-	row, err := serv.eDao.Select(e)
-
-	if err != nil {
-		logger.LogError(err.Error())
-	}
-
-	return row.ToEmployeeDto(), err
-}
-

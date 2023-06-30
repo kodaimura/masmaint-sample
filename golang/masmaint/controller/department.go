@@ -7,12 +7,12 @@ import (
 	"masmaint/dto"
 )
 
+
 type DepartmentService interface {
+	GetAll() ([]dto.DepartmentDto, error)
 	Create(dDto *dto.DepartmentDto) (dto.DepartmentDto, error)
 	Update(dDto *dto.DepartmentDto) (dto.DepartmentDto, error)
 	Delete(dDto *dto.DepartmentDto) error
-	GetAll() ([]dto.DepartmentDto, error)
-	GetOne(dDto *dto.DepartmentDto) ([]dto.DepartmentDto, error)
 }
 
 type DepartmentController struct {

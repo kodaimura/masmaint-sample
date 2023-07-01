@@ -19,7 +19,6 @@ type DepartmentController struct {
 	dServ *service.DepartmentService
 }
 
-
 func NewDepartmentController() *DepartmentController {
 	dServ := service.NewDepartmentService()
 	return &DepartmentController{dServ}

@@ -10,6 +10,6 @@ type EmployeeDto struct {
 	Address any `json:"address"`
 	HireDate any `json:"hire_date"`
 	JobTitle any `json:"job_title"`
-	DepartmentId any `json:"department_id"`
+	DepartmentCode any `json:"department_code"`
 	Salary any `json:"salary"`
 }

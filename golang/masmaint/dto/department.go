@@ -2,7 +2,7 @@ package dto
 
 
 type DepartmentDto struct {
-	Id any `json:"id"`
+	Code any `json:"code"`
 	Name any `json:"name"`
 	Description any `json:"description"`
 	ManagerId any `json:"manager_id"`

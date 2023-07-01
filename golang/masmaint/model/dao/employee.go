@@ -12,7 +12,6 @@ type EmployeeDao struct {
 	db *sql.DB
 }
 
-
 func NewEmployeeDao() *EmployeeDao {
 	db := db.GetDB()
 	return &EmployeeDao{db}
@@ -32,7 +31,7 @@ func (rep *EmployeeDao) SelectAll() ([]entity.Employee, error) {
 			address,
 			hire_date,
 			job_title,
-			department_id,
+			department_code,
 			salary
 		 FROM employee`,
 	)
@@ -52,7 +51,7 @@ func (rep *EmployeeDao) SelectAll() ([]entity.Employee, error) {
 			&e.Address,
 			&e.HireDate,
 			&e.JobTitle,
-			&e.DepartmentId,
+			&e.DepartmentCode,
 			&e.Salary,
 		)
 		if err != nil {
@@ -78,7 +77,7 @@ func (rep *EmployeeDao) Select(e *entity.Employee) (entity.Employee, error) {
 			address,
 			hire_date,
 			job_title,
-			department_id,
+			department_code,
 			salary
 		 FROM employee
 		 WHERE id = $1`,
@@ -92,7 +91,7 @@ func (rep *EmployeeDao) Select(e *entity.Employee) (entity.Employee, error) {
 		&ret.Address,
 		&ret.HireDate,
 		&ret.JobTitle,
-		&ret.DepartmentId,
+		&ret.DepartmentCode,
 		&ret.Salary,
 	)
 
@@ -112,7 +111,7 @@ func (rep *EmployeeDao) Insert(e *entity.Employee) (entity.Employee, error) {
 			address,
 			hire_date,
 			job_title,
-			department_id,
+			department_code,
 			salary
 		 ) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9) 
 		 RETURNING
@@ -124,7 +123,7 @@ func (rep *EmployeeDao) Insert(e *entity.Employee) (entity.Employee, error) {
 			address,
 			hire_date,
 			job_title,
-			department_id,
+			department_code,
 			salary`,
 		e.FirstName,
 		e.LastName,
@@ -133,7 +132,7 @@ func (rep *EmployeeDao) Insert(e *entity.Employee) (entity.Employee, error) {
 		e.Address,
 		e.HireDate,
 		e.JobTitle,
-		e.DepartmentId,
+		e.DepartmentCode,
 		e.Salary,
 	).Scan(
 		&ret.Id,
@@ -144,7 +143,7 @@ func (rep *EmployeeDao) Insert(e *entity.Employee) (entity.Employee, error) {
 		&ret.Address,
 		&ret.HireDate,
 		&ret.JobTitle,
-		&ret.DepartmentId,
+		&ret.DepartmentCode,
 		&ret.Salary,
 	)
 
@@ -165,7 +164,7 @@ func (rep *EmployeeDao) Update(e *entity.Employee) (entity.Employee, error) {
 			address = $5,
 			hire_date = $6,
 			job_title = $7,
-			department_id = $8,
+			department_code = $8,
 			salary = $9
 		 WHERE id = $10
 		 RETURNING
@@ -177,7 +176,7 @@ func (rep *EmployeeDao) Update(e *entity.Employee) (entity.Employee, error) {
 			address,
 			hire_date,
 			job_title,
-			department_id,
+			department_code,
 			salary`,
 		e.FirstName,
 		e.LastName,
@@ -186,7 +185,7 @@ func (rep *EmployeeDao) Update(e *entity.Employee) (entity.Employee, error) {
 		e.Address,
 		e.HireDate,
 		e.JobTitle,
-		e.DepartmentId,
+		e.DepartmentCode,
 		e.Salary,
 		e.Id,
 	).Scan(
@@ -198,7 +197,7 @@ func (rep *EmployeeDao) Update(e *entity.Employee) (entity.Employee, error) {
 		&ret.Address,
 		&ret.HireDate,
 		&ret.JobTitle,
-		&ret.DepartmentId,
+		&ret.DepartmentCode,
 		&ret.Salary,
 	)
 

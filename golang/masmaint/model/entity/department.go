@@ -9,12 +9,12 @@ import (
 
 
 type Department struct {
-	Id int64 `db:"id"`
+	Code string `db:"code"`
 	Name string `db:"name"`
 	Description sql.NullString `db:"description"`
 	ManagerId sql.NullInt64 `db:"manager_id"`
 	Location sql.NullString `db:"location"`
-	Budget sql.NullFloat64 `db:"budget"`
+	Budget float64 `db:"budget"`
 	CreatedAt string `db:"created_at"`
 	UpdatedAt string `db:"updated_at"`
 }
@@ -23,12 +23,9 @@ func NewDepartment() *Department {
 	return &Department{}
 }
 
-func (e *Department) SetId(id any) error {
-	x, err := utils.ToInt64(id)
-	if err != nil {
-		return err
-	}
-	e.Id = x
+
+func (e *Department) SetCode(code any) error {
+	e.Code = utils.ToString(code)
 	return nil
 }
 
@@ -75,17 +72,11 @@ func (e *Department) SetLocation(location any) error {
 }
 
 func (e *Department) SetBudget(budget any) error {
-	if budget == nil || budget == "" {
-		e.Budget.Valid = false
-		return nil	
-	}
-
 	x, err := utils.ToFloat64(budget)
 	if err != nil {
 		return err
 	}
-	e.Budget.Float64 = x
-	e.Budget.Valid = true
+	e.Budget = x
 	return nil
 }
 
@@ -93,7 +84,7 @@ func (e *Department) SetBudget(budget any) error {
 func (e *Department) ToDepartmentDto() dto.DepartmentDto {
 	var dDto dto.DepartmentDto
 
-	dDto.Id = e.Id
+	dDto.Code = e.Code
 	dDto.Name = e.Name
 	if e.Description.Valid != false {
 		dDto.Description = e.Description.String
@@ -104,9 +95,7 @@ func (e *Department) ToDepartmentDto() dto.DepartmentDto {
 	if e.Location.Valid != false {
 		dDto.Location = e.Location.String
 	}
-	if e.Budget.Valid != false {
-		dDto.Budget = e.Budget.Float64
-	}
+	dDto.Budget = e.Budget
 	dDto.CreatedAt = e.CreatedAt
 	dDto.UpdatedAt = e.UpdatedAt
 

@@ -19,7 +19,6 @@ type EmployeeController struct {
 	eServ *service.EmployeeService
 }
 
-
 func NewEmployeeController() *EmployeeController {
 	eServ := service.NewEmployeeService()
 	return &EmployeeController{eServ}

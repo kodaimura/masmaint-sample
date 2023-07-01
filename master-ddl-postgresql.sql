@@ -14,17 +14,17 @@ CREATE TABLE employee (
   address TEXT,
   hire_date DATE,
   job_title TEXT,
-  department_id INTEGER,
-  salary INTEGER
+  department_code TEXT,
+  salary NUMERIC(10, 2)
 );
 
 CREATE TABLE department (
-  id SERIAL PRIMARY KEY,
-  name TEXT NOT NULL UNIQUE,
+  code TEXT PRIMARY KEY,
+  name TEXT NOT NULL,
   description TEXT,
   manager_id INTEGER,
   location TEXT,
-  budget NUMERIC(10, 2),
+  budget NUMERIC(10, 2) NOT NULL,
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );

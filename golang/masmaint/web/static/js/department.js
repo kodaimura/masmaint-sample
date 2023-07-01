@@ -6,7 +6,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
 /* リロードボタン押下 */
 document.getElementById('reload').addEventListener('click', (event) => {
 	clearMessage();
-	document.getElementById('list-body').innerHTML = '';
+	document.getElementById('records').innerHTML = '';
 	setUp();
 })
 
@@ -43,20 +43,20 @@ const nullToEmpty = (s) => {
 /* <tr></tr>を作成 */
 const createTr = (elem) => {
 	return `<tr><td><input class="form-check-input" type="checkbox" name="del" value=${JSON.stringify(elem)}></td>`
-		+ `<td><input type="text" name="id" value=${nullToEmpty(elem.id)} disabled></td>`
-		+ `<td><input type="text" name="name" value=${nullToEmpty(elem.name)}><input type="hidden" name="name_bk" value=${nullToEmpty(elem.name)}></td>`
-		+ `<td><input type="text" name="description" value=${nullToEmpty(elem.description)}><input type="hidden" name="description_bk" value=${nullToEmpty(elem.description)}></td>`
-		+ `<td><input type="text" name="manager_id" value=${nullToEmpty(elem.manager_id)}><input type="hidden" name="manager_id_bk" value=${nullToEmpty(elem.manager_id)}></td>`
-		+ `<td><input type="text" name="location" value=${nullToEmpty(elem.location)}><input type="hidden" name="location_bk" value=${nullToEmpty(elem.location)}></td>`
-		+ `<td><input type="text" name="budget" value=${nullToEmpty(elem.budget)}><input type="hidden" name="budget_bk" value=${nullToEmpty(elem.budget)}></td>`
-		+ `<td><input type="text" name="created_at" value=${nullToEmpty(elem.created_at)} disabled></td>`
-		+ `<td><input type="text" name="updated_at" value=${nullToEmpty(elem.updated_at)} disabled></td></tr>`;
+		+ `<td><input type="text" name="code" value="${nullToEmpty(elem.code)}" disabled></td>`
+		+ `<td><input type="text" name="name" value="${nullToEmpty(elem.name)}"><input type="hidden" name="name_bk" value="${nullToEmpty(elem.name)}"></td>`
+		+ `<td><input type="text" name="description" value="${nullToEmpty(elem.description)}"><input type="hidden" name="description_bk" value="${nullToEmpty(elem.description)}"></td>`
+		+ `<td><input type="text" name="manager_id" value="${nullToEmpty(elem.manager_id)}"><input type="hidden" name="manager_id_bk" value="${nullToEmpty(elem.manager_id)}"></td>`
+		+ `<td><input type="text" name="location" value="${nullToEmpty(elem.location)}"><input type="hidden" name="location_bk" value="${nullToEmpty(elem.location)}"></td>`
+		+ `<td><input type="text" name="budget" value="${nullToEmpty(elem.budget)}"><input type="hidden" name="budget_bk" value="${nullToEmpty(elem.budget)}"></td>`
+		+ `<td><input type="text" name="created_at" value="${nullToEmpty(elem.created_at)}" disabled></td>`
+		+ `<td><input type="text" name="updated_at" value="${nullToEmpty(elem.updated_at)}" disabled></td></tr>`;
 } 
 
 /* <tr></tr>を作成 （tbody末尾の新規登録用レコード）*/
 const createTrNew = (elem) => {
 	return `<tr id="new"><td></td>`
-		+ `<td><input type="text" disabled></td>`
+		+ `<td><input type="text" id="code_new"></td>`
 		+ `<td><input type="text" id="name_new"></td>`
 		+ `<td><input type="text" id="description_new"></td>`
 		+ `<td><input type="text" id="manager_id_new"></td>`
@@ -81,6 +81,7 @@ const renderTbody = (data) => {
 const changeAction = (event) => {
 	let target = event.target;
 	let target_bk = target.nextElementSibling;
+
 	if (target.value !== target_bk.value) {
 		target.classList.add('changed');
 	} else {
@@ -116,7 +117,7 @@ const doPutAll = async () => {
 	let successCount = 0;
 	let errorCount = 0;
 
-	let id = document.getElementsByName('id');
+	let code = document.getElementsByName('code');
 	let created_at = document.getElementsByName('created_at');
 	let updated_at = document.getElementsByName('updated_at');
 
@@ -139,7 +140,7 @@ const doPutAll = async () => {
 			|| (budget[i].value !== budget_bk[i].value)) {
 
 			let requestBody = {
-				id: id[i].value,
+				code: code[i].value,
 				name: name[i].value,
 				description: description[i].value,
 				manager_id: manager_id[i].value,
@@ -161,7 +162,7 @@ const doPutAll = async () => {
   				return response.json();
   			})
 			.then(data => {
-				id[i].value = data.id;
+				code[i].value = data.code;
 				created_at[i].value = data.created_at;
 				updated_at[i].value = data.updated_at;
 				name[i].value = data.name;
@@ -194,19 +195,22 @@ const doPutAll = async () => {
 
 /* 新規登録 */
 const doPost = () => {
+	let code = document.getElementById('code_new').value;
 	let name = document.getElementById('name_new').value;
 	let description = document.getElementById('description_new').value;
 	let manager_id = document.getElementById('manager_id_new').value;
 	let location = document.getElementById('location_new').value;
 	let budget = document.getElementById('budget_new').value;
 
-	if ((name !== '') 
+	if ((code !== '') 
+		|| (name !== '') 
 		|| (description !== '') 
 		|| (manager_id !== '') 
 		|| (location !== '')
 		|| (budget !== ''))
 	{
 		let requestBody = {
+			code: code,
 			name: name,
 			description: description,
 			manager_id: manager_id,

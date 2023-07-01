@@ -17,13 +17,14 @@ type Employee struct {
 	Address sql.NullString `db:"address"`
 	HireDate sql.NullString `db:"hire_date"`
 	JobTitle sql.NullString `db:"job_title"`
-	DepartmentId sql.NullInt64 `db:"department_id"`
-	Salary sql.NullInt64 `db:"salary"`
+	DepartmentCode sql.NullString `db:"department_code"`
+	Salary sql.NullFloat64 `db:"salary"`
 }
 
 func NewEmployee() *Employee {
 	return &Employee{}
 }
+
 
 func (e *Employee) SetId(id any) error {
 	x, err := utils.ToInt64(id)
@@ -106,36 +107,28 @@ func (e *Employee) SetJobTitle(jobTitle any) error {
 	return nil
 }
 
-func (e *Employee) SetDepartmentId(departmentId any) error {
-	if departmentId == nil || departmentId == "" {
-		e.DepartmentId.Valid = false
+func (e *Employee) SetDepartmentCode(departmentCode any) error {
+	if departmentCode == nil {
+		e.DepartmentCode.Valid = false
 		return nil
 	}
 
-	x, err := utils.ToInt64(departmentId)
-	if err != nil {
-		return err
-	}
-	e.DepartmentId.Int64 = x
-	e.DepartmentId.Valid = true
+	e.DepartmentCode.String = utils.ToString(departmentCode)
+	e.DepartmentCode.Valid = true
 	return nil
 }
 
 func (e *Employee) SetSalary(salary any) error {
-	if salary == nil {
+	if salary == nil || salary == "" {
 		e.Salary.Valid = false
 		return nil
-	} 
-	if salary == "" {
-		e.Salary.Valid = false
-		return nil
-	} 
+	}
 
-	x, err := utils.ToInt64(salary)
+	x, err := utils.ToFloat64(salary)
 	if err != nil {
 		return err
 	}
-	e.Salary.Int64 = x
+	e.Salary.Float64 = x
 	e.Salary.Valid = true
 	return nil
 }
@@ -164,11 +157,11 @@ func (e *Employee) ToEmployeeDto() dto.EmployeeDto {
 	if e.JobTitle.Valid != false {
 		eDto.JobTitle = e.JobTitle.String
 	}
-	if e.DepartmentId.Valid != false {
-		eDto.DepartmentId = e.DepartmentId.Int64
+	if e.DepartmentCode.Valid != false {
+		eDto.DepartmentCode = e.DepartmentCode.String
 	}
 	if e.Salary.Valid != false {
-		eDto.Salary = e.Salary.Int64
+		eDto.Salary = e.Salary.Float64
 	}
 
 	return eDto

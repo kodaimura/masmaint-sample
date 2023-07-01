@@ -22,7 +22,6 @@ type EmployeeService struct {
 	eDao *dao.EmployeeDao
 }
 
-
 func NewEmployeeService() *EmployeeService {
 	eDao := dao.NewEmployeeDao()
 	return &EmployeeService{eDao}
@@ -72,7 +71,7 @@ func (serv *EmployeeService) Create(eDto *dto.EmployeeDto) (dto.EmployeeDto, err
 	e.SetAddress(eDto.Address) != nil || 
 	e.SetHireDate(eDto.HireDate) != nil || 
 	e.SetJobTitle(eDto.JobTitle) != nil ||
-	e.SetDepartmentId(eDto.DepartmentId) != nil || 
+	e.SetDepartmentCode(eDto.DepartmentCode) != nil || 
 	e.SetSalary(eDto.Salary) != nil {
 		return dto.EmployeeDto{}, errors.New("不正な値があります。")
 	}
@@ -98,7 +97,7 @@ func (serv *EmployeeService) Update(eDto *dto.EmployeeDto) (dto.EmployeeDto, err
 	e.SetAddress(eDto.Address) != nil || 
 	e.SetHireDate(eDto.HireDate) != nil || 
 	e.SetJobTitle(eDto.JobTitle) != nil ||
-	e.SetDepartmentId(eDto.DepartmentId) != nil || 
+	e.SetDepartmentCode(eDto.DepartmentCode) != nil || 
 	e.SetSalary(eDto.Salary) != nil {
 		return dto.EmployeeDto{}, errors.New("不正な値があります。")
 	}

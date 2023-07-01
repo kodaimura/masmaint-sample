@@ -22,7 +22,6 @@ type DepartmentService struct {
 	dDao *dao.DepartmentDao
 }
 
-
 func NewDepartmentService() *DepartmentService {
 	dDao := dao.NewDepartmentDao()
 	return &DepartmentService{dDao}
@@ -48,7 +47,7 @@ func (serv *DepartmentService) GetAll() ([]dto.DepartmentDto, error) {
 func (serv *DepartmentService) GetOne(dDto *dto.DepartmentDto) (dto.DepartmentDto, error) {
 	var d *entity.Department = entity.NewDepartment()
 
-	if d.SetId(dDto.Id) != nil {
+	if d.SetCode(dDto.Code) != nil {
 		return dto.DepartmentDto{}, errors.New("不正な値があります。")
 	}
 
@@ -65,7 +64,8 @@ func (serv *DepartmentService) GetOne(dDto *dto.DepartmentDto) (dto.DepartmentDt
 func (serv *DepartmentService) Create(dDto *dto.DepartmentDto) (dto.DepartmentDto, error) {
 	var d *entity.Department = entity.NewDepartment()
 
-	if d.SetName(dDto.Name) != nil || 
+	if d.SetCode(dDto.Code) != nil || 
+	d.SetName(dDto.Name) != nil || 
 	d.SetDescription(dDto.Description) != nil || 
 	d.SetManagerId(dDto.ManagerId) != nil || 
 	d.SetLocation(dDto.Location) != nil || 
@@ -86,7 +86,7 @@ func (serv *DepartmentService) Create(dDto *dto.DepartmentDto) (dto.DepartmentDt
 func (serv *DepartmentService) Update(dDto *dto.DepartmentDto) (dto.DepartmentDto, error) {
 	var d *entity.Department = entity.NewDepartment()
 
-	if d.SetId(dDto.Id) != nil || 
+	if d.SetCode(dDto.Code) != nil || 
 	d.SetName(dDto.Name) != nil || 
 	d.SetDescription(dDto.Description) != nil || 
 	d.SetManagerId(dDto.ManagerId) != nil || 
@@ -108,7 +108,7 @@ func (serv *DepartmentService) Update(dDto *dto.DepartmentDto) (dto.DepartmentDt
 func (serv *DepartmentService) Delete(dDto *dto.DepartmentDto) error {
 	var d *entity.Department = entity.NewDepartment()
 
-	if d.SetId(dDto.Id) != nil {
+	if d.SetCode(dDto.Code) != nil {
 		return errors.New("不正な値があります。")
 	}
 

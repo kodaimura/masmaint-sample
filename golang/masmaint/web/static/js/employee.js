@@ -6,7 +6,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
 /* リロードボタン押下 */
 document.getElementById('reload').addEventListener('click', (event) => {
 	clearMessage();
-	document.getElementById('list-body').innerHTML = '';
+	document.getElementById('records').innerHTML = '';
 	setUp();
 })
 
@@ -43,16 +43,16 @@ const nullToEmpty = (s) => {
 /* <tr></tr>を作成 */
 const createTr = (elem) => {
 	return `<tr><td><input class="form-check-input" type="checkbox" name="del" value=${JSON.stringify(elem)}></td>`
-		+ `<td><input type="text" name="id" value=${nullToEmpty(elem.id)} disabled></td>`
-		+ `<td><input type="text" name="first_name" value=${nullToEmpty(elem.first_name)}><input type="hidden" name="first_name_bk" value=${nullToEmpty(elem.first_name)}></td>`
-		+ `<td><input type="text" name="last_name" value=${nullToEmpty(elem.last_name)}><input type="hidden" name="last_name_bk" value=${nullToEmpty(elem.last_name)}></td>`
-		+ `<td><input type="text" name="email" value=${nullToEmpty(elem.email)}><input type="hidden" name="email_bk" value=${nullToEmpty(elem.email)}></td>`
-		+ `<td><input type="text" name="phone_number" value=${nullToEmpty(elem.phone_number)}><input type="hidden" name="phone_number_bk" value=${nullToEmpty(elem.phone_number)}></td>`
-		+ `<td><input type="text" name="address" value=${nullToEmpty(elem.address)}><input type="hidden" name="address_bk" value=${nullToEmpty(elem.address)}></td>`
-		+ `<td><input type="text" name="hire_date" value=${nullToEmpty(elem.hire_date)}><input type="hidden" name="hire_date_bk" value=${nullToEmpty(elem.hire_date)}></td>`
-		+ `<td><input type="text" name="job_title" value=${nullToEmpty(elem.job_title)}><input type="hidden" name="job_title_bk" value=${nullToEmpty(elem.job_title)}></td>`
-		+ `<td><input type="text" name="department_id" value=${nullToEmpty(elem.department_id)}><input type="hidden" name="department_id_bk" value=${nullToEmpty(elem.department_id)}></td>`
-		+ `<td><input type="text" name="salary" value=${nullToEmpty(elem.salary)}><input type="hidden" name="salary_bk" value=${nullToEmpty(elem.salary)}></td></tr>`;
+		+ `<td><input type="text" name="id" value="${nullToEmpty(elem.id)}" disabled></td>`
+		+ `<td><input type="text" name="first_name" value="${nullToEmpty(elem.first_name)}"><input type="hidden" name="first_name_bk" value="${nullToEmpty(elem.first_name)}"></td>`
+		+ `<td><input type="text" name="last_name" value="${nullToEmpty(elem.last_name)}"><input type="hidden" name="last_name_bk" value="${nullToEmpty(elem.last_name)}"></td>`
+		+ `<td><input type="text" name="email" value="${nullToEmpty(elem.email)}"><input type="hidden" name="email_bk" value="${nullToEmpty(elem.email)}"></td>`
+		+ `<td><input type="text" name="phone_number" value="${nullToEmpty(elem.phone_number)}"><input type="hidden" name="phone_number_bk" value="${nullToEmpty(elem.phone_number)}"></td>`
+		+ `<td><input type="text" name="address" value="${nullToEmpty(elem.address)}"><input type="hidden" name="address_bk" value="${nullToEmpty(elem.address)}"></td>`
+		+ `<td><input type="text" name="hire_date" value="${nullToEmpty(elem.hire_date)}"><input type="hidden" name="hire_date_bk" value="${nullToEmpty(elem.hire_date)}"></td>`
+		+ `<td><input type="text" name="job_title" value="${nullToEmpty(elem.job_title)}"><input type="hidden" name="job_title_bk" value="${nullToEmpty(elem.job_title)}"></td>`
+		+ `<td><input type="text" name="department_code" value="${nullToEmpty(elem.department_code)}"><input type="hidden" name="department_code_bk" value="${nullToEmpty(elem.department_code)}"></td>`
+		+ `<td><input type="text" name="salary" value="${nullToEmpty(elem.salary)}"><input type="hidden" name="salary_bk" value="${nullToEmpty(elem.salary)}"></td></tr>`;
 } 
 
 /* <tr></tr>を作成 （tbody末尾の新規登録用レコード）*/
@@ -66,7 +66,7 @@ const createTrNew = (elem) => {
 		+ `<td><input type="text" id="address_new"></td>`
 		+ `<td><input type="text" id="hire_date_new"></td>`
 		+ `<td><input type="text" id="job_title_new"></td>`
-		+ `<td><input type="text" id="department_id_new"></td>`
+		+ `<td><input type="text" id="department_code_new"></td>`
 		+ `<td><input type="text" id="salary_new"></td></tr>`;
 } 
 
@@ -113,7 +113,7 @@ const setUp = () => {
 		addChangedAction('address');
 		addChangedAction('hire_date');
 		addChangedAction('job_title');
-		addChangedAction('department_id');
+		addChangedAction('department_code');
 		addChangedAction('salary');
 	});
 }
@@ -140,10 +140,10 @@ const doPutAll = async () => {
 	let hire_date_bk = document.getElementsByName('hire_date_bk');
 	let job_title = document.getElementsByName('job_title');
 	let job_title_bk = document.getElementsByName('job_title_bk');
-	let department_id = document.getElementsByName('department_id');
-	let department_id_bk = document.getElementsByName('department_id_bk');
+	let department_code = document.getElementsByName('department_code');
+	let department_code_bk = document.getElementsByName('department_code_bk');
 	let salary = document.getElementsByName('salary');
-	let salary_bk = document.getElementsByName('salary');
+	let salary_bk = document.getElementsByName('salary_bk');
 
 	for (let i = 0; i < first_name.length; i++) {
 		if ((first_name[i].value !== first_name_bk[i].value) 
@@ -153,7 +153,7 @@ const doPutAll = async () => {
 			|| (address[i].value !== address_bk[i].value)
 			|| (hire_date[i].value !== hire_date_bk[i].value)
 			|| (job_title[i].value !== job_title_bk[i].value)
-			|| (department_id[i].value !== department_id_bk[i].value)
+			|| (department_code[i].value !== department_code_bk[i].value)
 			|| (salary[i].value !== salary_bk[i].value)) {
 
 			let requestBody = {
@@ -165,7 +165,7 @@ const doPutAll = async () => {
 				address: address[i].value,
 				hire_date: hire_date[i].value,
 				job_title: job_title[i].value,
-				department_id: department_id[i].value,
+				department_code: department_code[i].value,
 				salary: salary[i].value
 			}
 
@@ -196,8 +196,8 @@ const doPutAll = async () => {
 				hire_date_bk[i].value = data.hire_date;
 				job_title[i].value = data.job_title;
 				job_title_bk[i].value = data.job_title;
-				department_id[i].value = data.department_id;
-				department_id_bk[i].value = data.department_id;
+				department_code[i].value = data.department_code;
+				department_code_bk[i].value = data.department_code;
 				salary[i].value = data.salary;
 				salary_bk[i].value = data.salary;
 
@@ -208,9 +208,9 @@ const doPutAll = async () => {
 				address[i].classList.remove('changed');
 				hire_date[i].classList.remove('changed');
 				job_title[i].classList.remove('changed');
-				department_id[i].classList.remove('changed');
+				department_code[i].classList.remove('changed');
 				salary[i].classList.remove('changed');
-				
+
 				successCount += 1;
 			}).catch(error => {
 				errorCount += 1;				
@@ -231,7 +231,7 @@ const doPost = () => {
 	let address = document.getElementById('address_new').value;
 	let hire_date = document.getElementById('hire_date_new').value;
 	let job_title = document.getElementById('job_title_new').value;
-	let department_id = document.getElementById('department_id_new').value;
+	let department_code = document.getElementById('department_code_new').value;
 	let salary = document.getElementById('salary_new').value;
 
 	if ((first_name !== '') 
@@ -241,7 +241,7 @@ const doPost = () => {
 		|| (address !== '')
 		|| (hire_date !== '')
 		|| (job_title !== '') 
-		|| (department_id !== '')
+		|| (department_code !== '')
 		|| (salary !== ''))
 	{
 		let requestBody = {
@@ -252,7 +252,7 @@ const doPost = () => {
 			address: address,
 			hire_date: hire_date,
 			job_title: job_title,
-			department_id: department_id,
+			department_code: department_code,
 			salary: salary
 		}
 

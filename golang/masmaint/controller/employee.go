@@ -7,6 +7,7 @@ import (
 	"masmaint/dto"
 )
 
+
 type EmployeeService interface {
 	GetAll() ([]dto.EmployeeDto, error)
 	Create(eDto *dto.EmployeeDto) (dto.EmployeeDto, error)

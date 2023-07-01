@@ -7,6 +7,7 @@ import (
 	"masmaint/core/utils"
 )
 
+
 type Employee struct {
 	Id int64 `db:"id"`
 	FirstName string `db:"first_name"`
@@ -84,7 +85,7 @@ func (e *Employee) SetAddress(address any) error {
 
 func (e *Employee) SetHireDate(hireDate any) error {
 	//日付型は "" の時は null 扱いとする。
-	if hireDate == nil || hireDate == ""{
+	if hireDate == nil || hireDate == "" {
 		e.HireDate.Valid = false
 		return nil
 	} 
@@ -106,14 +107,10 @@ func (e *Employee) SetJobTitle(jobTitle any) error {
 }
 
 func (e *Employee) SetDepartmentId(departmentId any) error {
-	if departmentId == nil {
+	if departmentId == nil || departmentId == "" {
 		e.DepartmentId.Valid = false
 		return nil
-	} 
-	if departmentId == "" {
-		e.DepartmentId.Valid = false
-		return nil
-	} 
+	}
 
 	x, err := utils.ToInt64(departmentId)
 	if err != nil {
@@ -142,6 +139,7 @@ func (e *Employee) SetSalary(salary any) error {
 	e.Salary.Valid = true
 	return nil
 }
+
 
 func (e *Employee) ToEmployeeDto() dto.EmployeeDto {
 	var eDto dto.EmployeeDto

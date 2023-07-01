@@ -7,6 +7,7 @@ import (
 	"masmaint/core/utils"
 )
 
+
 type Department struct {
 	Id int64 `db:"id"`
 	Name string `db:"name"`
@@ -48,14 +49,10 @@ func (e *Department) SetDescription(description any) error {
 }
 
 func (e *Department) SetManagerId(managerId any) error {
-	if managerId == nil {
+	if managerId == nil || managerId == "" {
 		e.ManagerId.Valid = false
 		return nil
-	} 
-	if managerId == "" {
-		e.ManagerId.Valid = false
-		return nil
-	} 
+	}
 
 	x, err := utils.ToInt64(managerId)
 	if err != nil {
@@ -78,13 +75,9 @@ func (e *Department) SetLocation(location any) error {
 }
 
 func (e *Department) SetBudget(budget any) error {
-	if budget == nil {
+	if budget == nil || budget == "" {
 		e.Budget.Valid = false
 		return nil	
-	}
-	if budget == "" {
-		e.Budget.Valid = false
-		return nil
 	}
 
 	x, err := utils.ToFloat64(budget)

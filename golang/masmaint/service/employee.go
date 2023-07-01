@@ -31,9 +31,9 @@ func NewEmployeeService() *EmployeeService {
 
 func (serv *EmployeeService) GetAll() ([]dto.EmployeeDto, error) {
 	rows, err := serv.eDao.SelectAll()
-
 	if err != nil {
 		logger.LogError(err.Error())
+		return []dto.EmployeeDto{}, errors.New("取得に失敗しました。")
 	}
 
 	var ret []dto.EmployeeDto
@@ -41,20 +41,24 @@ func (serv *EmployeeService) GetAll() ([]dto.EmployeeDto, error) {
 		ret = append(ret, row.ToEmployeeDto())
 	}
 
-	return ret, err
+	return ret, nil
 }
 
 
 func (serv *EmployeeService) GetOne(eDto *dto.EmployeeDto) (dto.EmployeeDto, error) {
 	var e *entity.Employee = entity.NewEmployee()
-	e.SetId(eDto.Id)
-	row, err := serv.eDao.Select(e)
 
-	if err != nil {
-		logger.LogError(err.Error())
+	if e.SetId(eDto.Id) != nil {
+		return dto.EmployeeDto{}, errors.New("不正な値があります。")
 	}
 
-	return row.ToEmployeeDto(), err
+	row, err := serv.eDao.Select(e)
+	if err != nil {
+		logger.LogError(err.Error())
+		return dto.EmployeeDto{}, errors.New("取得に失敗しました。")
+	}
+
+	return row.ToEmployeeDto(), nil
 }
 
 
@@ -74,12 +78,12 @@ func (serv *EmployeeService) Create(eDto *dto.EmployeeDto) (dto.EmployeeDto, err
 	}
 
 	row, err := serv.eDao.Insert(e)
-
 	if err != nil {
 		logger.LogError(err.Error())
+		return dto.EmployeeDto{}, errors.New("登録に失敗しました。")
 	}
 
-	return row.ToEmployeeDto(), err
+	return row.ToEmployeeDto(), nil
 }
 
 
@@ -100,12 +104,12 @@ func (serv *EmployeeService) Update(eDto *dto.EmployeeDto) (dto.EmployeeDto, err
 	}
 
 	row, err := serv.eDao.Update(e)
-
 	if err != nil {
 		logger.LogError(err.Error())
+		return dto.EmployeeDto{}, errors.New("更新に失敗しました。")
 	}
 
-	return row.ToEmployeeDto(), err
+	return row.ToEmployeeDto(), nil
 }
 
 
@@ -117,10 +121,10 @@ func (serv *EmployeeService) Delete(eDto *dto.EmployeeDto) error {
 	}
 
 	err := serv.eDao.Delete(e)
-
 	if err != nil {
 		logger.LogError(err.Error())
+		return errors.New("削除に失敗しました。")
 	}
 
-	return err
+	return nil
 }

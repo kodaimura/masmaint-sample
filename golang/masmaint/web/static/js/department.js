@@ -23,11 +23,24 @@ document.getElementById('ModalDeleteAllOk').addEventListener('click', (event) =>
 	doDeleteAll();
 })
 
+/* チェックボックスの選択一覧取得 */
+const getDeleteTarget = () => {
+	let dels = document.getElementsByName('del');
+	let ret = [];
+
+	for (let x of dels) {
+		if (x.checked) {
+			ret.push(x.value);
+		}
+	}
+	return ret
+}
+
 const renderMessage = (msg, count, isSuccess) => {
 	if (count !== 0) {
 		let message = document.createElement('div');
-		message.textContent = `${count}件の${msg}に${isSuccess? "成功" : "失敗"}しました。`
-		message.className = `alert alert-${isSuccess? "success" : "danger"} alert-custom my-1`;
+		message.textContent = `${count}件の${msg}に${isSuccess? '成功' : '失敗'}しました。`
+		message.className = `alert alert-${isSuccess? 'success' : 'danger'} alert-custom my-1`;
 		document.getElementById('message').appendChild(message);
 	}
 }
@@ -37,44 +50,7 @@ const clearMessage = () => {
 }
 
 const nullToEmpty = (s) => {
-	return (s == null)? "" : s;
-}
-
-/* <tr></tr>を作成 */
-const createTr = (elem) => {
-	return `<tr><td><input class="form-check-input" type="checkbox" name="del" value=${JSON.stringify(elem)}></td>`
-		+ `<td><input type="text" name="code" value="${nullToEmpty(elem.code)}" disabled></td>`
-		+ `<td><input type="text" name="name" value="${nullToEmpty(elem.name)}"><input type="hidden" name="name_bk" value="${nullToEmpty(elem.name)}"></td>`
-		+ `<td><input type="text" name="description" value="${nullToEmpty(elem.description)}"><input type="hidden" name="description_bk" value="${nullToEmpty(elem.description)}"></td>`
-		+ `<td><input type="text" name="manager_id" value="${nullToEmpty(elem.manager_id)}"><input type="hidden" name="manager_id_bk" value="${nullToEmpty(elem.manager_id)}"></td>`
-		+ `<td><input type="text" name="location" value="${nullToEmpty(elem.location)}"><input type="hidden" name="location_bk" value="${nullToEmpty(elem.location)}"></td>`
-		+ `<td><input type="text" name="budget" value="${nullToEmpty(elem.budget)}"><input type="hidden" name="budget_bk" value="${nullToEmpty(elem.budget)}"></td>`
-		+ `<td><input type="text" name="created_at" value="${nullToEmpty(elem.created_at)}" disabled></td>`
-		+ `<td><input type="text" name="updated_at" value="${nullToEmpty(elem.updated_at)}" disabled></td></tr>`;
-} 
-
-/* <tr></tr>を作成 （tbody末尾の新規登録用レコード）*/
-const createTrNew = (elem) => {
-	return `<tr id="new"><td></td>`
-		+ `<td><input type="text" id="code_new"></td>`
-		+ `<td><input type="text" id="name_new"></td>`
-		+ `<td><input type="text" id="description_new"></td>`
-		+ `<td><input type="text" id="manager_id_new"></td>`
-		+ `<td><input type="text" id="location_new"></td>`
-		+ `<td><input type="text" id="budget_new"></td>`
-		+ `<td><input type="text" disabled></td>`
-		+ `<td><input type="text" disabled></td></tr>`;
-} 
-
-/* <tbody></tbody>レンダリング */
-const renderTbody = (data) => {
-	let tbody= '';
-	for (const elem of data) {
-		tbody += createTr(elem);
-	}
-	tbody += createTrNew();
-
-	document.getElementById('records').innerHTML = tbody;
+	return (s == null)? '' : s;
 }
 
 /* チェンジアクション */
@@ -96,6 +72,44 @@ const addChangedAction = (columnName) => {
 		elem.addEventListener('change', changeAction);
 	}
 }
+
+/* <tbody></tbody>レンダリング */
+const renderTbody = (data) => {
+	let tbody= '';
+	for (const elem of data) {
+		tbody += createTr(elem);
+	}
+	tbody += createTrNew();
+
+	document.getElementById('records').innerHTML = tbody;
+}
+
+/* <tr></tr>を作成 （tbody末尾の新規登録用レコード）*/
+const createTrNew = (elem) => {
+	return `<tr id='new'><td></td>`
+		+ `<td><input type='text' id='code_new'></td>`
+		+ `<td><input type='text' id='name_new'></td>`
+		+ `<td><input type='text' id='description_new'></td>`
+		+ `<td><input type='text' id='manager_id_new'></td>`
+		+ `<td><input type='text' id='location_new'></td>`
+		+ `<td><input type='text' id='budget_new'></td>`
+		+ `<td><input type='text' disabled></td>`
+		+ `<td><input type='text' disabled></td></tr>`;
+} 
+
+/* <tr></tr>を作成 */
+const createTr = (elem) => {
+	return `<tr><td><input class='form-check-input' type='checkbox' name='del' value=${JSON.stringify(elem)}></td>`
+		+ `<td><input type='text' name='code' value='${nullToEmpty(elem.code)}' disabled></td>`
+		+ `<td><input type='text' name='name' value='${nullToEmpty(elem.name)}'><input type='hidden' name='name_bk' value='${nullToEmpty(elem.name)}'></td>`
+		+ `<td><input type='text' name='description' value='${nullToEmpty(elem.description)}'><input type='hidden' name='description_bk' value='${nullToEmpty(elem.description)}'></td>`
+		+ `<td><input type='text' name='manager_id' value='${nullToEmpty(elem.manager_id)}'><input type='hidden' name='manager_id_bk' value='${nullToEmpty(elem.manager_id)}'></td>`
+		+ `<td><input type='text' name='location' value='${nullToEmpty(elem.location)}'><input type='hidden' name='location_bk' value='${nullToEmpty(elem.location)}'></td>`
+		+ `<td><input type='text' name='budget' value='${nullToEmpty(elem.budget)}'><input type='hidden' name='budget_bk' value='${nullToEmpty(elem.budget)}'></td>`
+		+ `<td><input type='text' name='created_at' value='${nullToEmpty(elem.created_at)}' disabled></td>`
+		+ `<td><input type='text' name='updated_at' value='${nullToEmpty(elem.updated_at)}' disabled></td></tr>`;
+}
+
 
 /* セットアップ */
 const setUp = () => {
@@ -151,8 +165,8 @@ const doPutAll = async () => {
 			}
 
 			await fetch('api/department', {
-				method: "PUT",
-				headers: {"Content-Type": "application/json"},
+				method: 'PUT',
+				headers: {'Content-Type': 'application/json'},
 				body: JSON.stringify(requestBody)
 			})
 			.then(response => {
@@ -189,9 +203,10 @@ const doPutAll = async () => {
 		}
 	}
 
-	renderMessage("更新", successCount, true);
-	renderMessage("更新", errorCount, false);
+	renderMessage('更新', successCount, true);
+	renderMessage('更新', errorCount, false);
 } 
+
 
 /* 新規登録 */
 const doPost = () => {
@@ -219,8 +234,8 @@ const doPost = () => {
 		}
 
 		fetch('api/department', {
-			method: "POST",
-			headers: {"Content-Type": "application/json"},
+			method: 'POST',
+			headers: {'Content-Type': 'application/json'},
 			body: JSON.stringify(requestBody)
 		})
 		.then(response => {
@@ -241,26 +256,13 @@ const doPost = () => {
 			tmpElem.innerHTML = createTrNew();
 			document.getElementById('records').appendChild(tmpElem.firstChild);
 
-			renderMessage("登録", 1, true);
+			renderMessage('登録', 1, true);
 		}).catch(error => {
-			renderMessage("登録", 1, false);
+			renderMessage('登録', 1, false);
 		})
 	}
 }
 
-
-/* チェックボックスの選択一覧取得 */
-const getDeleteTarget = () => {
-	let dels = document.getElementsByName("del");
-	let ret = [];
-
-	for (let x of dels) {
-		if (x.checked) {
-			ret.push(x.value);
-		}
-	}
-	return ret
-}
 
 /* 一括削除 */
 const doDeleteAll = async () => {
@@ -270,8 +272,8 @@ const doDeleteAll = async () => {
 
 	for (let x of ls) {
 		await fetch('api/department', {
-			method: "DELETE",
-			headers: {"Content-Type": "application/json"},
+			method: 'DELETE',
+			headers: {'Content-Type': 'application/json'},
 			body: x
 		})
 		.then(response => {
@@ -286,6 +288,6 @@ const doDeleteAll = async () => {
 
 	setUp();
 
-	renderMessage("削除", successCount, true);
-	renderMessage("削除", errorCount, false);
+	renderMessage('削除', successCount, true);
+	renderMessage('削除', errorCount, false);
 }

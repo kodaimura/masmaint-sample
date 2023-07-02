@@ -58,6 +58,8 @@ const changeAction = (event) => {
 	let target = event.target;
 	let target_bk = target.nextElementSibling;
 
+	if (target_bk == null) return
+
 	if (target.value !== target_bk.value) {
 		target.classList.add('changed');
 	} else {

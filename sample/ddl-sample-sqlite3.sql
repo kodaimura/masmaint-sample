@@ -29,14 +29,14 @@ CREATE TABLE IF NOT EXISTS employee (
 CREATE TRIGGER IF NOT EXISTS trg_department_upd AFTER UPDATE ON department
 BEGIN
 	UPDATE department
-	SET update_at = DATETIME('now', 'localtime')
+	SET updated_at = DATETIME('now', 'localtime')
 	WHERE rowid == NEW.rowid;
 END;
 
 CREATE TRIGGER IF NOT EXISTS trg_employee_upd AFTER UPDATE ON employee
 BEGIN
 	UPDATE employee
-	SET update_at = DATETIME('now', 'localtime')
+	SET updated_at = DATETIME('now', 'localtime')
 	WHERE rowid == NEW.rowid;
 END;
 

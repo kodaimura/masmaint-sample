@@ -60,6 +60,8 @@ const changeAction = (event) => {
 	
 	if (target_bk == null) return
 
+	if (target_bk == null) return
+
 	if (target.value !== target_bk.value) {
 		target.classList.add('changed');
 	} else {

@@ -57,6 +57,8 @@ const nullToEmpty = (s) => {
 const changeAction = (event) => {
 	let target = event.target;
 	let target_bk = target.nextElementSibling;
+	
+	if (target_bk == null) return
 
 	if (target.value !== target_bk.value) {
 		target.classList.add('changed');
@@ -76,8 +78,10 @@ const addChangedAction = (columnName) => {
 /* <tbody></tbody>レンダリング */
 const renderTbody = (data) => {
 	let tbody= '';
-	for (const elem of data) {
-		tbody += createTr(elem);
+	if (data != null) {
+		for (const elem of data) {
+			tbody += createTr(elem);
+		}
 	}
 	tbody += createTrNew();
 
@@ -96,7 +100,9 @@ const createTrNew = (elem) => {
 		+ `<td><input type='text' id='hire_date_new'></td>`
 		+ `<td><input type='text' id='job_title_new'></td>`
 		+ `<td><input type='text' id='department_code_new'></td>`
-		+ `<td><input type='text' id='salary_new'></td></tr>`;
+		+ `<td><input type='text' id='salary_new'></td>`
+		+ `<td><input type='text' disabled></td>`
+		+ `<td><input type='text' disabled></td>`;
 } 
 
 /* <tr></tr>を作成 */
@@ -111,7 +117,9 @@ const createTr = (elem) => {
 		+ `<td><input type='text' name='hire_date' value='${nullToEmpty(elem.hire_date)}'><input type='hidden' name='hire_date_bk' value='${nullToEmpty(elem.hire_date)}'></td>`
 		+ `<td><input type='text' name='job_title' value='${nullToEmpty(elem.job_title)}'><input type='hidden' name='job_title_bk' value='${nullToEmpty(elem.job_title)}'></td>`
 		+ `<td><input type='text' name='department_code' value='${nullToEmpty(elem.department_code)}'><input type='hidden' name='department_code_bk' value='${nullToEmpty(elem.department_code)}'></td>`
-		+ `<td><input type='text' name='salary' value='${nullToEmpty(elem.salary)}'><input type='hidden' name='salary_bk' value='${nullToEmpty(elem.salary)}'></td></tr>`;
+		+ `<td><input type='text' name='salary' value='${nullToEmpty(elem.salary)}'><input type='hidden' name='salary_bk' value='${nullToEmpty(elem.salary)}'></td>`
+		+ `<td><input type='text' name='created_at' value='${nullToEmpty(elem.created_at)}' disabled></td>`
+		+ `<td><input type='text' name='updated_at' value='${nullToEmpty(elem.updated_at)}' disabled></td>`;
 } 
 
 
@@ -138,9 +146,8 @@ const setUp = () => {
 const doPutAll = async () => {
 	let successCount = 0;
 	let errorCount = 0;
-
+	
 	let id = document.getElementsByName('id');
-
 	let first_name = document.getElementsByName('first_name');
 	let first_name_bk = document.getElementsByName('first_name_bk');
 	let last_name = document.getElementsByName('last_name');
@@ -159,10 +166,12 @@ const doPutAll = async () => {
 	let department_code_bk = document.getElementsByName('department_code_bk');
 	let salary = document.getElementsByName('salary');
 	let salary_bk = document.getElementsByName('salary_bk');
+	let created_at = document.getElementsByName('created_at');
+	let updated_at = document.getElementsByName('updated_at');
 
-	for (let i = 0; i < first_name.length; i++) {
-		if ((first_name[i].value !== first_name_bk[i].value) 
-			|| (last_name[i].value !== last_name_bk[i].value) 
+	for (let i = 0; i < id.length; i++) {
+		if ((first_name[i].value !== first_name_bk[i].value)
+			|| (last_name[i].value !== last_name_bk[i].value)
 			|| (email[i].value !== email_bk[i].value)
 			|| (phone_number[i].value !== phone_number_bk[i].value)
 			|| (address[i].value !== address_bk[i].value)
@@ -182,6 +191,8 @@ const doPutAll = async () => {
 				job_title: job_title[i].value,
 				department_code: department_code[i].value,
 				salary: salary[i].value,
+				created_at: created_at[i].value,
+				updated_at: updated_at[i].value,
 			}
 
 			await fetch('api/employee', {
@@ -215,6 +226,8 @@ const doPutAll = async () => {
 				department_code_bk[i].value = data.department_code;
 				salary[i].value = data.salary;
 				salary_bk[i].value = data.salary;
+				created_at[i].value = data.created_at;
+				updated_at[i].value = data.updated_at;
 
 				first_name[i].classList.remove('changed');
 				last_name[i].classList.remove('changed');
@@ -250,13 +263,13 @@ const doPost = () => {
 	let department_code = document.getElementById('department_code_new').value;
 	let salary = document.getElementById('salary_new').value;
 
-	if ((first_name !== '') 
-		|| (last_name !== '') 
-		|| (email !== '') 
-		|| (phone_number !== '') 
+	if ((first_name !== '')
+		|| (last_name !== '')
+		|| (email !== '')
+		|| (phone_number !== '')
 		|| (address !== '')
 		|| (hire_date !== '')
-		|| (job_title !== '') 
+		|| (job_title !== '')
 		|| (department_code !== '')
 		|| (salary !== ''))
 	{
@@ -264,12 +277,12 @@ const doPost = () => {
 			first_name: first_name,
 			last_name: last_name,
 			email: email,
-			phone_number: phone_number ,
+			phone_number: phone_number,
 			address: address,
 			hire_date: hire_date,
 			job_title: job_title,
 			department_code: department_code,
-			salary: salary
+			salary: salary,
 		}
 
 		fetch('api/employee', {

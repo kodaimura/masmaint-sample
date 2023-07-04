@@ -1,0 +1,32 @@
+CREATE TABLE IF NOT EXISTS department (
+	code TEXT,
+	name TEXT NOT NULL,
+	description TEXT,
+	manager_id INT,
+	location TEXT,
+	budget NUMERIC(10,2) NOT NULL,
+	created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+	PRIMARY KEY(code)
+);
+
+CREATE TABLE IF NOT EXISTS employee (
+	id INT PRIMARY KEY AUTO_INCREMENT,
+	first_name TEXT NOT NULL,
+	last_name TEXT,
+	email TEXT,
+	phone_number TEXT,
+	address TEXT,
+	hire_date DATE,
+	job_title TEXT,
+	department_code TEXT,
+	salary NUMERIC(10,2),
+	created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+
+
+
+
+

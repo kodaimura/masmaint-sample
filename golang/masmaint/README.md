@@ -1,2 +1,0 @@
-# masmaint-sample
-## Go (Gin)

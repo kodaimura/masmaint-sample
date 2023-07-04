@@ -30,6 +30,7 @@ func (ctr *EmployeeController) GetEmployeePage(c *gin.Context) {
 	c.HTML(200, "employee.html", gin.H{})
 }
 
+
 //GET /api/employee
 func (ctr *EmployeeController) GetEmployee(c *gin.Context) {
 	ret, err := ctr.eServ.GetAll()
@@ -43,9 +44,10 @@ func (ctr *EmployeeController) GetEmployee(c *gin.Context) {
 	c.JSON(200, ret)
 }
 
+
 //POST /api/employee
 func (ctr *EmployeeController) PostEmployee(c *gin.Context) {
-	var eDto dto.EmployeeDto 
+	var eDto dto.EmployeeDto
 
 	if err := c.ShouldBindJSON(&eDto); err != nil {
 		c.JSON(400, gin.H{"error": err.Error()})
@@ -64,9 +66,10 @@ func (ctr *EmployeeController) PostEmployee(c *gin.Context) {
 	c.JSON(200, ret)
 }
 
+
 //PUT /api/employee
 func (ctr *EmployeeController) PutEmployee(c *gin.Context) {
-	var eDto dto.EmployeeDto 
+	var eDto dto.EmployeeDto
 
 	if err := c.ShouldBindJSON(&eDto); err != nil {
 		c.JSON(400, gin.H{"error": err.Error()})
@@ -76,18 +79,19 @@ func (ctr *EmployeeController) PutEmployee(c *gin.Context) {
 
 	ret, err := ctr.eServ.Update(&eDto)
 
-	if  err != nil {
+	if err != nil {
 		c.JSON(500, gin.H{})
 		c.Abort()
 		return
 	}
-	
+
 	c.JSON(200, ret)
 }
 
+
 //DELETE /api/employee
 func (ctr *EmployeeController) DeleteEmployee(c *gin.Context) {
-	var eDto dto.EmployeeDto 
+	var eDto dto.EmployeeDto
 
 	if err := c.ShouldBindJSON(&eDto); err != nil {
 		c.JSON(400, gin.H{"error": err.Error()})
@@ -100,6 +104,6 @@ func (ctr *EmployeeController) DeleteEmployee(c *gin.Context) {
 		c.Abort()
 		return
 	}
-	
+
 	c.JSON(200, gin.H{})
 }

@@ -9,10 +9,10 @@
 	<div class="table-responsive mt-2" style="height:70%">
 	<table class="table table-hover table-bordered table-sm">
 		<thead>
-			<tr>
+			<tr class="fixed-table-header bg-light">
 				<th>削除</th>
 				<th>id</th>
-				<th>first_name<spnn style="color:red;">*</spnn></th>
+				<th>first_name<spnn style='color:red;'>*</spnn></th>
 				<th>last_name</th>
 				<th>email</th>
 				<th>phone_number</th>
@@ -21,11 +21,14 @@
 				<th>job_title</th>
 				<th>department_code</th>
 				<th>salary</th>
+				<th>created_at</th>
+				<th>updated_at</th>
 			</tr>
 		</thead>
 		<tbody id="records">
 		</tbody>
 	</table>
+	</div>
 </div>
 <script src="/js/employee.js"></script>
 {{template "footer" .}}

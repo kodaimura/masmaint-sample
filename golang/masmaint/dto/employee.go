@@ -12,4 +12,6 @@ type EmployeeDto struct {
 	JobTitle any `json:"job_title"`
 	DepartmentCode any `json:"department_code"`
 	Salary any `json:"salary"`
+	CreatedAt any `json:"created_at"`
+	UpdatedAt any `json:"updated_at"`
 }

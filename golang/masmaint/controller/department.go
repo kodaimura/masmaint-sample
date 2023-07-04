@@ -30,6 +30,7 @@ func (ctr *DepartmentController) GetDepartmentPage(c *gin.Context) {
 	c.HTML(200, "department.html", gin.H{})
 }
 
+
 //GET /api/department
 func (ctr *DepartmentController) GetDepartment(c *gin.Context) {
 	ret, err := ctr.dServ.GetAll()
@@ -43,9 +44,10 @@ func (ctr *DepartmentController) GetDepartment(c *gin.Context) {
 	c.JSON(200, ret)
 }
 
+
 //POST /api/department
 func (ctr *DepartmentController) PostDepartment(c *gin.Context) {
-	var dDto dto.DepartmentDto 
+	var dDto dto.DepartmentDto
 
 	if err := c.ShouldBindJSON(&dDto); err != nil {
 		c.JSON(400, gin.H{"error": err.Error()})
@@ -64,9 +66,10 @@ func (ctr *DepartmentController) PostDepartment(c *gin.Context) {
 	c.JSON(200, ret)
 }
 
+
 //PUT /api/department
 func (ctr *DepartmentController) PutDepartment(c *gin.Context) {
-	var dDto dto.DepartmentDto 
+	var dDto dto.DepartmentDto
 
 	if err := c.ShouldBindJSON(&dDto); err != nil {
 		c.JSON(400, gin.H{"error": err.Error()})
@@ -76,18 +79,19 @@ func (ctr *DepartmentController) PutDepartment(c *gin.Context) {
 
 	ret, err := ctr.dServ.Update(&dDto)
 
-	if  err != nil {
+	if err != nil {
 		c.JSON(500, gin.H{})
 		c.Abort()
 		return
 	}
-	
+
 	c.JSON(200, ret)
 }
 
+
 //DELETE /api/department
 func (ctr *DepartmentController) DeleteDepartment(c *gin.Context) {
-	var dDto dto.DepartmentDto 
+	var dDto dto.DepartmentDto
 
 	if err := c.ShouldBindJSON(&dDto); err != nil {
 		c.JSON(400, gin.H{"error": err.Error()})
@@ -100,6 +104,6 @@ func (ctr *DepartmentController) DeleteDepartment(c *gin.Context) {
 		c.Abort()
 		return
 	}
-	
+
 	c.JSON(200, gin.H{})
 }

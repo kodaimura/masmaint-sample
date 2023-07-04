@@ -1,3 +1,4 @@
+
 package controller
 
 import (
@@ -14,7 +15,7 @@ func SetRouter(r *gin.Engine) {
 		rm.GET("/", func(c *gin.Context) {
 			c.HTML(200, "index.html", gin.H{})
 		})
-
+		
 		employeeController := NewEmployeeController()
 		rm.GET("/employee", employeeController.GetEmployeePage)
 		rm.GET("/api/employee", employeeController.GetEmployee)
@@ -28,6 +29,6 @@ func SetRouter(r *gin.Engine) {
 		rm.POST("/api/department", departmentController.PostDepartment)
 		rm.PUT("/api/department", departmentController.PutDepartment)
 		rm.DELETE("/api/department", departmentController.DeleteDepartment)
-		
+
 	}
 }

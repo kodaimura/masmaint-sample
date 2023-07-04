@@ -64,14 +64,14 @@ func (serv *EmployeeService) GetOne(eDto *dto.EmployeeDto) (dto.EmployeeDto, err
 func (serv *EmployeeService) Create(eDto *dto.EmployeeDto) (dto.EmployeeDto, error) {
 	var e *entity.Employee = entity.NewEmployee()
 
-	if e.SetFirstName(eDto.FirstName) != nil || 
-	e.SetLastName(eDto.LastName) != nil || 
-	e.SetEmail(eDto.Email) != nil || 
-	e.SetPhoneNumber(eDto.PhoneNumber) != nil || 
-	e.SetAddress(eDto.Address) != nil || 
-	e.SetHireDate(eDto.HireDate) != nil || 
+	if e.SetFirstName(eDto.FirstName) != nil ||
+	e.SetLastName(eDto.LastName) != nil ||
+	e.SetEmail(eDto.Email) != nil ||
+	e.SetPhoneNumber(eDto.PhoneNumber) != nil ||
+	e.SetAddress(eDto.Address) != nil ||
+	e.SetHireDate(eDto.HireDate) != nil ||
 	e.SetJobTitle(eDto.JobTitle) != nil ||
-	e.SetDepartmentCode(eDto.DepartmentCode) != nil || 
+	e.SetDepartmentCode(eDto.DepartmentCode) != nil ||
 	e.SetSalary(eDto.Salary) != nil {
 		return dto.EmployeeDto{}, errors.New("不正な値があります。")
 	}
@@ -89,15 +89,15 @@ func (serv *EmployeeService) Create(eDto *dto.EmployeeDto) (dto.EmployeeDto, err
 func (serv *EmployeeService) Update(eDto *dto.EmployeeDto) (dto.EmployeeDto, error) {
 	var e *entity.Employee = entity.NewEmployee()
 
-	if e.SetId(eDto.Id) != nil || 
-	e.SetFirstName(eDto.FirstName) != nil || 
-	e.SetLastName(eDto.LastName) != nil || 
-	e.SetEmail(eDto.Email) != nil || 
-	e.SetPhoneNumber(eDto.PhoneNumber) != nil || 
-	e.SetAddress(eDto.Address) != nil || 
-	e.SetHireDate(eDto.HireDate) != nil || 
+	if e.SetId(eDto.Id) != nil ||
+	e.SetFirstName(eDto.FirstName) != nil ||
+	e.SetLastName(eDto.LastName) != nil ||
+	e.SetEmail(eDto.Email) != nil ||
+	e.SetPhoneNumber(eDto.PhoneNumber) != nil ||
+	e.SetAddress(eDto.Address) != nil ||
+	e.SetHireDate(eDto.HireDate) != nil ||
 	e.SetJobTitle(eDto.JobTitle) != nil ||
-	e.SetDepartmentCode(eDto.DepartmentCode) != nil || 
+	e.SetDepartmentCode(eDto.DepartmentCode) != nil ||
 	e.SetSalary(eDto.Salary) != nil {
 		return dto.EmployeeDto{}, errors.New("不正な値があります。")
 	}

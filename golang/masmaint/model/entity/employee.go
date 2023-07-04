@@ -9,7 +9,7 @@ import (
 
 
 type Employee struct {
-	Id int64 `db:"id"`
+	Id sql.NullInt64 `db:"id"`
 	FirstName string `db:"first_name"`
 	LastName sql.NullString `db:"last_name"`
 	Email sql.NullString `db:"email"`
@@ -19,19 +19,26 @@ type Employee struct {
 	JobTitle sql.NullString `db:"job_title"`
 	DepartmentCode sql.NullString `db:"department_code"`
 	Salary sql.NullFloat64 `db:"salary"`
+	CreatedAt string `db:"created_at"`
+	UpdatedAt string `db:"updated_at"`
 }
 
 func NewEmployee() *Employee {
 	return &Employee{}
 }
 
-
 func (e *Employee) SetId(id any) error {
+	if id == nil || id == "" {
+		e.Id.Valid = false
+		return nil
+	}
+
 	x, err := utils.ToInt64(id)
 	if err != nil {
 		return err
 	}
-	e.Id = x
+	e.Id.Int64 = x
+	e.Id.Valid = true
 	return nil
 }
 
@@ -44,7 +51,7 @@ func (e *Employee) SetLastName(lastName any) error {
 	if lastName == nil {
 		e.LastName.Valid = false
 		return nil
-	} 
+	}
 
 	e.LastName.String = utils.ToString(lastName)
 	e.LastName.Valid = true
@@ -55,7 +62,7 @@ func (e *Employee) SetEmail(email any) error {
 	if email == nil {
 		e.Email.Valid = false
 		return nil
-	} 
+	}
 
 	e.Email.String = utils.ToString(email)
 	e.Email.Valid = true
@@ -66,7 +73,7 @@ func (e *Employee) SetPhoneNumber(phoneNumber any) error {
 	if phoneNumber == nil {
 		e.PhoneNumber.Valid = false
 		return nil
-	} 
+	}
 
 	e.PhoneNumber.String = utils.ToString(phoneNumber)
 	e.PhoneNumber.Valid = true
@@ -77,7 +84,7 @@ func (e *Employee) SetAddress(address any) error {
 	if address == nil {
 		e.Address.Valid = false
 		return nil
-	} 
+	}
 
 	e.Address.String = utils.ToString(address)
 	e.Address.Valid = true
@@ -85,11 +92,10 @@ func (e *Employee) SetAddress(address any) error {
 }
 
 func (e *Employee) SetHireDate(hireDate any) error {
-	//日付型は "" の時は null 扱いとする。
 	if hireDate == nil || hireDate == "" {
 		e.HireDate.Valid = false
 		return nil
-	} 
+	}
 
 	e.HireDate.String = utils.ToString(hireDate)
 	e.HireDate.Valid = true
@@ -100,7 +106,7 @@ func (e *Employee) SetJobTitle(jobTitle any) error {
 	if jobTitle == nil {
 		e.JobTitle.Valid = false
 		return nil
-	} 
+	}
 
 	e.JobTitle.String = utils.ToString(jobTitle)
 	e.JobTitle.Valid = true
@@ -133,11 +139,23 @@ func (e *Employee) SetSalary(salary any) error {
 	return nil
 }
 
+func (e *Employee) SetCreatedAt(createdAt any) error {
+	e.CreatedAt = utils.ToString(createdAt)
+	return nil
+}
+
+func (e *Employee) SetUpdatedAt(updatedAt any) error {
+	e.UpdatedAt = utils.ToString(updatedAt)
+	return nil
+}
+
 
 func (e *Employee) ToEmployeeDto() dto.EmployeeDto {
 	var eDto dto.EmployeeDto
 
-	eDto.Id = e.Id
+	if e.Id.Valid != false {
+		eDto.Id = e.Id.Int64
+	}
 	eDto.FirstName = e.FirstName
 	if e.LastName.Valid != false {
 		eDto.LastName = e.LastName.String
@@ -163,6 +181,8 @@ func (e *Employee) ToEmployeeDto() dto.EmployeeDto {
 	if e.Salary.Valid != false {
 		eDto.Salary = e.Salary.Float64
 	}
+	eDto.CreatedAt = e.CreatedAt
+	eDto.UpdatedAt = e.UpdatedAt
 
 	return eDto
 }

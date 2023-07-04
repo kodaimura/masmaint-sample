@@ -15,7 +15,9 @@ CREATE TABLE employee (
   hire_date DATE,
   job_title TEXT,
   department_code TEXT,
-  salary NUMERIC(10, 2)
+  salary NUMERIC(10, 2),
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE department (
@@ -30,4 +32,7 @@ CREATE TABLE department (
 );
 
 create trigger trg_department_upd BEFORE UPDATE ON department FOR EACH ROW
+  execute procedure set_update_time();
+
+create trigger trg_employee_upd BEFORE UPDATE ON employee FOR EACH ROW
   execute procedure set_update_time();

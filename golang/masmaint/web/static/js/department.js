@@ -57,6 +57,8 @@ const nullToEmpty = (s) => {
 const changeAction = (event) => {
 	let target = event.target;
 	let target_bk = target.nextElementSibling;
+	
+	if (target_bk == null) return
 
 	if (target.value !== target_bk.value) {
 		target.classList.add('changed');
@@ -76,8 +78,10 @@ const addChangedAction = (columnName) => {
 /* <tbody></tbody>レンダリング */
 const renderTbody = (data) => {
 	let tbody= '';
-	for (const elem of data) {
-		tbody += createTr(elem);
+	if (data != null) {
+		for (const elem of data) {
+			tbody += createTr(elem);
+		}
 	}
 	tbody += createTrNew();
 
@@ -94,7 +98,7 @@ const createTrNew = (elem) => {
 		+ `<td><input type='text' id='location_new'></td>`
 		+ `<td><input type='text' id='budget_new'></td>`
 		+ `<td><input type='text' disabled></td>`
-		+ `<td><input type='text' disabled></td></tr>`;
+		+ `<td><input type='text' disabled></td>`;
 } 
 
 /* <tr></tr>を作成 */
@@ -107,8 +111,8 @@ const createTr = (elem) => {
 		+ `<td><input type='text' name='location' value='${nullToEmpty(elem.location)}'><input type='hidden' name='location_bk' value='${nullToEmpty(elem.location)}'></td>`
 		+ `<td><input type='text' name='budget' value='${nullToEmpty(elem.budget)}'><input type='hidden' name='budget_bk' value='${nullToEmpty(elem.budget)}'></td>`
 		+ `<td><input type='text' name='created_at' value='${nullToEmpty(elem.created_at)}' disabled></td>`
-		+ `<td><input type='text' name='updated_at' value='${nullToEmpty(elem.updated_at)}' disabled></td></tr>`;
-}
+		+ `<td><input type='text' name='updated_at' value='${nullToEmpty(elem.updated_at)}' disabled></td>`;
+} 
 
 
 /* セットアップ */
@@ -130,11 +134,8 @@ const setUp = () => {
 const doPutAll = async () => {
 	let successCount = 0;
 	let errorCount = 0;
-
+	
 	let code = document.getElementsByName('code');
-	let created_at = document.getElementsByName('created_at');
-	let updated_at = document.getElementsByName('updated_at');
-
 	let name = document.getElementsByName('name');
 	let name_bk = document.getElementsByName('name_bk');
 	let description = document.getElementsByName('description');
@@ -145,9 +146,11 @@ const doPutAll = async () => {
 	let location_bk = document.getElementsByName('location_bk');
 	let budget = document.getElementsByName('budget');
 	let budget_bk = document.getElementsByName('budget_bk');
+	let created_at = document.getElementsByName('created_at');
+	let updated_at = document.getElementsByName('updated_at');
 
-	for (let i = 0; i < name.length; i++) {
-		if ((name[i].value !== name_bk[i].value) 
+	for (let i = 0; i < code.length; i++) {
+		if ((name[i].value !== name_bk[i].value)
 			|| (description[i].value !== description_bk[i].value)
 			|| (manager_id[i].value !== manager_id_bk[i].value)
 			|| (location[i].value !== location_bk[i].value)
@@ -161,7 +164,7 @@ const doPutAll = async () => {
 				location: location[i].value,
 				budget: budget[i].value,
 				created_at: created_at[i].value,
-				updated_at: updated_at[i].value
+				updated_at: updated_at[i].value,
 			}
 
 			await fetch('api/department', {
@@ -177,8 +180,6 @@ const doPutAll = async () => {
   			})
 			.then(data => {
 				code[i].value = data.code;
-				created_at[i].value = data.created_at;
-				updated_at[i].value = data.updated_at;
 				name[i].value = data.name;
 				name_bk[i].value = data.name;
 				description[i].value = data.description;
@@ -189,6 +190,8 @@ const doPutAll = async () => {
 				location_bk[i].value = data.location;
 				budget[i].value = data.budget;
 				budget_bk[i].value = data.budget;
+				created_at[i].value = data.created_at;
+				updated_at[i].value = data.updated_at;
 
 				name[i].classList.remove('changed');
 				description[i].classList.remove('changed');
@@ -217,10 +220,10 @@ const doPost = () => {
 	let location = document.getElementById('location_new').value;
 	let budget = document.getElementById('budget_new').value;
 
-	if ((code !== '') 
-		|| (name !== '') 
-		|| (description !== '') 
-		|| (manager_id !== '') 
+	if ((code !== '')
+		|| (name !== '')
+		|| (description !== '')
+		|| (manager_id !== '')
 		|| (location !== '')
 		|| (budget !== ''))
 	{
@@ -230,7 +233,7 @@ const doPost = () => {
 			description: description,
 			manager_id: manager_id,
 			location: location,
-			budget: budget
+			budget: budget,
 		}
 
 		fetch('api/department', {

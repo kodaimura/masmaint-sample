@@ -64,11 +64,11 @@ func (serv *DepartmentService) GetOne(dDto *dto.DepartmentDto) (dto.DepartmentDt
 func (serv *DepartmentService) Create(dDto *dto.DepartmentDto) (dto.DepartmentDto, error) {
 	var d *entity.Department = entity.NewDepartment()
 
-	if d.SetCode(dDto.Code) != nil || 
-	d.SetName(dDto.Name) != nil || 
-	d.SetDescription(dDto.Description) != nil || 
-	d.SetManagerId(dDto.ManagerId) != nil || 
-	d.SetLocation(dDto.Location) != nil || 
+	if d.SetCode(dDto.Code) != nil ||
+	d.SetName(dDto.Name) != nil ||
+	d.SetDescription(dDto.Description) != nil ||
+	d.SetManagerId(dDto.ManagerId) != nil ||
+	d.SetLocation(dDto.Location) != nil ||
 	d.SetBudget(dDto.Budget) != nil {
 		return dto.DepartmentDto{}, errors.New("不正な値があります。")
 	}
@@ -86,11 +86,11 @@ func (serv *DepartmentService) Create(dDto *dto.DepartmentDto) (dto.DepartmentDt
 func (serv *DepartmentService) Update(dDto *dto.DepartmentDto) (dto.DepartmentDto, error) {
 	var d *entity.Department = entity.NewDepartment()
 
-	if d.SetCode(dDto.Code) != nil || 
-	d.SetName(dDto.Name) != nil || 
-	d.SetDescription(dDto.Description) != nil || 
-	d.SetManagerId(dDto.ManagerId) != nil || 
-	d.SetLocation(dDto.Location) != nil || 
+	if d.SetCode(dDto.Code) != nil ||
+	d.SetName(dDto.Name) != nil ||
+	d.SetDescription(dDto.Description) != nil ||
+	d.SetManagerId(dDto.ManagerId) != nil ||
+	d.SetLocation(dDto.Location) != nil ||
 	d.SetBudget(dDto.Budget) != nil {
 		return dto.DepartmentDto{}, errors.New("不正な値があります。")
 	}

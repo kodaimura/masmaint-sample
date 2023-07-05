@@ -103,7 +103,7 @@ const createTrNew = (elem) => {
 
 /* <tr></tr>を作成 */
 const createTr = (elem) => {
-	return `<tr><td><input class='form-check-input' type='checkbox' name='del' value=${JSON.stringify(elem)}></td>`
+	return `<tr><td><input class='form-check-input' type='checkbox' name='del' value='${JSON.stringify(elem)}'></td>`
 		+ `<td><input type='text' name='code' value='${nullToEmpty(elem.code)}' disabled></td>`
 		+ `<td><input type='text' name='name' value='${nullToEmpty(elem.name)}'><input type='hidden' name='name_bk' value='${nullToEmpty(elem.name)}'></td>`
 		+ `<td><input type='text' name='description' value='${nullToEmpty(elem.description)}'><input type='hidden' name='description_bk' value='${nullToEmpty(elem.description)}'></td>`

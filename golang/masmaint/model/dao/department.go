@@ -8,17 +8,17 @@ import (
 )
 
 
-type DepartmentDao struct {
+type departmentDao struct {
 	db *sql.DB
 }
 
-func NewDepartmentDao() *DepartmentDao {
+func NewDepartmentDao() *departmentDao {
 	db := db.GetDB()
-	return &DepartmentDao{db}
+	return &departmentDao{db}
 }
 
 
-func (rep *DepartmentDao) SelectAll() ([]entity.Department, error) {
+func (rep *departmentDao) SelectAll() ([]entity.Department, error) {
 	var ret []entity.Department
 
 	rows, err := rep.db.Query(
@@ -61,7 +61,7 @@ func (rep *DepartmentDao) SelectAll() ([]entity.Department, error) {
 }
 
 
-func (rep *DepartmentDao) Select(d *entity.Department) (entity.Department, error) {
+func (rep *departmentDao) Select(d *entity.Department) (entity.Department, error) {
 	var ret entity.Department
 
 	err := rep.db.QueryRow(
@@ -92,7 +92,7 @@ func (rep *DepartmentDao) Select(d *entity.Department) (entity.Department, error
 }
 
 
-func (rep *DepartmentDao) Insert(d *entity.Department) (entity.Department, error) {
+func (rep *departmentDao) Insert(d *entity.Department) (entity.Department, error) {
 	var ret entity.Department
 
 	err := rep.db.QueryRow(
@@ -134,7 +134,7 @@ func (rep *DepartmentDao) Insert(d *entity.Department) (entity.Department, error
 }
 
 
-func (rep *DepartmentDao) Update(d *entity.Department) (entity.Department, error) {
+func (rep *departmentDao) Update(d *entity.Department) (entity.Department, error) {
 	var ret entity.Department
 
 	err := rep.db.QueryRow(
@@ -176,7 +176,7 @@ func (rep *DepartmentDao) Update(d *entity.Department) (entity.Department, error
 }
 
 
-func (rep *DepartmentDao) Delete(d *entity.Department) error {
+func (rep *departmentDao) Delete(d *entity.Department) error {
 	_, err := rep.db.Exec(
 		`DELETE FROM department
 		 WHERE code = ?`,

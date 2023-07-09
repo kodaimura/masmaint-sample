@@ -15,24 +15,24 @@ type EmployeeService interface {
 	Delete(eDto *dto.EmployeeDto) error
 }
 
-type EmployeeController struct {
-	eServ *service.EmployeeService
+type employeeController struct {
+	eServ EmployeeService
 }
 
-func NewEmployeeController() *EmployeeController {
+func NewEmployeeController() *employeeController {
 	eServ := service.NewEmployeeService()
-	return &EmployeeController{eServ}
+	return &employeeController{eServ}
 }
 
 
 //GET /employee
-func (ctr *EmployeeController) GetEmployeePage(c *gin.Context) {
+func (ctr *employeeController) GetEmployeePage(c *gin.Context) {
 	c.HTML(200, "employee.html", gin.H{})
 }
 
 
 //GET /api/employee
-func (ctr *EmployeeController) GetEmployee(c *gin.Context) {
+func (ctr *employeeController) GetEmployee(c *gin.Context) {
 	ret, err := ctr.eServ.GetAll()
 
 	if err != nil {
@@ -46,7 +46,7 @@ func (ctr *EmployeeController) GetEmployee(c *gin.Context) {
 
 
 //POST /api/employee
-func (ctr *EmployeeController) PostEmployee(c *gin.Context) {
+func (ctr *employeeController) PostEmployee(c *gin.Context) {
 	var eDto dto.EmployeeDto
 
 	if err := c.ShouldBindJSON(&eDto); err != nil {
@@ -68,7 +68,7 @@ func (ctr *EmployeeController) PostEmployee(c *gin.Context) {
 
 
 //PUT /api/employee
-func (ctr *EmployeeController) PutEmployee(c *gin.Context) {
+func (ctr *employeeController) PutEmployee(c *gin.Context) {
 	var eDto dto.EmployeeDto
 
 	if err := c.ShouldBindJSON(&eDto); err != nil {
@@ -90,7 +90,7 @@ func (ctr *EmployeeController) PutEmployee(c *gin.Context) {
 
 
 //DELETE /api/employee
-func (ctr *EmployeeController) DeleteEmployee(c *gin.Context) {
+func (ctr *employeeController) DeleteEmployee(c *gin.Context) {
 	var eDto dto.EmployeeDto
 
 	if err := c.ShouldBindJSON(&eDto); err != nil {

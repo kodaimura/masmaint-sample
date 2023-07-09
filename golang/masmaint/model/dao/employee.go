@@ -8,17 +8,17 @@ import (
 )
 
 
-type EmployeeDao struct {
+type employeeDao struct {
 	db *sql.DB
 }
 
-func NewEmployeeDao() *EmployeeDao {
+func NewEmployeeDao() *employeeDao {
 	db := db.GetDB()
-	return &EmployeeDao{db}
+	return &employeeDao{db}
 }
 
 
-func (rep *EmployeeDao) SelectAll() ([]entity.Employee, error) {
+func (rep *employeeDao) SelectAll() ([]entity.Employee, error) {
 	var ret []entity.Employee
 
 	rows, err := rep.db.Query(
@@ -69,7 +69,7 @@ func (rep *EmployeeDao) SelectAll() ([]entity.Employee, error) {
 }
 
 
-func (rep *EmployeeDao) Select(e *entity.Employee) (entity.Employee, error) {
+func (rep *employeeDao) Select(e *entity.Employee) (entity.Employee, error) {
 	var ret entity.Employee
 
 	err := rep.db.QueryRow(
@@ -108,7 +108,7 @@ func (rep *EmployeeDao) Select(e *entity.Employee) (entity.Employee, error) {
 }
 
 
-func (rep *EmployeeDao) Insert(e *entity.Employee) (entity.Employee, error) {
+func (rep *employeeDao) Insert(e *entity.Employee) (entity.Employee, error) {
 	var ret entity.Employee
 
 	err := rep.db.QueryRow(
@@ -164,7 +164,7 @@ func (rep *EmployeeDao) Insert(e *entity.Employee) (entity.Employee, error) {
 }
 
 
-func (rep *EmployeeDao) Update(e *entity.Employee) (entity.Employee, error) {
+func (rep *employeeDao) Update(e *entity.Employee) (entity.Employee, error) {
 	var ret entity.Employee
 
 	err := rep.db.QueryRow(
@@ -222,7 +222,7 @@ func (rep *EmployeeDao) Update(e *entity.Employee) (entity.Employee, error) {
 }
 
 
-func (rep *EmployeeDao) Delete(e *entity.Employee) error {
+func (rep *employeeDao) Delete(e *entity.Employee) error {
 	_, err := rep.db.Exec(
 		`DELETE FROM employee
 		 WHERE id = ?`,

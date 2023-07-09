@@ -18,17 +18,17 @@ type DepartmentDao interface {
 	Delete(d *entity.Department) error
 }
 
-type DepartmentService struct {
-	dDao *dao.DepartmentDao
+type departmentService struct {
+	dDao DepartmentDao
 }
 
-func NewDepartmentService() *DepartmentService {
+func NewDepartmentService() *departmentService {
 	dDao := dao.NewDepartmentDao()
-	return &DepartmentService{dDao}
+	return &departmentService{dDao}
 }
 
 
-func (serv *DepartmentService) GetAll() ([]dto.DepartmentDto, error) {
+func (serv *departmentService) GetAll() ([]dto.DepartmentDto, error) {
 	rows, err := serv.dDao.SelectAll()
 	if err != nil {
 		logger.LogError(err.Error())
@@ -44,7 +44,7 @@ func (serv *DepartmentService) GetAll() ([]dto.DepartmentDto, error) {
 }
 
 
-func (serv *DepartmentService) GetOne(dDto *dto.DepartmentDto) (dto.DepartmentDto, error) {
+func (serv *departmentService) GetOne(dDto *dto.DepartmentDto) (dto.DepartmentDto, error) {
 	var d *entity.Department = entity.NewDepartment()
 
 	if d.SetCode(dDto.Code) != nil {
@@ -61,7 +61,7 @@ func (serv *DepartmentService) GetOne(dDto *dto.DepartmentDto) (dto.DepartmentDt
 }
 
 
-func (serv *DepartmentService) Create(dDto *dto.DepartmentDto) (dto.DepartmentDto, error) {
+func (serv *departmentService) Create(dDto *dto.DepartmentDto) (dto.DepartmentDto, error) {
 	var d *entity.Department = entity.NewDepartment()
 
 	if d.SetCode(dDto.Code) != nil ||
@@ -83,7 +83,7 @@ func (serv *DepartmentService) Create(dDto *dto.DepartmentDto) (dto.DepartmentDt
 }
 
 
-func (serv *DepartmentService) Update(dDto *dto.DepartmentDto) (dto.DepartmentDto, error) {
+func (serv *departmentService) Update(dDto *dto.DepartmentDto) (dto.DepartmentDto, error) {
 	var d *entity.Department = entity.NewDepartment()
 
 	if d.SetCode(dDto.Code) != nil ||
@@ -105,7 +105,7 @@ func (serv *DepartmentService) Update(dDto *dto.DepartmentDto) (dto.DepartmentDt
 }
 
 
-func (serv *DepartmentService) Delete(dDto *dto.DepartmentDto) error {
+func (serv *departmentService) Delete(dDto *dto.DepartmentDto) error {
 	var d *entity.Department = entity.NewDepartment()
 
 	if d.SetCode(dDto.Code) != nil {

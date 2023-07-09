@@ -18,17 +18,17 @@ type EmployeeDao interface {
 	Delete(e *entity.Employee) error
 }
 
-type EmployeeService struct {
-	eDao *dao.EmployeeDao
+type employeeService struct {
+	eDao EmployeeDao
 }
 
-func NewEmployeeService() *EmployeeService {
+func NewEmployeeService() *employeeService {
 	eDao := dao.NewEmployeeDao()
-	return &EmployeeService{eDao}
+	return &employeeService{eDao}
 }
 
 
-func (serv *EmployeeService) GetAll() ([]dto.EmployeeDto, error) {
+func (serv *employeeService) GetAll() ([]dto.EmployeeDto, error) {
 	rows, err := serv.eDao.SelectAll()
 	if err != nil {
 		logger.LogError(err.Error())
@@ -44,7 +44,7 @@ func (serv *EmployeeService) GetAll() ([]dto.EmployeeDto, error) {
 }
 
 
-func (serv *EmployeeService) GetOne(eDto *dto.EmployeeDto) (dto.EmployeeDto, error) {
+func (serv *employeeService) GetOne(eDto *dto.EmployeeDto) (dto.EmployeeDto, error) {
 	var e *entity.Employee = entity.NewEmployee()
 
 	if e.SetId(eDto.Id) != nil {
@@ -61,7 +61,7 @@ func (serv *EmployeeService) GetOne(eDto *dto.EmployeeDto) (dto.EmployeeDto, err
 }
 
 
-func (serv *EmployeeService) Create(eDto *dto.EmployeeDto) (dto.EmployeeDto, error) {
+func (serv *employeeService) Create(eDto *dto.EmployeeDto) (dto.EmployeeDto, error) {
 	var e *entity.Employee = entity.NewEmployee()
 
 	if e.SetFirstName(eDto.FirstName) != nil ||
@@ -86,7 +86,7 @@ func (serv *EmployeeService) Create(eDto *dto.EmployeeDto) (dto.EmployeeDto, err
 }
 
 
-func (serv *EmployeeService) Update(eDto *dto.EmployeeDto) (dto.EmployeeDto, error) {
+func (serv *employeeService) Update(eDto *dto.EmployeeDto) (dto.EmployeeDto, error) {
 	var e *entity.Employee = entity.NewEmployee()
 
 	if e.SetId(eDto.Id) != nil ||
@@ -112,7 +112,7 @@ func (serv *EmployeeService) Update(eDto *dto.EmployeeDto) (dto.EmployeeDto, err
 }
 
 
-func (serv *EmployeeService) Delete(eDto *dto.EmployeeDto) error {
+func (serv *employeeService) Delete(eDto *dto.EmployeeDto) error {
 	var e *entity.Employee = entity.NewEmployee()
 
 	if e.SetId(eDto.Id) != nil {

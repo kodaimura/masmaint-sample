@@ -15,24 +15,24 @@ type DepartmentService interface {
 	Delete(dDto *dto.DepartmentDto) error
 }
 
-type DepartmentController struct {
-	dServ *service.DepartmentService
+type departmentController struct {
+	dServ DepartmentService
 }
 
-func NewDepartmentController() *DepartmentController {
+func NewDepartmentController() *departmentController {
 	dServ := service.NewDepartmentService()
-	return &DepartmentController{dServ}
+	return &departmentController{dServ}
 }
 
 
 //GET /department
-func (ctr *DepartmentController) GetDepartmentPage(c *gin.Context) {
+func (ctr *departmentController) GetDepartmentPage(c *gin.Context) {
 	c.HTML(200, "department.html", gin.H{})
 }
 
 
 //GET /api/department
-func (ctr *DepartmentController) GetDepartment(c *gin.Context) {
+func (ctr *departmentController) GetDepartment(c *gin.Context) {
 	ret, err := ctr.dServ.GetAll()
 
 	if err != nil {
@@ -46,7 +46,7 @@ func (ctr *DepartmentController) GetDepartment(c *gin.Context) {
 
 
 //POST /api/department
-func (ctr *DepartmentController) PostDepartment(c *gin.Context) {
+func (ctr *departmentController) PostDepartment(c *gin.Context) {
 	var dDto dto.DepartmentDto
 
 	if err := c.ShouldBindJSON(&dDto); err != nil {
@@ -68,7 +68,7 @@ func (ctr *DepartmentController) PostDepartment(c *gin.Context) {
 
 
 //PUT /api/department
-func (ctr *DepartmentController) PutDepartment(c *gin.Context) {
+func (ctr *departmentController) PutDepartment(c *gin.Context) {
 	var dDto dto.DepartmentDto
 
 	if err := c.ShouldBindJSON(&dDto); err != nil {
@@ -90,7 +90,7 @@ func (ctr *DepartmentController) PutDepartment(c *gin.Context) {
 
 
 //DELETE /api/department
-func (ctr *DepartmentController) DeleteDepartment(c *gin.Context) {
+func (ctr *departmentController) DeleteDepartment(c *gin.Context) {
 	var dDto dto.DepartmentDto
 
 	if err := c.ShouldBindJSON(&dDto); err != nil {

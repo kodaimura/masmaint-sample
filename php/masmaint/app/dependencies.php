@@ -9,9 +9,15 @@ use Monolog\Logger;
 use Monolog\Processor\UidProcessor;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
+use Slim\Views\Twig;
 
 return function (ContainerBuilder $containerBuilder) {
     $containerBuilder->addDefinitions([
+        Twig::class => function (ContainerInterface $c) {
+            $settings = $c->get(SettingsInterface::class);
+            return Twig::create('../templates', $settings->get('twig'));
+        },
+
         LoggerInterface::class => function (ContainerInterface $c) {
             $settings = $c->get(SettingsInterface::class);
 

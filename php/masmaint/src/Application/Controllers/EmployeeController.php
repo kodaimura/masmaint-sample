@@ -23,9 +23,8 @@ class EmployeeController extends BaseController
 
     public function employeePage($request, $response, $args): Response
     {
-        echo "aaaaa";
         $response = $this->twig->render($response, 'employee.html', []);
         return $response;
     }
-
+    
 }

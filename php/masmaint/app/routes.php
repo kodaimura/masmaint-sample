@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Application\Controllers\IndexController;
+use App\Application\Controllers\EmployeeController;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\App;
@@ -21,5 +22,7 @@ return function (App $app) {
 
     $app->group('/mastertables', function (Group $group) {
         $group->get('', IndexController::class. ':indexPage');
+        $group->get('/', IndexController::class. ':indexPage');
+        $group->get('/employee', EmployeeController::class. ':employeePage');
     });
 };

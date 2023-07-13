@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Application\Controllers\IndexController;
 use App\Application\Controllers\EmployeeController;
+use App\Application\Controllers\DepartmentController;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\App;
@@ -24,5 +25,6 @@ return function (App $app) {
         $group->get('', IndexController::class. ':indexPage');
         $group->get('/', IndexController::class. ':indexPage');
         $group->get('/employee', EmployeeController::class. ':employeePage');
+        $group->get('/department', DepartmentController::class. ':departmentPage');
     });
 };

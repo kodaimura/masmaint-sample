@@ -3,7 +3,9 @@
 declare(strict_types=1);
 
 namespace App\Infrastructure\Persistence\Department;
+use App\Domain\Department\DepartmentRepository;
 
+use \PDOException;
 use \PDO;
 use Psr\Log\LoggerInterface;
 use App\Domain\Department\Department;
@@ -34,29 +36,35 @@ class DepartmentRepositoryImpl implements DepartmentRepository
             FROM department
             ORDER BY code ASC";
 
-        $stmt = $this->db->prepare($query);
-        $stmt->execute();
+        try {
+            $stmt = $this->db->prepare($query);
+            $stmt->execute();
+        } catch (PDOException $e) {
+            $this->logger->error($e->getMessage());
+        }
+
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
         $ret = [];
-
-        foreach ($row as $result) {
+        foreach ($result as $row) {
             $x = new Department(
-                $x['code'], 
-                $x['name'],
-                $x['description'],
-                $x['manager_id'],
-                $x['location'],
-                $x['budget'],
-                $x['created_at'],
-                $x['updated_at'],
+                $row['code'], 
+                $row['name'],
+                $row['description'],
+                $row['manager_id'],
+                $row['location'],
+                $row['budget'],
+                $row['created_at'],
+                $row['updated_at']
             );
+            
             $ret[] = $x;
         }
+
         return $ret;
     }
 
-    public function create(Department $department) {
+    public function create(Department $department): Department 
+    {
         $query = 
             "INSERT INTO department (
                 ,code
@@ -105,7 +113,8 @@ class DepartmentRepositoryImpl implements DepartmentRepository
             );
     }
 
-    public function update(Department $department) {
+    public function update(Department $department): Department 
+    {
         $query = 
             "UPDATE department SET
                 name = :name
@@ -147,7 +156,8 @@ class DepartmentRepositoryImpl implements DepartmentRepository
             );
     }
 
-    public function delete(Department $department) {
+    public function delete(Department $department) 
+    {
         $query = "DELETE FROM department WHERE code = :code";
 
         $stmt = $this->db->prepare($query);

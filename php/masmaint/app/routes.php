@@ -26,5 +26,6 @@ return function (App $app) {
         $group->get('/', IndexController::class. ':indexPage');
         $group->get('/employee', EmployeeController::class. ':employeePage');
         $group->get('/department', DepartmentController::class. ':departmentPage');
+        $group->get('/api/department', DepartmentController::class. ':getDepartments');
     });
 };

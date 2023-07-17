@@ -18,13 +18,13 @@ class Department implements JsonSerializable
 
     private ?string $location;
 
-    private float $budget;
+    private string $budget;
 
     private ?string $createdAt;
 
     private ?string $updatedAt;
 
-    public function __construct(string $code, string $name, string $description, ?int $managerId, ?string $location, float $budget)
+    public function __construct($code, $name, $description, $managerId, $location, $budget, $createdAt, $updatedAt)
     {
         $this->code = $code;
         $this->name = $name;
@@ -32,6 +32,8 @@ class Department implements JsonSerializable
         $this->managerId = $managerId;
         $this->location = $location;
         $this->budget = $budget;
+        $this->createdAt = $createdAt;
+        $this->updatedAt = $updatedAt;
     }
 
     public function getCode(): string
@@ -59,7 +61,7 @@ class Department implements JsonSerializable
         return $this->location;
     }
 
-    public function getBudget(): float
+    public function getBudget(): string
     {
         return $this->budget;
     }
@@ -74,6 +76,7 @@ class Department implements JsonSerializable
         return $this->updatedAt;
     }
 
+    //json_encode()でエンコードされるときに呼ばれる
     #[\ReturnTypeWillChange]
     public function jsonSerialize(): array
     {
@@ -81,11 +84,11 @@ class Department implements JsonSerializable
             'code' => $this->code,
             'name' => $this->name,
             'description' => $this->description,
-            'managerId' => $this->managerId,
+            'manager_id' => $this->managerId,
             'location' => $this->location,
             'budget' => $this->budget,
-            'createdAt' => $this->createdAt,
-            'updatedAt' => $this->updatedAt,
+            'created_at' => $this->createdAt,
+            'updated_at' => $this->updatedAt,
         ];
     }
 }

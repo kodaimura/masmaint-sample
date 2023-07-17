@@ -89,28 +89,32 @@ class DepartmentRepositoryImpl implements DepartmentRepository
                 ,budget
                 ,created_at
                 ,updated_at";
+        
+        try {
+            $stmt = $this->db->prepare($query);
+            $stmt->bindValue(':code', $department->getCode());
+            $stmt->bindValue(':name', $department->getName());
+            $stmt->bindValue(':description', $department->getDescription());
+            $stmt->bindValue(':managerId', $department->getManagerId());
+            $stmt->bindValue(':location', $department->getLocation());
+            $stmt->bindValue(':budget', $department->getBudget());
+            $stmt->execute();
+        } catch (PDOException $e) {
+            $this->logger->error($e->getMessage());
+        }
 
-        $stmt = $this->db->prepare($query);
-        $stmt->bindValue(':code', $department->getCode());
-        $stmt->bindValue(':name', $department->getName());
-        $stmt->bindValue(':description', $department->getDescription());
-        $stmt->bindValue(':managerId', $department->getManagerId());
-        $stmt->bindValue(':location', $department->getLocation());
-        $stmt->bindValue(':budget', $department->getBudget());
-
-        $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
         return new Department(
-                $result['code'], 
-                $result['name'],
-                $result['description'],
-                $result['manager_id'],
-                $result['location'],
-                $result['budget'],
-                $result['created_at'],
-                $result['updated_at'],
-            );
+            $result['code'], 
+            $result['name'],
+            $result['description'],
+            $result['manager_id'],
+            $result['location'],
+            $result['budget'],
+            $result['created_at'],
+            $result['updated_at'],
+        );
     }
 
     public function update(Department $department): Department 
@@ -133,35 +137,43 @@ class DepartmentRepositoryImpl implements DepartmentRepository
                 ,created_at
                 ,updated_at";
 
-        $stmt = $this->db->prepare($query);
-        $stmt->bindValue(':name', $department->getName());
-        $stmt->bindValue(':description', $department->getDescription());
-        $stmt->bindValue(':managerId', $department->getManagerId());
-        $stmt->bindValue(':location', $department->getLocation());
-        $stmt->bindValue(':budget', $department->getBudget());
-        $stmt->bindValue(':code', $department->getCode());
+        try {
+            $stmt = $this->db->prepare($query);
+            $stmt->bindValue(':name', $department->getName());
+            $stmt->bindValue(':description', $department->getDescription());
+            $stmt->bindValue(':managerId', $department->getManagerId());
+            $stmt->bindValue(':location', $department->getLocation());
+            $stmt->bindValue(':budget', $department->getBudget());
+            $stmt->bindValue(':code', $department->getCode());
+            $stmt->execute();
+        } catch (PDOException $e) {
+            $this->logger->error($e->getMessage());
+        }
 
-        $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
         return new Department(
-                $result['code'], 
-                $result['name'],
-                $result['description'],
-                $result['manager_id'],
-                $result['location'],
-                $result['budget'],
-                $result['created_at'],
-                $result['updated_at'],
-            );
+            $result['code'], 
+            $result['name'],
+            $result['description'],
+            $result['manager_id'],
+            $result['location'],
+            $result['budget'],
+            $result['created_at'],
+            $result['updated_at'],
+        );
     }
 
     public function delete(Department $department) 
     {
         $query = "DELETE FROM department WHERE code = :code";
 
-        $stmt = $this->db->prepare($query);
-        $stmt->bindValue(':code', $department->getCode());
-        $stmt->execute(PDO::FETCH_ASSOC);
+        try {
+            $stmt = $this->db->prepare($query);
+            $stmt->bindValue(':code', $department->getCode());
+            $stmt->execute();
+        } catch (PDOException $e) {
+            $this->logger->error($e->getMessage());
+        }
     }
 }

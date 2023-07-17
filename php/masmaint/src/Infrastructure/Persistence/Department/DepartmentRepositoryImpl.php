@@ -90,6 +90,7 @@ class DepartmentRepositoryImpl implements DepartmentRepository
         $stmt->bindValue(':location', $department->getLocation());
         $stmt->bindValue(':budget', $department->getBudget());
 
+        $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
         return new Department(
@@ -131,6 +132,7 @@ class DepartmentRepositoryImpl implements DepartmentRepository
         $stmt->bindValue(':budget', $department->getBudget());
         $stmt->bindValue(':code', $department->getCode());
 
+        $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
         return new Department(

@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 namespace App\Infrastructure\Persistence\Department;
+
 use App\Domain\Department\DepartmentRepository;
 
 use \PDOException;
@@ -43,24 +44,7 @@ class DepartmentRepositoryImpl implements DepartmentRepository
             $this->logger->error($e->getMessage());
         }
 
-        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        $ret = [];
-        foreach ($result as $row) {
-            $x = new Department(
-                $row['code'], 
-                $row['name'],
-                $row['description'],
-                $row['manager_id'],
-                $row['location'],
-                $row['budget'],
-                $row['created_at'],
-                $row['updated_at']
-            );
-            
-            $ret[] = $x;
-        }
-
-        return $ret;
+        return $stmt->fetchAll(PDO::FETCH_CLASS, Department::class);
     }
 
     public function create(Department $department): Department 

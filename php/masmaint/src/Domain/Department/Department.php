@@ -14,16 +14,17 @@ class Department implements JsonSerializable
 
     private ?string $description;
 
-    private ?int $managerId;
+    private ?int $manager_id;
 
     private ?string $location;
 
-    private string $budget;
+    private float $budget;
 
-    private ?string $createdAt;
+    private ?string $created_at;
 
-    private ?string $updatedAt;
+    private ?string $updated_at;
 
+/*
     public function __construct($code, $name, $description, $managerId, $location, $budget, $createdAt, $updatedAt)
     {
         $this->code = $code;
@@ -35,7 +36,7 @@ class Department implements JsonSerializable
         $this->createdAt = $createdAt;
         $this->updatedAt = $updatedAt;
     }
-
+*/
     public function getCode(): string
     {
         return $this->code;
@@ -53,7 +54,7 @@ class Department implements JsonSerializable
 
     public function getManagerId(): ?int
     {
-        return $this->managerId;
+        return $this->manager_id;
     }
 
     public function getLocation(): ?string
@@ -61,19 +62,19 @@ class Department implements JsonSerializable
         return $this->location;
     }
 
-    public function getBudget(): string
+    public function getBudget(): float
     {
         return $this->budget;
     }
 
     public function getCreatedAt(): ?string
     {
-        return $this->createdAt;
+        return $this->created_at;
     }
 
     public function getUpdatedAt(): ?string
     {
-        return $this->updatedAt;
+        return $this->updated_at;
     }
 
     //json_encode()でエンコードされるときに呼ばれる
@@ -84,11 +85,11 @@ class Department implements JsonSerializable
             'code' => $this->code,
             'name' => $this->name,
             'description' => $this->description,
-            'manager_id' => $this->managerId,
+            'manager_id' => $this->manager_id,
             'location' => $this->location,
             'budget' => $this->budget,
-            'created_at' => $this->createdAt,
-            'updated_at' => $this->updatedAt,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
         ];
     }
 }

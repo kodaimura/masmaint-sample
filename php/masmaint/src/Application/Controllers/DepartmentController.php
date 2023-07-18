@@ -32,9 +32,25 @@ class DepartmentController extends BaseController
 
     public function getDepartments($request, $response, $args): Response
     {
-        $departments = $this->departmentService->getDepartments();
-        $this->logger->info($departments[0]->getCreatedAt());
+        $departments = $this->departmentService->getAll();
         $response->getBody()->write(json_encode($departments));
+        return $response->withHeader('Content-Type', 'application/json');
+    }
+
+    public function postDepartment($request, $response, $args): Response
+    {
+        $data = $request->getParsedBody();
+        try {
+            $department = $this->departmentService->create($data);
+            $response->getBody()->write(json_encode($department));
+
+        } catch (Exception $e) {
+            $this->logger->error($e->getMessage());
+            return $response
+            ->withHeader('Content-Type', 'application/json')
+            ->withStatus(500);
+        }
+        $this->logger->error("adajla");
         return $response->withHeader('Content-Type', 'application/json');
     }
 

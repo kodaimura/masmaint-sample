@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace App\Infrastructure\Persistence\Department;
 
 use App\Domain\Department\DepartmentRepository;
+use App\Domain\Department\Department;
 
 use \PDOException;
 use \PDO;
 use Psr\Log\LoggerInterface;
-use App\Domain\Department\Department;
 
 class DepartmentRepositoryImpl implements DepartmentRepository
 {
@@ -44,14 +44,30 @@ class DepartmentRepositoryImpl implements DepartmentRepository
             $this->logger->error($e->getMessage());
         }
 
-        return $stmt->fetchAll(PDO::FETCH_CLASS, Department::class);
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $ret = [];
+        foreach ($result as $row) {
+            $x = new Department();
+            $x->setCode($row['code']);
+            $x->setName($row['name']);
+            $x->setDescription($row['description']);
+            $x->setManagerId($row['manager_id']);
+            $x->setLocation($row['location']);
+            $x->setBudget($row['budget']);
+            $x->setCreatedAt($row['created_at']);
+            $x->setUpdatedAt($row['updated_at']);
+
+            $ret[] = $x;
+        }
+
+        return $ret;
     }
 
     public function create(Department $department): Department 
     {
         $query = 
             "INSERT INTO department (
-                ,code
+                code
                 ,name
                 ,description
                 ,manager_id
@@ -78,9 +94,9 @@ class DepartmentRepositoryImpl implements DepartmentRepository
             $stmt = $this->db->prepare($query);
             $stmt->bindValue(':code', $department->getCode());
             $stmt->bindValue(':name', $department->getName());
-            $stmt->bindValue(':description', $department->getDescription());
-            $stmt->bindValue(':managerId', $department->getManagerId());
-            $stmt->bindValue(':location', $department->getLocation());
+            $stmt->bindValue(':description', $department->getDescription(), PDO::PARAM_NULL);
+            $stmt->bindValue(':managerId', $department->getManagerId(), PDO::PARAM_NULL);
+            $stmt->bindValue(':location', $department->getLocation(), PDO::PARAM_NULL);
             $stmt->bindValue(':budget', $department->getBudget());
             $stmt->execute();
         } catch (PDOException $e) {
@@ -89,16 +105,17 @@ class DepartmentRepositoryImpl implements DepartmentRepository
 
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        return new Department(
-            $result['code'], 
-            $result['name'],
-            $result['description'],
-            $result['manager_id'],
-            $result['location'],
-            $result['budget'],
-            $result['created_at'],
-            $result['updated_at'],
-        );
+        $ret = new Department();
+        $ret->setCode($result['code']);
+        $ret->setName($result['name']);
+        $ret->setDescription($result['description']);
+        $ret->setManagerId($result['manager_id']);
+        $ret->setLocation($result['location']);
+        $ret->setBudget($result['budget']);
+        $ret->setCreatedAt($result['created_at']);
+        $ret->setUpdatedAt($result['updated_at']);
+
+        return $ret;
     }
 
     public function update(Department $department): Department 

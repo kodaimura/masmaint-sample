@@ -14,29 +14,16 @@ class Department implements JsonSerializable
 
     private ?string $description;
 
-    private ?int $manager_id;
+    private ?int $managerId;
 
     private ?string $location;
 
     private float $budget;
 
-    private ?string $created_at;
+    private ?string $createdAt;
 
-    private ?string $updated_at;
+    private ?string $updatedAt;
 
-/*
-    public function __construct($code, $name, $description, $managerId, $location, $budget, $createdAt, $updatedAt)
-    {
-        $this->code = $code;
-        $this->name = $name;
-        $this->description = $description;
-        $this->managerId = $managerId;
-        $this->location = $location;
-        $this->budget = $budget;
-        $this->createdAt = $createdAt;
-        $this->updatedAt = $updatedAt;
-    }
-*/
     public function getCode(): string
     {
         return $this->code;
@@ -54,7 +41,7 @@ class Department implements JsonSerializable
 
     public function getManagerId(): ?int
     {
-        return $this->manager_id;
+        return $this->managerId;
     }
 
     public function getLocation(): ?string
@@ -69,12 +56,64 @@ class Department implements JsonSerializable
 
     public function getCreatedAt(): ?string
     {
-        return $this->created_at;
+        return $this->createdAt;
     }
 
     public function getUpdatedAt(): ?string
     {
-        return $this->updated_at;
+        return $this->updatedAt;
+    }
+
+    public function setCode($code)
+    {
+        $this->code = $code;
+    }
+
+    public function setName($name)
+    {
+        $this->name = $name;
+    }
+
+    public function setDescription($description)
+    {
+        $this->description = $description;
+    }
+
+    public function setManagerId($managerId)
+    {
+        if ($managerId === null || $managerId === "") {
+            $this->managerId = null;
+        } else if (filter_var($managerId, FILTER_VALIDATE_INT) !== false) {
+            $this->managerId = (int) $managerId;
+        } else {
+            throw new Exception("error: setManagerId");
+        }
+    }
+
+    public function setLocation($location)
+    {
+        $this->location = $location;
+    }
+
+    public function setBudget($budget)
+    {
+        if ($budget === null || $budget === "") {
+            throw new Exception("error: setBudget");
+        } else if (is_numeric($budget)) {
+            $this->budget = (float) $budget;
+        } else {
+            throw new Exception("error: setBudget");
+        }
+    }
+
+    public function setCreatedAt($createdAt)
+    {
+        $this->createdAt = $createdAt;
+    }
+
+    public function setUpdatedAt($updatedAt)
+    {
+        $this->updatedAt = $updatedAt;
     }
 
     //json_encode()でエンコードされるときに呼ばれる
@@ -85,11 +124,11 @@ class Department implements JsonSerializable
             'code' => $this->code,
             'name' => $this->name,
             'description' => $this->description,
-            'manager_id' => $this->manager_id,
+            'manager_id' => $this->managerId,
             'location' => $this->location,
             'budget' => $this->budget,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
+            'created_at' => $this->createdAt,
+            'updated_at' => $this->updatedAt,
         ];
     }
 }

@@ -27,7 +27,7 @@ class EmployeeService extends BaseService
         return $this->employeeDao->findAll();
     }
 
-    public function create($data): Department
+    public function create($data): Employee
     {
         $employee = new Employee();
         $employee->setFirstName($data['first_name']);
@@ -40,18 +40,22 @@ class EmployeeService extends BaseService
         $employee->setDepartmentCode($data['department_code']);
         $employee->setSalary($data['salary']);
 
-        return $this->departmentDao->create($department);
+        return $this->employeeDao->create($employee);
     }
 
-    public function update($data): Department
+    public function update($data): Employee
     {
-        $department = new Department();
-        $department->setCode($data['code']);
-        $department->setName($data['name']);
-        $department->setDescription($data['description']);
-        $department->setManagerId($data['manager_id']);
-        $department->setLocation($data['location']);
-        $department->setBudget($data['budget']);
+        $employee = new Employee();
+        $employee->setId($data['id']);
+        $employee->setFirstName($data['first_name']);
+        $employee->setLastName($data['last_name']);
+        $employee->setEmail($data['email']);
+        $employee->setPhoneNumber($data['phone_number']);
+        $employee->setAddress($data['address']);
+        $employee->setHireDate($data['hire_date']);
+        $employee->setJobTitle($data['job_title']);
+        $employee->setDepartmentCode($data['department_code']);
+        $employee->setSalary($data['salary']);
 
         return $this->employeeDao->update($employee);
     }

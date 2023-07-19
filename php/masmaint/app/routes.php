@@ -28,5 +28,6 @@ return function (App $app) {
         $group->get('/department', DepartmentController::class. ':departmentPage');
         $group->get('/api/department', DepartmentController::class. ':getDepartments');
         $group->post('/api/department', DepartmentController::class. ':postDepartment');
+        $group->put('/api/department', DepartmentController::class. ':putDepartment');
     });
 };

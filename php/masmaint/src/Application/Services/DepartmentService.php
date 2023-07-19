@@ -30,21 +30,27 @@ class DepartmentService extends BaseService
     public function create($data): Department
     {
         $department = new Department();
-        $this->logger->error("1");
         $department->setCode($data['code']);
-        $this->logger->error("1");
         $department->setName($data['name']);
-        $this->logger->error("2");
         $department->setDescription($data['description']);
-        $this->logger->error("3");
         $department->setManagerId($data['manager_id']);
-        $this->logger->error("4");
         $department->setLocation($data['location']);
-        $this->logger->error("5");
         $department->setBudget($data['budget']);
-        $this->logger->error("6");
 
         return $this->departmentRepository->create($department);
+    }
+
+    public function update($data): Department
+    {
+        $department = new Department();
+        $department->setCode($data['code']);
+        $department->setName($data['name']);
+        $department->setDescription($data['description']);
+        $department->setManagerId($data['manager_id']);
+        $department->setLocation($data['location']);
+        $department->setBudget($data['budget']);
+
+        return $this->departmentRepository->update($department);
     }
 
 }

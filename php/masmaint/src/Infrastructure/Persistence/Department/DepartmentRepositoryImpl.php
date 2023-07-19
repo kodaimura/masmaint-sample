@@ -128,7 +128,7 @@ class DepartmentRepositoryImpl implements DepartmentRepository
                 ,location = :location
                 ,budget = :budget
             WHERE code = :code
-            ) RETURNING
+            RETURNING
                 code
                 ,name
                 ,description
@@ -141,9 +141,9 @@ class DepartmentRepositoryImpl implements DepartmentRepository
         try {
             $stmt = $this->db->prepare($query);
             $stmt->bindValue(':name', $department->getName());
-            $stmt->bindValue(':description', $department->getDescription());
-            $stmt->bindValue(':managerId', $department->getManagerId());
-            $stmt->bindValue(':location', $department->getLocation());
+            $stmt->bindValue(':description', $department->getDescription(), PDO::PARAM_NULL);
+            $stmt->bindValue(':managerId', $department->getManagerId(), PDO::PARAM_NULL);
+            $stmt->bindValue(':location', $department->getLocation(), PDO::PARAM_NULL);
             $stmt->bindValue(':budget', $department->getBudget());
             $stmt->bindValue(':code', $department->getCode());
             $stmt->execute();
@@ -153,16 +153,17 @@ class DepartmentRepositoryImpl implements DepartmentRepository
 
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        return new Department(
-            $result['code'], 
-            $result['name'],
-            $result['description'],
-            $result['manager_id'],
-            $result['location'],
-            $result['budget'],
-            $result['created_at'],
-            $result['updated_at'],
-        );
+        $ret = new Department();
+        $ret->setCode($result['code']);
+        $ret->setName($result['name']);
+        $ret->setDescription($result['description']);
+        $ret->setManagerId($result['manager_id']);
+        $ret->setLocation($result['location']);
+        $ret->setBudget($result['budget']);
+        $ret->setCreatedAt($result['created_at']);
+        $ret->setUpdatedAt($result['updated_at']);
+
+        return $ret;
     }
 
     public function delete(Department $department) 

@@ -50,7 +50,22 @@ class DepartmentController extends BaseController
             ->withHeader('Content-Type', 'application/json')
             ->withStatus(500);
         }
-        $this->logger->error("adajla");
+        return $response->withHeader('Content-Type', 'application/json');
+    }
+
+    public function putDepartment($request, $response, $args): Response
+    {
+        $data = $request->getParsedBody();
+        try {
+            $department = $this->departmentService->update($data);
+            $response->getBody()->write(json_encode($department));
+
+        } catch (Exception $e) {
+            $this->logger->error($e->getMessage());
+            return $response
+            ->withHeader('Content-Type', 'application/json')
+            ->withStatus(500);
+        }
         return $response->withHeader('Content-Type', 'application/json');
     }
 

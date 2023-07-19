@@ -14,7 +14,7 @@ use Slim\Views\Twig;
 class DepartmentService extends BaseService
 {
 
-    protected DepartmentRepository $departmentRep;
+    protected DepartmentDao $departmentDao;
 
     public function __construct(ContainerInterface $container, LoggerInterface $logger, DepartmentDao $departmentDao)
     {

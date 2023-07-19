@@ -144,21 +144,21 @@ class EmployeeDaoImpl implements EmployeeDao
         return $ret;
     }
 
-    public function update(Department $department): Department 
+    public function update(Employee $employee): Employee 
     {
         $query = 
             "UPDATE employee
              SET
-                first_name = ?
-                ,last_name = ?
-                ,email = ?
-                ,phone_number = ?
-                ,address = ?
-                ,hire_date = ?
-                ,job_title = ?
-                ,department_code = ?
-                ,salary = ?
-             WHERE id = ?
+                first_name = :firstName
+                ,last_name = :lastName
+                ,email = :email
+                ,phone_number = :phoneNumber
+                ,address = :address
+                ,hire_date = :hireDate
+                ,job_title = :jobTitle
+                ,department_code = :departmentCode
+                ,salary = :salary
+             WHERE id = :id
              RETURNING 
                 id
                 ,first_name
@@ -184,6 +184,7 @@ class EmployeeDaoImpl implements EmployeeDao
             $stmt->bindValue(':jobTitle', $employee->getJobTitle(), PDO::PARAM_NULL);
             $stmt->bindValue(':departmentCode', $employee->getDepartmentCode(), PDO::PARAM_NULL);
             $stmt->bindValue(':salary', $employee->getSalary());
+            $stmt->bindValue(':id', $employee->getId());
             $stmt->execute();
         } catch (PDOException $e) {
             $this->logger->error($e->getMessage());

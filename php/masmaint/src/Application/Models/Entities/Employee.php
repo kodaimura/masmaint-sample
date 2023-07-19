@@ -94,7 +94,6 @@ class Employee implements JsonSerializable
 
     public function setId($id)
     {
-        $this->id = $id;
         if ($id === null || $id === "") {
             $this->id = null;
         } else if (filter_var($id, FILTER_VALIDATE_INT) !== false) {
@@ -104,7 +103,7 @@ class Employee implements JsonSerializable
         }
     }
 
-    public function setFrstName($firstName)
+    public function setFirstName($firstName)
     {
         $this->firstName = $firstName;
     }
@@ -171,14 +170,14 @@ class Employee implements JsonSerializable
     {
         return [
             'id' => $this->id,
-            'firstName' => $this->firstName,
-            'lastName' => $this->lastName,
+            'first_name' => $this->firstName,
+            'last_name' => $this->lastName,
             'email' => $this->email,
-            'phoneNumber' => $this->phoneNumber,
+            'phone_number' => $this->phoneNumber,
             'address' => $this->address,
-            'hireDate' => $this->hireDate,
-            'jobTitle' => $this->jobTitle,
-            'departmentCode' => $this->departmentCode,
+            'hire_date' => $this->hireDate,
+            'job_title' => $this->jobTitle,
+            'department_code' => $this->departmentCode,
             'salary' => $this->salary,
             'created_at' => $this->createdAt,
             'updated_at' => $this->updatedAt,

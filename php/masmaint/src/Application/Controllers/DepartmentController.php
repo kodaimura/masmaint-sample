@@ -30,7 +30,7 @@ class DepartmentController extends BaseController
         return $response;
     }
 
-    public function getDepartments($request, $response, $args): Response
+    public function getDepartment($request, $response, $args): Response
     {
         $departments = $this->departmentService->getAll();
         $response->getBody()->write(json_encode($departments));
@@ -74,7 +74,7 @@ class DepartmentController extends BaseController
         $data = $request->getParsedBody();
         try {
             $this->departmentService->delete($data);
-            
+
         } catch (Exception $e) {
             $this->logger->error($e->getMessage());
             return $response

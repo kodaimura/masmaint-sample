@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Application\Services;
 
-use App\Domain\Department\DepartmentRepository;
-use App\Domain\Department\Department;
+use App\Application\Models\Daos\DepartmentDao;
+use App\Application\Models\Entities\Department;
 use Psr\Log\LoggerInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -16,15 +16,15 @@ class DepartmentService extends BaseService
 
     protected DepartmentRepository $departmentRep;
 
-    public function __construct(ContainerInterface $container, LoggerInterface $logger, DepartmentRepository $departmentRepository)
+    public function __construct(ContainerInterface $container, LoggerInterface $logger, DepartmentDao $departmentDao)
     {
         parent::__construct($container, $logger);
-        $this->departmentRepository = $departmentRepository;
+        $this->departmentDao = $departmentDao;
     }
 
     public function getAll(): array
     {
-        return $this->departmentRepository->findAll();
+        return $this->departmentDao->findAll();
     }
 
     public function create($data): Department
@@ -37,7 +37,7 @@ class DepartmentService extends BaseService
         $department->setLocation($data['location']);
         $department->setBudget($data['budget']);
 
-        return $this->departmentRepository->create($department);
+        return $this->departmentDao->create($department);
     }
 
     public function update($data): Department
@@ -50,7 +50,7 @@ class DepartmentService extends BaseService
         $department->setLocation($data['location']);
         $department->setBudget($data['budget']);
 
-        return $this->departmentRepository->update($department);
+        return $this->departmentDao->update($department);
     }
 
     public function delete($data)
@@ -58,7 +58,7 @@ class DepartmentService extends BaseService
         $department = new Department();
         $department->setCode($data['code']);
 
-        $this->departmentRepository->delete($department);
+        $this->departmentDao->delete($department);
         return;
     }
 

@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace App\Infrastructure\Persistence\Department;
+namespace App\Application\Models\DaoImpls;
 
-use App\Domain\Department\DepartmentRepository;
-use App\Domain\Department\Department;
+use App\Application\Models\Daos\DepartmentDao;
+use App\Application\Models\Entities\Department;
 
 use \PDOException;
 use \PDO;
 use Psr\Log\LoggerInterface;
 
-class DepartmentRepositoryImpl implements DepartmentRepository
+class DepartmentDaoImpl implements DepartmentDao
 {
 
     private LoggerInterface $logger;

@@ -2,9 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\Department;
+namespace App\Application\Models\Daos;
 
-interface DepartmentRepository
+use App\Application\Models\Entities\Department;
+
+interface DepartmentDao
 {
 
     public function findAll(): array;

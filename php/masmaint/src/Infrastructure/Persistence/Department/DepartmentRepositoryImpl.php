@@ -177,5 +177,7 @@ class DepartmentRepositoryImpl implements DepartmentRepository
         } catch (PDOException $e) {
             $this->logger->error($e->getMessage());
         }
+
+        return;
     }
 }

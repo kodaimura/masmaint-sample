@@ -69,4 +69,19 @@ class DepartmentController extends BaseController
         return $response->withHeader('Content-Type', 'application/json');
     }
 
+    public function deleteDepartment($request, $response, $args): Response
+    {
+        $data = $request->getParsedBody();
+        try {
+            $this->departmentService->delete($data);
+            
+        } catch (Exception $e) {
+            $this->logger->error($e->getMessage());
+            return $response
+            ->withHeader('Content-Type', 'application/json')
+            ->withStatus(500);
+        }
+        return $response->withHeader('Content-Type', 'application/json');
+    }
+
 }

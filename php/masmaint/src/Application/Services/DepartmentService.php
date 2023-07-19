@@ -53,4 +53,13 @@ class DepartmentService extends BaseService
         return $this->departmentRepository->update($department);
     }
 
+    public function delete($data)
+    {
+        $department = new Department();
+        $department->setCode($data['code']);
+
+        $this->departmentRepository->delete($department);
+        return;
+    }
+
 }

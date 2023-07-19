@@ -24,7 +24,13 @@ return function (App $app) {
     $app->group('/mastertables', function (Group $group) {
         $group->get('', IndexController::class. ':indexPage');
         $group->get('/', IndexController::class. ':indexPage');
+        
         $group->get('/employee', EmployeeController::class. ':employeePage');
+        $group->get('/api/employee', EmployeeController::class. ':getEmployees');
+        $group->post('/api/employee', EmployeeController::class. ':postEmployee');
+        $group->put('/api/employee', EmployeeController::class. ':putEmployee');
+        $group->delete('/api/employee', EmployeeController::class. ':deleteEmployee');
+
         $group->get('/department', DepartmentController::class. ':departmentPage');
         $group->get('/api/department', DepartmentController::class. ':getDepartments');
         $group->post('/api/department', DepartmentController::class. ':postDepartment');

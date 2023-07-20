@@ -9,7 +9,7 @@ import (
 
 
 type Employee struct {
-	Id sql.NullInt64 `db:"id"`
+	Id int64 `db:"id"`
 	FirstName string `db:"first_name"`
 	LastName sql.NullString `db:"last_name"`
 	Email sql.NullString `db:"email"`
@@ -28,17 +28,11 @@ func NewEmployee() *Employee {
 }
 
 func (e *Employee) SetId(id any) error {
-	if id == nil || id == "" {
-		e.Id.Valid = false
-		return nil
-	}
-
 	x, err := utils.ToInt64(id)
 	if err != nil {
 		return err
 	}
-	e.Id.Int64 = x
-	e.Id.Valid = true
+	e.Id = x
 	return nil
 }
 
@@ -153,9 +147,7 @@ func (e *Employee) SetUpdatedAt(updatedAt any) error {
 func (e *Employee) ToEmployeeDto() dto.EmployeeDto {
 	var eDto dto.EmployeeDto
 
-	if e.Id.Valid != false {
-		eDto.Id = e.Id.Int64
-	}
+	eDto.Id = e.Id
 	eDto.FirstName = e.FirstName
 	if e.LastName.Valid != false {
 		eDto.LastName = e.LastName.String

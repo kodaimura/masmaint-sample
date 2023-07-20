@@ -9,7 +9,7 @@ import (
 
 
 type Department struct {
-	Code sql.NullString `db:"code"`
+	Code string `db:"code"`
 	Name string `db:"name"`
 	Description sql.NullString `db:"description"`
 	ManagerId sql.NullInt64 `db:"manager_id"`
@@ -24,13 +24,7 @@ func NewDepartment() *Department {
 }
 
 func (e *Department) SetCode(code any) error {
-	if code == nil {
-		e.Code.Valid = false
-		return nil
-	}
-
-	e.Code.String = utils.ToString(code)
-	e.Code.Valid = true
+	e.Code = utils.ToString(code)
 	return nil
 }
 
@@ -99,9 +93,7 @@ func (e *Department) SetUpdatedAt(updatedAt any) error {
 func (e *Department) ToDepartmentDto() dto.DepartmentDto {
 	var dDto dto.DepartmentDto
 
-	if e.Code.Valid != false {
-		dDto.Code = e.Code.String
-	}
+	dDto.Code = e.Code
 	dDto.Name = e.Name
 	if e.Description.Valid != false {
 		dDto.Description = e.Description.String

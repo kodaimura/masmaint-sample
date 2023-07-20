@@ -16,11 +16,6 @@ return function (App $app) {
         return $response;
     });
 
-    $app->get('/', function (Request $request, Response $response) {
-        $response->getBody()->write('Hello world!');
-        return $response;
-    });
-
     $app->group('/mastertables', function (Group $group) {
         $group->get('', IndexController::class. ':indexPage');
         $group->get('/', IndexController::class. ':indexPage');

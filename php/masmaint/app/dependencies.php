@@ -46,10 +46,10 @@ return function (ContainerBuilder $containerBuilder) {
             $password = $dbSettings['password'];
             $charset = $dbSettings['charset'];
             $flags = $dbSettings['flags'];
-            mysql $dsn = "$driver:host=$host;port=$port;dbname=$dbname;charset=$charset";
-            //postgresql $dsn = "$driver:host=$host;port=$port;dbname=$dbname";
-            //sqlite3 return new PDO("sqlite:../../../masmaint-sample.db");
-            return new PDO($dsn, $username, $password, $flags);
+            //$dsn = "$driver:host=$host;port=$port;dbname=$dbname;charset=$charset"; //mysql
+            //$dsn = "$driver:host=$host;port=$port;dbname=$dbname"; //postgresql
+            return new PDO("sqlite:../../../masmaint-sample.db"); //sqlite3
+            //return new PDO($dsn, $username, $password, $flags); //mysql postgresql
             
         },
     ]);

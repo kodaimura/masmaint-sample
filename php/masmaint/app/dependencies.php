@@ -38,15 +38,19 @@ return function (ContainerBuilder $containerBuilder) {
             
             $dbSettings = $settings->get('db');
 
+            $driver = $dbSettings['driver'];
             $host = $dbSettings['host'];
+            $port = $dbSettings['port'];
             $dbname = $dbSettings['database'];
             $username = $dbSettings['username'];
             $password = $dbSettings['password'];
             $charset = $dbSettings['charset'];
             $flags = $dbSettings['flags'];
-            $dsn = "mysql:host=$host;dbname=$dbname;charset=$charset";
-            //return new PDO($dsn, $username, $password);
-            return new PDO("sqlite:../../../masmaint-sample.db");
+            mysql $dsn = "$driver:host=$host;port=$port;dbname=$dbname;charset=$charset";
+            //postgresql $dsn = "$driver:host=$host;port=$port;dbname=$dbname";
+            //sqlite3 return new PDO("sqlite:../../../masmaint-sample.db");
+            return new PDO($dsn, $username, $password, $flags);
+            
         },
     ]);
 };

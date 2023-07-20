@@ -44,6 +44,12 @@ class EmployeeController extends BaseController
             $employee = $this->employeeService->create($data);
             $response->getBody()->write(json_encode($employee));
 
+        } catch (\InvalidArgumentException $e) {
+            $this->logger->debug($e->getMessage());
+            return $response
+            ->withHeader('Content-Type', 'application/json')
+            ->withStatus(400);
+
         } catch (\Exception $e) {
             $this->logger->error($e->getMessage());
             return $response
@@ -60,6 +66,12 @@ class EmployeeController extends BaseController
             $employee = $this->employeeService->update($data);
             $response->getBody()->write(json_encode($employee));
 
+        } catch (\InvalidArgumentException $e) {
+            $this->logger->debug($e->getMessage());
+            return $response
+            ->withHeader('Content-Type', 'application/json')
+            ->withStatus(400);
+
         } catch (\Exception $e) {
             $this->logger->error($e->getMessage());
             return $response
@@ -75,6 +87,12 @@ class EmployeeController extends BaseController
         try {
             $this->employeeService->delete($data);
             
+        } catch (\InvalidArgumentException $e) {
+            $this->logger->debug($e->getMessage());
+            return $response
+            ->withHeader('Content-Type', 'application/json')
+            ->withStatus(400);
+
         } catch (\Exception $e) {
             $this->logger->error($e->getMessage());
             return $response

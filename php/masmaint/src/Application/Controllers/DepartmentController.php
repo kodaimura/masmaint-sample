@@ -44,6 +44,12 @@ class DepartmentController extends BaseController
             $department = $this->departmentService->create($data);
             $response->getBody()->write(json_encode($department));
 
+        } catch (\InvalidArgumentException $e) {
+            $this->logger->debug($e->getMessage());
+            return $response
+            ->withHeader('Content-Type', 'application/json')
+            ->withStatus(400);
+            
         } catch (\Exception $e) {
             $this->logger->error($e->getMessage());
             return $response
@@ -60,6 +66,12 @@ class DepartmentController extends BaseController
             $department = $this->departmentService->update($data);
             $response->getBody()->write(json_encode($department));
 
+        } catch (\InvalidArgumentException $e) {
+            $this->logger->debug($e->getMessage());
+            return $response
+            ->withHeader('Content-Type', 'application/json')
+            ->withStatus(400);
+
         } catch (\Exception $e) {
             $this->logger->error($e->getMessage());
             return $response
@@ -74,6 +86,12 @@ class DepartmentController extends BaseController
         $data = $request->getParsedBody();
         try {
             $this->departmentService->delete($data);
+
+        } catch (\InvalidArgumentException $e) {
+            $this->logger->debug($e->getMessage());
+            return $response
+            ->withHeader('Content-Type', 'application/json')
+            ->withStatus(400);
 
         } catch (\Exception $e) {
             $this->logger->error($e->getMessage());

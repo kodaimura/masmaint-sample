@@ -99,7 +99,7 @@ class Employee implements JsonSerializable
         } else if (filter_var($id, FILTER_VALIDATE_INT) !== false) {
             $this->id = (int) $id;
         } else {
-            throw new \Exception("error: setId");
+            throw new \InvalidArgumentException("error: setId");
         }
     }
 
@@ -154,7 +154,7 @@ class Employee implements JsonSerializable
         } else if (is_numeric($salary)) {
             $this->salary = (float) $salary;
         } else {
-            throw new \Exception("error: setSalary");
+            throw new \InvalidArgumentException("error: setSalary");
         }
     }
 

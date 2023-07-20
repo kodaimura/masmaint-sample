@@ -30,20 +30,15 @@ class EmployeeService extends BaseService
     public function create($data): Employee
     {
         $employee = new Employee();
-        try {
-            $employee->setFirstName($data['first_name']);
-            $employee->setLastName($data['last_name']);
-            $employee->setEmail($data['email']);
-            $employee->setPhoneNumber($data['phone_number']);
-            $employee->setAddress($data['address']);
-            $employee->setHireDate($data['hire_date']);
-            $employee->setJobTitle($data['job_title']);
-            $employee->setDepartmentCode($data['department_code']);
-            $employee->setSalary($data['salary']);
-        } catch (\Exception $e) {
-            $this->logger->debug($e->getMessage());
-            throw $e;
-        }
+        $employee->setFirstName($data['first_name']);
+        $employee->setLastName($data['last_name']);
+        $employee->setEmail($data['email']);
+        $employee->setPhoneNumber($data['phone_number']);
+        $employee->setAddress($data['address']);
+        $employee->setHireDate($data['hire_date']);
+        $employee->setJobTitle($data['job_title']);
+        $employee->setDepartmentCode($data['department_code']);
+        $employee->setSalary($data['salary']);
         
         return $this->employeeDao->create($employee);
     }
@@ -51,21 +46,16 @@ class EmployeeService extends BaseService
     public function update($data): Employee
     {
         $employee = new Employee();
-        try {
-            $employee->setId($data['id']);
-            $employee->setFirstName($data['first_name']);
-            $employee->setLastName($data['last_name']);
-            $employee->setEmail($data['email']);
-            $employee->setPhoneNumber($data['phone_number']);
-            $employee->setAddress($data['address']);
-            $employee->setHireDate($data['hire_date']);
-            $employee->setJobTitle($data['job_title']);
-            $employee->setDepartmentCode($data['department_code']);
-            $employee->setSalary($data['salary']);
-        } catch (\Exception $e) {
-            $this->logger->debug($e->getMessage());
-            throw $e;
-        }
+        $employee->setId($data['id']);
+        $employee->setFirstName($data['first_name']);
+        $employee->setLastName($data['last_name']);
+        $employee->setEmail($data['email']);
+        $employee->setPhoneNumber($data['phone_number']);
+        $employee->setAddress($data['address']);
+        $employee->setHireDate($data['hire_date']);
+        $employee->setJobTitle($data['job_title']);
+        $employee->setDepartmentCode($data['department_code']);
+        $employee->setSalary($data['salary']);
 
         return $this->employeeDao->update($employee);
     }
@@ -73,12 +63,7 @@ class EmployeeService extends BaseService
     public function delete($data)
     {
         $employee = new Employee();
-        try {
-            $employee->setId($data['id']);
-        } catch (\Exception $e) {
-            $this->logger->debug($e->getMessage());
-            throw $e;
-        }
+        $employee->setId($data['id']);
         
         $this->employeeDao->delete($employee);
         return;

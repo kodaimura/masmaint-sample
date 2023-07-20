@@ -71,6 +71,52 @@ class EmployeeDaoImpl implements EmployeeDao
         return $ret;
     }
 
+    public function findOne(Employee $employee): Employee
+    {
+        $query = 
+            "SELECT
+                id
+                ,first_name
+                ,last_name
+                ,email
+                ,phone_number
+                ,address
+                ,hire_date
+                ,job_title
+                ,department_code
+                ,salary
+                ,created_at
+                ,updated_at
+            FROM employee
+            WHERE id = :id";
+
+        try {
+            $stmt = $this->db->prepare($query);
+            $stmt->bindValue(':id', $employee->getId());
+            $stmt->execute();
+        } catch (PDOException $e) {
+            $this->logger->error($e->getMessage());
+        }
+
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        $ret = new Employee();
+        $ret->setId($result['id']);
+        $ret->setFirstName($result['first_name']);
+        $ret->setLastName($result['last_name']);
+        $ret->setEmail($result['email']);
+        $ret->setPhoneNumber($result['phone_number']);
+        $ret->setAddress($result['address']);
+        $ret->setHireDate($result['hire_date']);
+        $ret->setJobTitle($result['job_title']);
+        $ret->setDepartmentCode($result['department_code']);
+        $ret->setSalary($result['salary']);
+        $ret->setCreatedAt($result['created_at']);
+        $ret->setUpdatedAt($result['updated_at']);
+
+        return $ret;
+    }
+
     public function create(Employee $employee): Employee
     {
         $query = 
@@ -125,7 +171,6 @@ class EmployeeDaoImpl implements EmployeeDao
         }
 
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        $ret = [];
 
         $ret = new Employee();
         $ret->setId($result['id']);
@@ -191,7 +236,6 @@ class EmployeeDaoImpl implements EmployeeDao
         }
 
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        $ret = [];
 
         $ret = new Employee();
         $ret->setId($result['id']);

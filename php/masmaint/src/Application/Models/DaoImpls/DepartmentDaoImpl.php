@@ -63,6 +63,44 @@ class DepartmentDaoImpl implements DepartmentDao
         return $ret;
     }
 
+    public function findOne(Department $department): Department 
+    {
+        $query = 
+            "SELECT
+                code
+                ,name
+                ,description
+                ,manager_id
+                ,location
+                ,budget
+                ,created_at
+                ,updated_at
+            FROM department
+             WHERE code = :code";
+
+        try {
+            $stmt = $this->db->prepare($query);
+            $stmt->bindValue(':code', $department->getCode());
+            $stmt->execute();
+        } catch (PDOException $e) {
+            $this->logger->error($e->getMessage());
+        }
+
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        $ret = new Department();
+        $ret->setCode($result['code']);
+        $ret->setName($result['name']);
+        $ret->setDescription($result['description']);
+        $ret->setManagerId($result['manager_id']);
+        $ret->setLocation($result['location']);
+        $ret->setBudget($result['budget']);
+        $ret->setCreatedAt($result['created_at']);
+        $ret->setUpdatedAt($result['updated_at']);
+
+        return $ret;
+    }
+
     public function create(Department $department): Department 
     {
         $query = 

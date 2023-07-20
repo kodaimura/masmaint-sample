@@ -86,7 +86,7 @@ class Department implements JsonSerializable
         } else if (filter_var($managerId, FILTER_VALIDATE_INT) !== false) {
             $this->managerId = (int) $managerId;
         } else {
-            throw new Exception("error: setManagerId");
+            throw new \Exception("error: setManagerId");
         }
     }
 
@@ -98,11 +98,11 @@ class Department implements JsonSerializable
     public function setBudget($budget)
     {
         if ($budget === null || $budget === "") {
-            throw new Exception("error: setBudget");
+            throw new \Exception("error: setBudget");
         } else if (is_numeric($budget)) {
             $this->budget = (float) $budget;
         } else {
-            throw new Exception("error: setBudget");
+            throw new \Exception("error: setBudget");
         }
     }
 

@@ -30,33 +30,48 @@ class DepartmentService extends BaseService
     public function create($data): Department
     {
         $department = new Department();
-        $department->setCode($data['code']);
-        $department->setName($data['name']);
-        $department->setDescription($data['description']);
-        $department->setManagerId($data['manager_id']);
-        $department->setLocation($data['location']);
-        $department->setBudget($data['budget']);
 
+        try {
+            $department->setCode($data['code']);
+            $department->setName($data['name']);
+            $department->setDescription($data['description']);
+            $department->setManagerId($data['manager_id']);
+            $department->setLocation($data['location']);
+            $department->setBudget($data['budget']);
+        } catch (\Exception $e) {
+            $this->logger->debug($e->getMessage());
+            throw $e;
+        }
+        
         return $this->departmentDao->create($department);
     }
 
     public function update($data): Department
     {
         $department = new Department();
-        $department->setCode($data['code']);
-        $department->setName($data['name']);
-        $department->setDescription($data['description']);
-        $department->setManagerId($data['manager_id']);
-        $department->setLocation($data['location']);
-        $department->setBudget($data['budget']);
-
+        try {
+            $department->setCode($data['code']);
+            $department->setName($data['name']);
+            $department->setDescription($data['description']);
+            $department->setManagerId($data['manager_id']);
+            $department->setLocation($data['location']);
+            $department->setBudget($data['budget']);
+        } catch (\Exception $e) {
+            $this->logger->debug($e->getMessage());
+            throw $e;
+        }
         return $this->departmentDao->update($department);
     }
 
     public function delete($data)
     {
         $department = new Department();
-        $department->setCode($data['code']);
+        try {
+            $department->setCode($data['code']);
+        } catch (\Exception $e) {
+            $this->logger->debug($e->getMessage());
+            throw $e;
+        }
 
         $this->departmentDao->delete($department);
         return;

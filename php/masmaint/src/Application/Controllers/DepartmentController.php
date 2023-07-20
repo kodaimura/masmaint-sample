@@ -44,7 +44,7 @@ class DepartmentController extends BaseController
             $department = $this->departmentService->create($data);
             $response->getBody()->write(json_encode($department));
 
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->logger->error($e->getMessage());
             return $response
             ->withHeader('Content-Type', 'application/json')
@@ -60,7 +60,7 @@ class DepartmentController extends BaseController
             $department = $this->departmentService->update($data);
             $response->getBody()->write(json_encode($department));
 
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->logger->error($e->getMessage());
             return $response
             ->withHeader('Content-Type', 'application/json')
@@ -75,7 +75,7 @@ class DepartmentController extends BaseController
         try {
             $this->departmentService->delete($data);
 
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->logger->error($e->getMessage());
             return $response
             ->withHeader('Content-Type', 'application/json')

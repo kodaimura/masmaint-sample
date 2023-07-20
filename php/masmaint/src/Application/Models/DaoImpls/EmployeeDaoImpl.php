@@ -111,13 +111,13 @@ class EmployeeDaoImpl implements EmployeeDao
         try {
             $stmt = $this->db->prepare($query);
             $stmt->bindValue(':firstName', $employee->getFirstName());
-            $stmt->bindValue(':lastName', $employee->getLastName(), PDO::PARAM_NULL);
-            $stmt->bindValue(':email', $employee->getEmail(), PDO::PARAM_NULL);
-            $stmt->bindValue(':phoneNumber', $employee->getPhoneNumber(), PDO::PARAM_NULL);
-            $stmt->bindValue(':address', $employee->getAddress(), PDO::PARAM_NULL);
-            $stmt->bindValue(':hireDate', $employee->getHireDate(), PDO::PARAM_NULL);
-            $stmt->bindValue(':jobTitle', $employee->getJobTitle(), PDO::PARAM_NULL);
-            $stmt->bindValue(':departmentCode', $employee->getDepartmentCode(), PDO::PARAM_NULL);
+            $stmt->bindValue(':lastName', $employee->getLastName());
+            $stmt->bindValue(':email', $employee->getEmail());
+            $stmt->bindValue(':phoneNumber', $employee->getPhoneNumber());
+            $stmt->bindValue(':address', $employee->getAddress());
+            $stmt->bindValue(':hireDate', $employee->getHireDate());
+            $stmt->bindValue(':jobTitle', $employee->getJobTitle());
+            $stmt->bindValue(':departmentCode', $employee->getDepartmentCode());
             $stmt->bindValue(':salary', $employee->getSalary());
             $stmt->execute();
         } catch (PDOException $e) {
@@ -176,13 +176,13 @@ class EmployeeDaoImpl implements EmployeeDao
         try {
             $stmt = $this->db->prepare($query);
             $stmt->bindValue(':firstName', $employee->getFirstName());
-            $stmt->bindValue(':lastName', $employee->getLastName(), PDO::PARAM_NULL);
-            $stmt->bindValue(':email', $employee->getEmail(), PDO::PARAM_NULL);
-            $stmt->bindValue(':phoneNumber', $employee->getPhoneNumber(), PDO::PARAM_NULL);
-            $stmt->bindValue(':address', $employee->getAddress(), PDO::PARAM_NULL);
-            $stmt->bindValue(':hireDate', $employee->getHireDate(), PDO::PARAM_NULL);
-            $stmt->bindValue(':jobTitle', $employee->getJobTitle(), PDO::PARAM_NULL);
-            $stmt->bindValue(':departmentCode', $employee->getDepartmentCode(), PDO::PARAM_NULL);
+            $stmt->bindValue(':lastName', $employee->getLastName());
+            $stmt->bindValue(':email', $employee->getEmail());
+            $stmt->bindValue(':phoneNumber', $employee->getPhoneNumber());
+            $stmt->bindValue(':address', $employee->getAddress());
+            $stmt->bindValue(':hireDate', $employee->getHireDate());
+            $stmt->bindValue(':jobTitle', $employee->getJobTitle());
+            $stmt->bindValue(':departmentCode', $employee->getDepartmentCode());
             $stmt->bindValue(':salary', $employee->getSalary());
             $stmt->bindValue(':id', $employee->getId());
             $stmt->execute();

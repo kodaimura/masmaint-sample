@@ -130,7 +130,11 @@ class Employee implements JsonSerializable
 
     public function setHireDate($hireDate)
     {
-        $this->hireDate = $hireDate;
+        if ($hireDate === null || $hireDate === "") {
+            $this->hireDate = null;
+        } else {
+            $this->hireDate = $hireDate;
+        }
     }
 
     public function setJobTitle($jobTitle)

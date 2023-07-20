@@ -94,9 +94,9 @@ class DepartmentDaoImpl implements DepartmentDao
             $stmt = $this->db->prepare($query);
             $stmt->bindValue(':code', $department->getCode());
             $stmt->bindValue(':name', $department->getName());
-            $stmt->bindValue(':description', $department->getDescription(), PDO::PARAM_NULL);
-            $stmt->bindValue(':managerId', $department->getManagerId(), PDO::PARAM_NULL);
-            $stmt->bindValue(':location', $department->getLocation(), PDO::PARAM_NULL);
+            $stmt->bindValue(':description', $department->getDescription());
+            $stmt->bindValue(':managerId', $department->getManagerId());
+            $stmt->bindValue(':location', $department->getLocation());
             $stmt->bindValue(':budget', $department->getBudget());
             $stmt->execute();
         } catch (PDOException $e) {
@@ -141,9 +141,9 @@ class DepartmentDaoImpl implements DepartmentDao
         try {
             $stmt = $this->db->prepare($query);
             $stmt->bindValue(':name', $department->getName());
-            $stmt->bindValue(':description', $department->getDescription(), PDO::PARAM_NULL);
-            $stmt->bindValue(':managerId', $department->getManagerId(), PDO::PARAM_NULL);
-            $stmt->bindValue(':location', $department->getLocation(), PDO::PARAM_NULL);
+            $stmt->bindValue(':description', $department->getDescription());
+            $stmt->bindValue(':managerId', $department->getManagerId());
+            $stmt->bindValue(':location', $department->getLocation());
             $stmt->bindValue(':budget', $department->getBudget());
             $stmt->bindValue(':code', $department->getCode());
             $stmt->execute();

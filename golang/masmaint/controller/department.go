@@ -3,6 +3,7 @@ package controller
 import (
 	"github.com/gin-gonic/gin"
 
+	cerror "masmaint/core/error"
 	"masmaint/service"
 	"masmaint/dto"
 )
@@ -58,7 +59,11 @@ func (ctr *departmentController) PostDepartment(c *gin.Context) {
 	ret, err := ctr.dServ.Create(&dDto)
 
 	if err != nil {
-		c.JSON(500, gin.H{})
+		if _, ok := err.(*cerror.InvalidArgumentError); ok {
+			c.JSON(400, gin.H{})
+		} else {
+			c.JSON(500, gin.H{})
+		}
 		c.Abort()
 		return
 	}
@@ -80,7 +85,11 @@ func (ctr *departmentController) PutDepartment(c *gin.Context) {
 	ret, err := ctr.dServ.Update(&dDto)
 
 	if err != nil {
-		c.JSON(500, gin.H{})
+		if _, ok := err.(*cerror.InvalidArgumentError); ok {
+			c.JSON(400, gin.H{})
+		} else {
+			c.JSON(500, gin.H{})
+		}
 		c.Abort()
 		return
 	}
@@ -100,7 +109,11 @@ func (ctr *departmentController) DeleteDepartment(c *gin.Context) {
 	}
 
 	if err := ctr.dServ.Delete(&dDto); err != nil {
-		c.JSON(500, gin.H{})
+		if _, ok := err.(*cerror.InvalidArgumentError); ok {
+			c.JSON(400, gin.H{})
+		} else {
+			c.JSON(500, gin.H{})
+		}
 		c.Abort()
 		return
 	}

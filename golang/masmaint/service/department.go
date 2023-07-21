@@ -1,8 +1,7 @@
 package service
 
 import (
-	"errors"
-
+	cerror "masmaint/core/error"
 	"masmaint/core/logger"
 	"masmaint/model/entity"
 	"masmaint/model/dao"
@@ -32,7 +31,7 @@ func (serv *departmentService) GetAll() ([]dto.DepartmentDto, error) {
 	rows, err := serv.dDao.SelectAll()
 	if err != nil {
 		logger.LogError(err.Error())
-		return []dto.DepartmentDto{}, errors.New("取得に失敗しました。")
+		return []dto.DepartmentDto{}, cerror.NewDaoError("取得に失敗しました。")
 	}
 
 	var ret []dto.DepartmentDto
@@ -48,13 +47,13 @@ func (serv *departmentService) GetOne(dDto *dto.DepartmentDto) (dto.DepartmentDt
 	var d *entity.Department = entity.NewDepartment()
 
 	if d.SetCode(dDto.Code) != nil {
-		return dto.DepartmentDto{}, errors.New("不正な値があります。")
+		return dto.DepartmentDto{}, cerror.NewInvalidArgumentError("不正な値があります。")
 	}
 
 	row, err := serv.dDao.Select(d)
 	if err != nil {
 		logger.LogError(err.Error())
-		return dto.DepartmentDto{}, errors.New("取得に失敗しました。")
+		return dto.DepartmentDto{}, cerror.NewDaoError("取得に失敗しました。")
 	}
 
 	return row.ToDepartmentDto(), nil
@@ -70,13 +69,13 @@ func (serv *departmentService) Create(dDto *dto.DepartmentDto) (dto.DepartmentDt
 	d.SetManagerId(dDto.ManagerId) != nil ||
 	d.SetLocation(dDto.Location) != nil ||
 	d.SetBudget(dDto.Budget) != nil {
-		return dto.DepartmentDto{}, errors.New("不正な値があります。")
+		return dto.DepartmentDto{}, cerror.NewInvalidArgumentError("不正な値があります。")
 	}
 
 	row, err := serv.dDao.Insert(d)
 	if err != nil {
 		logger.LogError(err.Error())
-		return dto.DepartmentDto{}, errors.New("登録に失敗しました。")
+		return dto.DepartmentDto{}, cerror.NewDaoError("登録に失敗しました。")
 	}
 
 	return row.ToDepartmentDto(), nil
@@ -92,13 +91,13 @@ func (serv *departmentService) Update(dDto *dto.DepartmentDto) (dto.DepartmentDt
 	d.SetManagerId(dDto.ManagerId) != nil ||
 	d.SetLocation(dDto.Location) != nil ||
 	d.SetBudget(dDto.Budget) != nil {
-		return dto.DepartmentDto{}, errors.New("不正な値があります。")
+		return dto.DepartmentDto{}, cerror.NewInvalidArgumentError("不正な値があります。")
 	}
 
 	row, err := serv.dDao.Update(d)
 	if err != nil {
 		logger.LogError(err.Error())
-		return dto.DepartmentDto{}, errors.New("更新に失敗しました。")
+		return dto.DepartmentDto{}, cerror.NewDaoError("更新に失敗しました。")
 	}
 
 	return row.ToDepartmentDto(), nil
@@ -109,13 +108,13 @@ func (serv *departmentService) Delete(dDto *dto.DepartmentDto) error {
 	var d *entity.Department = entity.NewDepartment()
 
 	if d.SetCode(dDto.Code) != nil {
-		return errors.New("不正な値があります。")
+		return cerror.NewInvalidArgumentError("不正な値があります。")
 	}
 
 	err := serv.dDao.Delete(d)
 	if err != nil {
 		logger.LogError(err.Error())
-		return errors.New("削除に失敗しました。")
+		return cerror.NewDaoError("削除に失敗しました。")
 	}
 
 	return nil

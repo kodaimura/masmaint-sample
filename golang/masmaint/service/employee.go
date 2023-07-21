@@ -1,8 +1,7 @@
 package service
 
 import (
-	"errors"
-
+	cerror "masmaint/core/error"
 	"masmaint/core/logger"
 	"masmaint/model/entity"
 	"masmaint/model/dao"
@@ -32,7 +31,7 @@ func (serv *employeeService) GetAll() ([]dto.EmployeeDto, error) {
 	rows, err := serv.eDao.SelectAll()
 	if err != nil {
 		logger.LogError(err.Error())
-		return []dto.EmployeeDto{}, errors.New("取得に失敗しました。")
+		return []dto.EmployeeDto{}, cerror.NewDaoError("取得に失敗しました。")
 	}
 
 	var ret []dto.EmployeeDto
@@ -48,13 +47,13 @@ func (serv *employeeService) GetOne(eDto *dto.EmployeeDto) (dto.EmployeeDto, err
 	var e *entity.Employee = entity.NewEmployee()
 
 	if e.SetId(eDto.Id) != nil {
-		return dto.EmployeeDto{}, errors.New("不正な値があります。")
+		return dto.EmployeeDto{}, cerror.NewInvalidArgumentError("不正な値があります。")
 	}
 
 	row, err := serv.eDao.Select(e)
 	if err != nil {
 		logger.LogError(err.Error())
-		return dto.EmployeeDto{}, errors.New("取得に失敗しました。")
+		return dto.EmployeeDto{}, cerror.NewDaoError("取得に失敗しました。")
 	}
 
 	return row.ToEmployeeDto(), nil
@@ -73,13 +72,13 @@ func (serv *employeeService) Create(eDto *dto.EmployeeDto) (dto.EmployeeDto, err
 	e.SetJobTitle(eDto.JobTitle) != nil ||
 	e.SetDepartmentCode(eDto.DepartmentCode) != nil ||
 	e.SetSalary(eDto.Salary) != nil {
-		return dto.EmployeeDto{}, errors.New("不正な値があります。")
+		return dto.EmployeeDto{}, cerror.NewInvalidArgumentError("不正な値があります。")
 	}
 
 	row, err := serv.eDao.Insert(e)
 	if err != nil {
 		logger.LogError(err.Error())
-		return dto.EmployeeDto{}, errors.New("登録に失敗しました。")
+		return dto.EmployeeDto{}, cerror.NewDaoError("登録に失敗しました。")
 	}
 
 	return row.ToEmployeeDto(), nil
@@ -99,13 +98,13 @@ func (serv *employeeService) Update(eDto *dto.EmployeeDto) (dto.EmployeeDto, err
 	e.SetJobTitle(eDto.JobTitle) != nil ||
 	e.SetDepartmentCode(eDto.DepartmentCode) != nil ||
 	e.SetSalary(eDto.Salary) != nil {
-		return dto.EmployeeDto{}, errors.New("不正な値があります。")
+		return dto.EmployeeDto{}, cerror.NewInvalidArgumentError("不正な値があります。")
 	}
 
 	row, err := serv.eDao.Update(e)
 	if err != nil {
 		logger.LogError(err.Error())
-		return dto.EmployeeDto{}, errors.New("更新に失敗しました。")
+		return dto.EmployeeDto{}, cerror.NewDaoError("更新に失敗しました。")
 	}
 
 	return row.ToEmployeeDto(), nil
@@ -116,13 +115,13 @@ func (serv *employeeService) Delete(eDto *dto.EmployeeDto) error {
 	var e *entity.Employee = entity.NewEmployee()
 
 	if e.SetId(eDto.Id) != nil {
-		return errors.New("不正な値があります。")
+		return cerror.NewInvalidArgumentError("不正な値があります。")
 	}
 
 	err := serv.eDao.Delete(e)
 	if err != nil {
 		logger.LogError(err.Error())
-		return errors.New("削除に失敗しました。")
+		return cerror.NewDaoError("削除に失敗しました。")
 	}
 
 	return nil

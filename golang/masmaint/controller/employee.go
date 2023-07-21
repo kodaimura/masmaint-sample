@@ -3,6 +3,7 @@ package controller
 import (
 	"github.com/gin-gonic/gin"
 
+	cerror "masmaint/core/error"
 	"masmaint/service"
 	"masmaint/dto"
 )
@@ -58,7 +59,11 @@ func (ctr *employeeController) PostEmployee(c *gin.Context) {
 	ret, err := ctr.eServ.Create(&eDto)
 
 	if err != nil {
-		c.JSON(500, gin.H{})
+		if _, ok := err.(*cerror.InvalidArgumentError); ok {
+			c.JSON(400, gin.H{})
+		} else {
+			c.JSON(500, gin.H{})
+		}
 		c.Abort()
 		return
 	}
@@ -80,7 +85,11 @@ func (ctr *employeeController) PutEmployee(c *gin.Context) {
 	ret, err := ctr.eServ.Update(&eDto)
 
 	if err != nil {
-		c.JSON(500, gin.H{})
+		if _, ok := err.(*cerror.InvalidArgumentError); ok {
+			c.JSON(400, gin.H{})
+		} else {
+			c.JSON(500, gin.H{})
+		}
 		c.Abort()
 		return
 	}
@@ -100,7 +109,11 @@ func (ctr *employeeController) DeleteEmployee(c *gin.Context) {
 	}
 
 	if err := ctr.eServ.Delete(&eDto); err != nil {
-		c.JSON(500, gin.H{})
+		if _, ok := err.(*cerror.InvalidArgumentError); ok {
+			c.JSON(400, gin.H{})
+		} else {
+			c.JSON(500, gin.H{})
+		}
 		c.Abort()
 		return
 	}

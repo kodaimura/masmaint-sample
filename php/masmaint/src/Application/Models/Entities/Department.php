@@ -20,9 +20,9 @@ class Department implements JsonSerializable
 
     private float $budget;
 
-    private ?string $createdAt;
+    private string $createdAt;
 
-    private ?string $updatedAt;
+    private string $updatedAt;
 
     public function getCode(): string
     {
@@ -54,12 +54,12 @@ class Department implements JsonSerializable
         return $this->budget;
     }
 
-    public function getCreatedAt(): ?string
+    public function getCreatedAt(): string
     {
         return $this->createdAt;
     }
 
-    public function getUpdatedAt(): ?string
+    public function getUpdatedAt(): string
     {
         return $this->updatedAt;
     }

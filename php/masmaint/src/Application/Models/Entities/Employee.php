@@ -8,7 +8,7 @@ use JsonSerializable;
 
 class Employee implements JsonSerializable
 {
-    private ?int $id;
+    private int $id;
 
     private string $firstName;
 
@@ -28,11 +28,11 @@ class Employee implements JsonSerializable
 
     private ?float $salary;
 
-    private ?string $createdAt;
+    private string $createdAt;
 
-    private ?string $updatedAt;
+    private string $updatedAt;
 
-    public function getId(): ?int
+    public function getId(): int
     {
         return $this->id;
     }
@@ -82,12 +82,12 @@ class Employee implements JsonSerializable
         return $this->salary;
     }
 
-    public function getCreatedAt(): ?string
+    public function getCreatedAt(): string
     {
         return $this->createdAt;
     }
 
-    public function getUpdatedAt(): ?string
+    public function getUpdatedAt(): string
     {
         return $this->updatedAt;
     }

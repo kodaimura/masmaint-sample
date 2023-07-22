@@ -95,7 +95,7 @@ class Employee implements JsonSerializable
     public function setId($id)
     {
         if ($id === null || $id === "") {
-            $this->id = null;
+            throw new \InvalidArgumentException("error: setId");
         } else if (filter_var($id, FILTER_VALIDATE_INT) !== false) {
             $this->id = (int) $id;
         } else {

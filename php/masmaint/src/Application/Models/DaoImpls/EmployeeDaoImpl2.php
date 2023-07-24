@@ -47,6 +47,7 @@ class EmployeeDaoImpl2 implements EmployeeDao
             $stmt->execute();
         } catch (PDOException $e) {
             $this->logger->error($e->getMessage());
+            throw $e;
         }
 
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -97,6 +98,7 @@ class EmployeeDaoImpl2 implements EmployeeDao
             $stmt->execute();
         } catch (PDOException $e) {
             $this->logger->error($e->getMessage());
+            throw $e;
         }
 
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -157,6 +159,7 @@ class EmployeeDaoImpl2 implements EmployeeDao
             $stmt->execute();
         } catch (PDOException $e) {
             $this->logger->error($e->getMessage());
+            throw $e;
         }
 
         $lastInsertedId = $this->db->lastInsertId();
@@ -196,6 +199,7 @@ class EmployeeDaoImpl2 implements EmployeeDao
             $stmt->execute();
         } catch (PDOException $e) {
             $this->logger->error($e->getMessage());
+            throw $e;
         }
 
         return $this->findOne($employee);
@@ -211,6 +215,7 @@ class EmployeeDaoImpl2 implements EmployeeDao
             $stmt->execute();
         } catch (PDOException $e) {
             $this->logger->error($e->getMessage());
+            throw $e;
         }
 
         return;

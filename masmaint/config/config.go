@@ -29,6 +29,9 @@ type Config struct {
 	BasicAuthUser string
 	BasicAuthPass string
 
+	AuthUser string
+	AuthPass string
+
 	JwtSecretKey string
 	LogLevel string
 }
@@ -61,6 +64,9 @@ func init() {
 
 	cf.BasicAuthUser = os.Getenv("BASIC_AUTH_USER")
 	cf.BasicAuthPass = os.Getenv("BASIC_AUTH_PASSWORD")
+
+	cf.AuthUser = os.Getenv("AUTH_USER")
+	cf.AuthPass = os.Getenv("AUTH_PASSWORD")
 
 	cf.JwtSecretKey = os.Getenv("JWT_SECRET_KEY")
 	cf.LogLevel = os.Getenv("LOG_LEVEL")

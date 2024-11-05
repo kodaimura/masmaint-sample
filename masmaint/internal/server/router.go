@@ -21,14 +21,13 @@ func SetWebRouter(r *gin.RouterGroup) {
 
 	auth := r.Group("", middleware.JwtAuthMiddleware())
 	{
-		auth.GET("/", ic.IndexPage)
 		auth.GET("/employee", employeeController.GetPage)
 		auth.GET("/department", departmentController.GetPage)
 	}
 }
 
 
-func SetRouter(r *gin.RouterGroup) {
+func SetApiRouter(r *gin.RouterGroup) {
 	employeeController := employee.NewController()
 	departmentController := department.NewController()
 
@@ -39,7 +38,7 @@ func SetRouter(r *gin.RouterGroup) {
 
 		cf := config.GetConfig()
 		if name == cf.AuthUser && pass == cf.AuthPass {
-			cc := jwt.CustomClaims{ AccountId: 1, AccountName: name,}å
+			cc := jwt.CustomClaims{ AccountId: 1, AccountName: name}
 			jwt.SetTokenToCookie(c, jwt.NewPayload(cc))
 		} else {
 			c.JSON(401, gin.H{"error": "ユーザ名またはパスワードが異なります。"})
@@ -53,9 +52,9 @@ func SetRouter(r *gin.RouterGroup) {
 		auth.PUT("/employee", employeeController.Put)
 		auth.DELETE("/employee", employeeController.Delete)
 
-		rm.GET("/department", departmentController.Get)
-		rm.POST("/department", departmentController.Post)
-		rm.PUT("/department", departmentController.Put)
-		rm.DELETE("/department", departmentController.Delete)
+		auth.GET("/department", departmentController.Get)
+		auth.POST("/department", departmentController.Post)
+		auth.PUT("/department", departmentController.Put)
+		auth.DELETE("/department", departmentController.Delete)
 	}
 }

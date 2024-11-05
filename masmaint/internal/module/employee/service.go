@@ -1,15 +1,15 @@
 package employee
 
 import (
-	"goat/internal/core/logger"
-	"goat/internal/core/utils"
+	"masmaint/internal/core/logger"
+	"masmaint/internal/core/utils"
 )
 
 type Service interface {
 	Get() ([]Employee, error)
-	Create(input *PostBody) (Employee, error)
-	Update(input *PutBody) (Employee, error)
-	Delete(input *DeleteBody) error
+	Create(input PostBody) (Employee, error)
+	Update(input PutBody) (Employee, error)
+	Delete(input DeleteBody) error
 }
 
 type service struct {
@@ -24,7 +24,7 @@ func NewService() Service {
 
 
 func (srv *service) Get() ([]Employee, error) {
-	rows, err := srv.repository.Get()
+	rows, err := srv.repository.Get(&Employee{})
 	if err != nil {
 		logger.Error(err.Error())
 		return []Employee{}, err
@@ -37,13 +37,13 @@ func (srv *service) Create(input PostBody) (Employee, error) {
 	var model Employee
 	utils.MapFields(&model, input)
 
-	id, err := srv.repository.Insert(model, nil)
+	id, err := srv.repository.Insert(&model, nil)
 	if err != nil {
 		logger.Error(err.Error())
 		return Employee{}, err
 	}
 
-	return srv.repository.GetOne(&Employee{ Id:id })
+	return srv.repository.GetOne(&Employee{ Id: id })
 }
 
 
@@ -51,12 +51,12 @@ func (srv *service) Update(input PutBody) (Employee, error) {
 	var model Employee
 	utils.MapFields(&model, input)
 
-	if err := srv.repository.Update(model, nil); err != nil {
+	if err := srv.repository.Update(&model, nil); err != nil {
 		logger.Error(err.Error())
 		return Employee{}, err
 	}
 
-	return srv.repository.GetOne(&Employee{ Id:input.Id })
+	return srv.repository.GetOne(&Employee{ Id: input.Id })
 }
 
 
@@ -64,7 +64,7 @@ func (srv *service) Delete(input DeleteBody) error {
 	var model Employee
 	utils.MapFields(&model, input)
 
-	if err := srv.repository.Delete(model, nil); err != nil {
+	if err := srv.repository.Delete(&model, nil); err != nil {
 		logger.Error(err.Error())
 		return err
 	}

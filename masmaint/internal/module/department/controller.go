@@ -43,7 +43,7 @@ func (ctr *controller) Post(c *gin.Context) {
 		return
 	}
 
-	ret, err := ctr.service.Create(&req)
+	ret, err := ctr.service.Create(req)
 
 	if err != nil {
 		c.JSON(500, gin.H{"error":"予期せぬエラーが発生しました。"})
@@ -64,7 +64,7 @@ func (ctr *controller) Put(c *gin.Context) {
 		return
 	}
 
-	ret, err := ctr.service.Update(&req)
+	ret, err := ctr.service.Update(req)
 
 	if err != nil {
 		c.JSON(500, gin.H{"error":"予期せぬエラーが発生しました。"})
@@ -85,7 +85,7 @@ func (ctr *controller) Delete(c *gin.Context) {
 		return
 	}
 
-	if err := ctr.service.Delete(&req); err != nil {
+	if err := ctr.service.Delete(req); err != nil {
 		c.JSON(500, gin.H{"error":"予期せぬエラーが発生しました。"})
 		c.Abort()
 		return

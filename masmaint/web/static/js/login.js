@@ -7,12 +7,12 @@ window.addEventListener("DOMContentLoaded", function() {
 
 const login = async () => {
     const form = document.getElementById("login-form");
-    const account_name = form.elements['account_name'].value;
-    const account_password = form.elements['account_password'].value;
+    const username = form.elements['username'].value;
+    const password = form.elements['password'].value;
 
     const body = {
-        account_name: account_name,
-        account_password: account_password
+        username: username,
+        password: password
     };
 
     try {

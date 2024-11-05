@@ -1,33 +1,29 @@
-package repository
+package department
 
 import (
 	"database/sql"
-
 	"masmaint/internal/core/db"
-	"masmaint/internal/model"
 )
 
-
-type DepartmentRepository interface {
-	Get(d *model.Department) ([]model.Department, error)
-	GetOne(d *model.Department) (model.Department, error)
-	Insert(d *model.Department, tx *sql.Tx) error
-	Update(d *model.Department, tx *sql.Tx) error
-	Delete(d *model.Department, tx *sql.Tx) error
+type Repository interface {
+	Get(d *Department) ([]Department, error)
+	GetOne(d *Department) (Department, error)
+	Insert(d *Department, tx *sql.Tx) error
+	Update(d *Department, tx *sql.Tx) error
+	Delete(d *Department, tx *sql.Tx) error
 }
 
-
-type departmentRepository struct {
+type repository struct {
 	db *sql.DB
 }
 
-func NewDepartmentRepository() DepartmentRepository {
+func NewRepository() Repository {
 	db := db.GetDB()
-	return &departmentRepository{db}
+	return &repository{db}
 }
 
 
-func (rep *departmentRepository) Get(d *model.Department) ([]model.Department, error) {
+func (rep *repository) Get(d *Department) ([]Department, error) {
 	where, binds := db.BuildWhereClause(d)
 	query := 
 	`SELECT
@@ -44,12 +40,12 @@ func (rep *departmentRepository) Get(d *model.Department) ([]model.Department, e
 	defer rows.Close()
 
 	if err != nil {
-		return []model.Department{}, err
+		return []Department{}, err
 	}
 
-	ret := []model.Department{}
+	ret := []Department{}
 	for rows.Next() {
-		d := model.Department{}
+		d := Department{}
 		err = rows.Scan(
 			&d.Code,
 			&d.Name,
@@ -61,7 +57,7 @@ func (rep *departmentRepository) Get(d *model.Department) ([]model.Department, e
 			&d.UpdatedAt,
 		)
 		if err != nil {
-			return []model.Department{}, err
+			return []Department{}, err
 		}
 		ret = append(ret, d)
 	}
@@ -70,8 +66,8 @@ func (rep *departmentRepository) Get(d *model.Department) ([]model.Department, e
 }
 
 
-func (rep *departmentRepository) GetOne(d *model.Department) (model.Department, error) {
-	var ret model.Department
+func (rep *repository) GetOne(d *Department) (Department, error) {
+	var ret Department
 	where, binds := db.BuildWhereClause(d)
 	query := 
 	`SELECT
@@ -100,7 +96,7 @@ func (rep *departmentRepository) GetOne(d *model.Department) (model.Department, 
 }
 
 
-func (rep *departmentRepository) Insert(d *model.Department, tx *sql.Tx) error {
+func (rep *repository) Insert(d *Department, tx *sql.Tx) error {
 	cmd := 
 	`INSERT INTO department (
 		code
@@ -131,7 +127,7 @@ func (rep *departmentRepository) Insert(d *model.Department, tx *sql.Tx) error {
 }
 
 
-func (rep *departmentRepository) Update(d *model.Department, tx *sql.Tx) error {
+func (rep *repository) Update(d *Department, tx *sql.Tx) error {
 	cmd := 
 	`UPDATE department
 	 SET code = ?
@@ -162,7 +158,7 @@ func (rep *departmentRepository) Update(d *model.Department, tx *sql.Tx) error {
 }
 
 
-func (rep *departmentRepository) Delete(d *model.Department, tx *sql.Tx) error {
+func (rep *repository) Delete(d *Department, tx *sql.Tx) error {
 	where, binds := db.BuildWhereClause(d)
 	cmd := "DELETE FROM department " + where
 

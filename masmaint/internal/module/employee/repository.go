@@ -2,32 +2,28 @@ package employee
 
 import (
 	"database/sql"
-
 	"masmaint/internal/core/db"
-	"masmaint/internal/model"
 )
 
-
-type EmployeeRepository interface {
-	Get(e *model.Employee) ([]model.Employee, error)
-	GetOne(e *model.Employee) (model.Employee, error)
-	Insert(e *model.Employee, tx *sql.Tx) (int, error)
-	Update(e *model.Employee, tx *sql.Tx) error
-	Delete(e *model.Employee, tx *sql.Tx) error
+type Repository interface {
+	Get(e *Employee) ([]Employee, error)
+	GetOne(e *Employee) (Employee, error)
+	Insert(e *Employee, tx *sql.Tx) (int, error)
+	Update(e *Employee, tx *sql.Tx) error
+	Delete(e *Employee, tx *sql.Tx) error
 }
 
-
-type employeeRepository struct {
+type repository struct {
 	db *sql.DB
 }
 
-func NewEmployeeRepository() EmployeeRepository {
+func NewRepository() Repository {
 	db := db.GetDB()
-	return &employeeRepository{db}
+	return &repository{db}
 }
 
 
-func (rep *employeeRepository) Get(e *model.Employee) ([]model.Employee, error) {
+func (rep *repository) Get(e *Employee) ([]Employee, error) {
 	where, binds := db.BuildWhereClause(e)
 	query := 
 	`SELECT
@@ -48,12 +44,12 @@ func (rep *employeeRepository) Get(e *model.Employee) ([]model.Employee, error) 
 	defer rows.Close()
 
 	if err != nil {
-		return []model.Employee{}, err
+		return []Employee{}, err
 	}
 
-	ret := []model.Employee{}
+	ret := []Employee{}
 	for rows.Next() {
-		e := model.Employee{}
+		e := Employee{}
 		err = rows.Scan(
 			&e.Id,
 			&e.FirstName,
@@ -69,7 +65,7 @@ func (rep *employeeRepository) Get(e *model.Employee) ([]model.Employee, error) 
 			&e.UpdatedAt,
 		)
 		if err != nil {
-			return []model.Employee{}, err
+			return []Employee{}, err
 		}
 		ret = append(ret, e)
 	}
@@ -78,8 +74,8 @@ func (rep *employeeRepository) Get(e *model.Employee) ([]model.Employee, error) 
 }
 
 
-func (rep *employeeRepository) GetOne(e *model.Employee) (model.Employee, error) {
-	var ret model.Employee
+func (rep *repository) GetOne(e *Employee) (Employee, error) {
+	var ret Employee
 	where, binds := db.BuildWhereClause(e)
 	query := 
 	`SELECT
@@ -116,7 +112,7 @@ func (rep *employeeRepository) GetOne(e *model.Employee) (model.Employee, error)
 }
 
 
-func (rep *employeeRepository) Insert(e *model.Employee, tx *sql.Tx) (int, error) {
+func (rep *repository) Insert(e *Employee, tx *sql.Tx) (int, error) {
 	cmd := 
 	`INSERT INTO employee (
 		first_name
@@ -155,7 +151,7 @@ func (rep *employeeRepository) Insert(e *model.Employee, tx *sql.Tx) (int, error
 }
 
 
-func (rep *employeeRepository) Update(e *model.Employee, tx *sql.Tx) error {
+func (rep *repository) Update(e *Employee, tx *sql.Tx) error {
 	cmd := 
 	`UPDATE employee
 	 SET first_name = ?
@@ -192,7 +188,7 @@ func (rep *employeeRepository) Update(e *model.Employee, tx *sql.Tx) error {
 }
 
 
-func (rep *employeeRepository) Delete(e *model.Employee, tx *sql.Tx) error {
+func (rep *repository) Delete(e *Employee, tx *sql.Tx) error {
 	where, binds := db.BuildWhereClause(e)
 	cmd := "DELETE FROM employee " + where
 

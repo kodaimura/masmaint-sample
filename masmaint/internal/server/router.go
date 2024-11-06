@@ -1,6 +1,7 @@
 package server
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"masmaint/config"
 	"masmaint/internal/core/jwt"
@@ -21,6 +22,7 @@ func SetWebRouter(r *gin.RouterGroup) {
 
 	auth := r.Group("", middleware.JwtAuthMiddleware())
 	{
+		auth.GET("/", func(c *gin.Context) { c.HTML(200, "index.html", gin.H{}) })
 		auth.GET("/employee", employeeController.GetPage)
 		auth.GET("/department", departmentController.GetPage)
 	}
@@ -33,8 +35,13 @@ func SetApiRouter(r *gin.RouterGroup) {
 
 	//カスタム推奨
 	r.POST("/login", func(c *gin.Context) { 
-		name := c.Param("username")
-		pass := c.Param("password")
+		var body map[string]string
+		c.ShouldBindJSON(&body)
+		name := body["username"]
+		pass := body["password"]
+		fmt.Println(name)
+
+		fmt.Println(pass)
 
 		cf := config.GetConfig()
 		if name == cf.AuthUser && pass == cf.AuthPass {

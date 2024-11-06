@@ -38,7 +38,7 @@ func (ctr *controller) Get(c *gin.Context) {
 func (ctr *controller) Post(c *gin.Context) {
 	var req PostBody
 	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(500, gin.H{"error":"不正なリクエストです。"})
+		c.JSON(400, gin.H{"error":"不正なリクエストです。"})
 		c.Abort()
 		return
 	}
@@ -59,7 +59,7 @@ func (ctr *controller) Post(c *gin.Context) {
 func (ctr *controller) Put(c *gin.Context) {
 	var req PutBody
 	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(500, gin.H{"error":"不正なリクエストです。"})
+		c.JSON(400, gin.H{"error":"不正なリクエストです。"})
 		c.Abort()
 		return
 	}
@@ -80,7 +80,7 @@ func (ctr *controller) Put(c *gin.Context) {
 func (ctr *controller) Delete(c *gin.Context) {
 	var req DeleteBody
 	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(500, gin.H{"error":"不正なリクエストです。"})
+		c.JSON(400, gin.H{"error":"不正なリクエストです。"})
 		c.Abort()
 		return
 	}

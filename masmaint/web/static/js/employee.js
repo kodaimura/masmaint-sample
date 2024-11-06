@@ -282,7 +282,7 @@ const doPost = () => {
 			hire_date: hire_date,
 			job_title: job_title,
 			department_code: department_code,
-			salary: salary,
+			salary: salary ? parseFloat(salary) : null,
 		}
 
 		fetch('api/employee', {

@@ -1,14 +1,14 @@
 package errs
 
 import (
-    "fmt"
+	"strings"
+	"reflect"
+	"encoding/json"
+    "database/sql"
     "github.com/lib/pq"
     "github.com/go-sql-driver/mysql"
     "github.com/mattn/go-sqlite3"
     "masmaint/config"
-    "masmaint/internal/core/errs"
-    "strings"
-    "database/sql"
 )
 
 
@@ -18,9 +18,10 @@ func NewError(err error) error {
     }
 
 	if jsonErr, ok := err.(*json.UnmarshalTypeError); ok {
-		return NewBadRequestError(jsonErr.Field, jsonErr.Type)
+		t := reflect.TypeOf(jsonErr.Type)
+		return NewBadRequestError(jsonErr.Field, t.Name())
 	}
-	if syntaxErr, ok := err.(*json.SyntaxError); ok {
+	if _, ok := err.(*json.SyntaxError); ok {
 		return NewBadRequestError("", "")
 	}
 
@@ -35,43 +36,43 @@ func NewError(err error) error {
     case "sqlite3":
         return classifySQLite3Error(err)
     default:
-        return errs.NewUnexpectedError(err.Error())
+        return NewUnexpectedError(err.Error())
     }
 }
 
 func classifyPostgresError(err error) error {
     if err == sql.ErrNoRows {
-        return errs.NewNotFoundError()
+        return NewNotFoundError()
     }
     if pgErr, ok := err.(*pq.Error); ok {
         if pgErr.Code == "23505" {
             columnName := extractColumnNameFromPostgresError(pgErr)
-            return errs.NewUniqueConstraintError(columnName)
+            return NewUniqueConstraintError(columnName)
         }
     }
-    return errs.NewUnexpectedError(err.Error())
+    return NewUnexpectedError(err.Error())
 }
 
 func classifyMySQLError(err error) error {
     if err == sql.ErrNoRows {
-        return errs.NewNotFoundError()
+        return NewNotFoundError()
     }
     if mysqlErr, ok := err.(*mysql.MySQLError); ok && mysqlErr.Number == 1062 {
         columnName := extractColumnNameFromMySQLError(mysqlErr)
-        return errs.NewUniqueConstraintError(columnName)
+        return NewUniqueConstraintError(columnName)
     }
-    return errs.NewUnexpectedError(err.Error())
+    return NewUnexpectedError(err.Error())
 }
 
 func classifySQLite3Error(err error) error {
     if err == sql.ErrNoRows {
-        return errs.NewNotFoundError()
+        return NewNotFoundError()
     }
     if sqliteErr, ok := err.(sqlite3.Error); ok && sqliteErr.Code == sqlite3.ErrConstraint {
         columnName := extractColumnNameFromSQLite3Error(sqliteErr)
-        return errs.NewUniqueConstraintError(columnName)
+        return NewUniqueConstraintError(columnName)
     }
-    return errs.NewUnexpectedError(err.Error())
+    return NewUnexpectedError(err.Error())
 }
 
 func extractColumnNameFromPostgresError(pgErr *pq.Error) string {
@@ -95,8 +96,8 @@ func extractColumnNameFromMySQLError(mysqlErr *mysql.MySQLError) string {
 }
 
 func extractColumnNameFromSQLite3Error(sqliteErr sqlite3.Error) string {
-    if strings.Contains(sqliteErr.Message, "UNIQUE constraint failed") {
-        parts := strings.Split(sqliteErr.Message, ":")
+    if strings.Contains(sqliteErr.Error(), "UNIQUE constraint failed") {
+        parts := strings.Split(sqliteErr.Error(), ":")
         if len(parts) > 1 {
             return strings.TrimSpace(parts[1])
         }

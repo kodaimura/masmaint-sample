@@ -11,12 +11,12 @@ type BadRequestError struct {
 	Type string
 }
 
-func NewBadRequestError(failed, expectType string) error {
+func NewBadRequestError(field, expectType string) error {
 	return BadRequestError{Field: field, Type: expectType}
 }
 
 func (e BadRequestError) Error() string {
-	if Field === "" {
+	if e.Field == "" {
 		return "error: The content of the request is invalid."
 	}
 	return fmt.Sprintf("error: Field '%s' should be of type %s", e.Field, e.Type)
@@ -51,10 +51,10 @@ type UnexpectedError struct {
 	Message string
 }
 
-func NewUnexpectedError() error {
-	return UnexpectedError{}
+func NewUnexpectedError(message string) error {
+	return UnexpectedError{Message: message}
 }
 
-func (e NewUnexpectedError) Error() string {
+func (e UnexpectedError) Error() string {
 	return fmt.Sprintf("error: %s", e.Message)
 }

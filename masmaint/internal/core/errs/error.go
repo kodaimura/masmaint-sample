@@ -6,6 +6,23 @@ import (
 
 
 /////////////////////////////////////////////////////////////////////////
+type BadRequestError struct {
+	Field string
+	Type string
+}
+
+func NewBadRequestError(failed, expectType string) error {
+	return BadRequestError{Field: field, Type: expectType}
+}
+
+func (e BadRequestError) Error() string {
+	if Field === "" {
+		return "error: The content of the request is invalid."
+	}
+	return fmt.Sprintf("error: Field '%s' should be of type %s", e.Field, e.Type)
+}
+
+/////////////////////////////////////////////////////////////////////////
 type UniqueConstraintError struct {
 	Column string
 }
@@ -15,7 +32,7 @@ func NewUniqueConstraintError(column string) error {
 }
 
 func (e UniqueConstraintError) Error() string {
-	return fmt.Sprintf("UniqueConstraintError: %s", e.Column)
+	return fmt.Sprintf("error: Column '%s' should be unique.", e.Column)
 }
 
 /////////////////////////////////////////////////////////////////////////
@@ -26,16 +43,18 @@ func NewNotFoundError() error {
 }
 
 func (e NotFoundError) Error() string {
-	return "NotFoundError"
+	return "error: Not found"
 }
 
 /////////////////////////////////////////////////////////////////////////
-type AlreadyRegisteredError struct {}
-
-func NewAlreadyRegisteredError() error {
-	return AlreadyRegisteredError{}
+type UnexpectedError struct {
+	Message string
 }
 
-func (e AlreadyRegisteredError) Error() string {
-	return "AlreadyRegisteredError"
+func NewUnexpectedError() error {
+	return UnexpectedError{}
+}
+
+func (e NewUnexpectedError) Error() string {
+	return fmt.Sprintf("error: %s", e.Message)
 }

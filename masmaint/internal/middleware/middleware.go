@@ -7,6 +7,7 @@ import (
 
 	"masmaint/config"
 	"masmaint/internal/core/jwt"
+	"masmaint/internal/core/errs"
 )
 
 
@@ -45,5 +46,26 @@ func JwtAuthApiMiddleware() gin.HandlerFunc {
 			return
 		}
 		c.Next()
+	}
+}
+
+
+func ApiResponseMiddleware() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		c.Next()
+		if len(c.Errors) > 0 {
+			err := c.Errors.Last().Err
+
+			switch e := err.(type) {
+			case errs.BadRequestError:
+				c.JSON(http.StatusBadRequest, gin.H{"error": e.Error()})
+			case errs.NotFoundError:
+				c.JSON(http.StatusNotFound, gin.H{"error": e.Error()})
+			case errs.UniqueConstraintError:
+				c.JSON(http.StatusConflict, gin.H{"error": e.Error()})
+			default:
+				c.JSON(http.StatusInternalServerError, gin.H{"error": e.Error()})
+			}
+		}
 	}
 }

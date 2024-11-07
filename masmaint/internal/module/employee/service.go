@@ -2,7 +2,6 @@ package employee
 
 import (
 	"masmaint/internal/core/logger"
-	"masmaint/internal/core/errs"
 	"masmaint/internal/core/utils"
 )
 
@@ -28,7 +27,7 @@ func (srv *service) Get() ([]Employee, error) {
 	rows, err := srv.repository.Get(&Employee{})
 	if err != nil {
 		logger.Error(err.Error())
-		return []Employee{}, errs.NewError(err)
+		return []Employee{}, err
 	}
 	return rows, nil
 }
@@ -41,7 +40,7 @@ func (srv *service) Create(input PostBody) (Employee, error) {
 	id, err := srv.repository.Insert(&model, nil)
 	if err != nil {
 		logger.Error(err.Error())
-		return Employee{}, errs.NewError(err)
+		return Employee{}, err
 	}
 
 	return srv.repository.GetOne(&Employee{ Id: id })
@@ -54,7 +53,7 @@ func (srv *service) Update(input PutBody) (Employee, error) {
 
 	if err := srv.repository.Update(&model, nil); err != nil {
 		logger.Error(err.Error())
-		return Employee{}, errs.NewError(err)
+		return Employee{}, err
 	}
 
 	return srv.repository.GetOne(&Employee{ Id: input.Id })
@@ -67,7 +66,7 @@ func (srv *service) Delete(input DeleteBody) error {
 
 	if err := srv.repository.Delete(&model, nil); err != nil {
 		logger.Error(err.Error())
-		return errs.NewError(err)
+		return err
 	}
 	return nil
 }

@@ -2,7 +2,6 @@ package errs
 
 import (
 	"strings"
-	"reflect"
 	"encoding/json"
     "database/sql"
     "github.com/lib/pq"
@@ -18,8 +17,7 @@ func NewError(err error) error {
     }
 
 	if jsonErr, ok := err.(*json.UnmarshalTypeError); ok {
-		t := reflect.TypeOf(jsonErr.Type)
-		return NewBadRequestError(jsonErr.Field, t.Name())
+		return NewBadRequestError(jsonErr.Field, jsonErr.Type.String())
 	}
 	if _, ok := err.(*json.SyntaxError); ok {
 		return NewBadRequestError("", "")

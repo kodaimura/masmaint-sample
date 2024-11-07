@@ -2,6 +2,7 @@ package employee
 
 import (
 	"github.com/gin-gonic/gin"
+	"masmaint/internal/core/errs"
 )
 
 type controller struct {
@@ -25,8 +26,7 @@ func (ctr *controller) Get(c *gin.Context) {
 	ret, err := ctr.service.Get()
 
 	if err != nil {
-		c.JSON(500, gin.H{"error":"予期せぬエラーが発生しました。"})
-		c.Abort()
+		c.Error(errs.NewError(err))
 		return
 	}
 
@@ -38,16 +38,14 @@ func (ctr *controller) Get(c *gin.Context) {
 func (ctr *controller) Post(c *gin.Context) {
 	var req PostBody
 	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(400, gin.H{"error":"不正なリクエストです。"})
-		c.Abort()
+		c.Error(errs.NewError(err))
 		return
 	}
 
 	ret, err := ctr.service.Create(req)
 
 	if err != nil {
-		c.JSON(500, gin.H{"error":"予期せぬエラーが発生しました。"})
-		c.Abort()
+		c.Error(errs.NewError(err))
 		return
 	}
 
@@ -59,16 +57,14 @@ func (ctr *controller) Post(c *gin.Context) {
 func (ctr *controller) Put(c *gin.Context) {
 	var req PutBody
 	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(400, gin.H{"error":"不正なリクエストです。"})
-		c.Abort()
+		c.Error(errs.NewError(err))
 		return
 	}
 
 	ret, err := ctr.service.Update(req)
 
 	if err != nil {
-		c.JSON(500, gin.H{"error":"予期せぬエラーが発生しました。"})
-		c.Abort()
+		c.Error(errs.NewError(err))
 		return
 	}
 
@@ -80,14 +76,12 @@ func (ctr *controller) Put(c *gin.Context) {
 func (ctr *controller) Delete(c *gin.Context) {
 	var req DeleteBody
 	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(400, gin.H{"error":"不正なリクエストです。"})
-		c.Abort()
+		c.Error(errs.NewError(err))
 		return
 	}
 
 	if err := ctr.service.Delete(req); err != nil {
-		c.JSON(500, gin.H{"error":"予期せぬエラーが発生しました。"})
-		c.Abort()
+		c.Error(err)
 		return
 	}
 

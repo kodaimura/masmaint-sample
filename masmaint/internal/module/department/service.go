@@ -2,7 +2,6 @@ package department
 
 import (
 	"masmaint/internal/core/logger"
-	"masmaint/internal/core/errs"
 	"masmaint/internal/core/utils"
 )
 
@@ -28,7 +27,7 @@ func (srv *service) Get() ([]Department, error) {
 	rows, err := srv.repository.Get(&Department{})
 	if err != nil {
 		logger.Error(err.Error())
-		return []Department{}, errs.NewError(err)
+		return []Department{}, err
 	}
 	return rows, nil
 }
@@ -41,7 +40,7 @@ func (srv *service) Create(input PostBody) (Department, error) {
 	err := srv.repository.Insert(&model, nil)
 	if err != nil {
 		logger.Error(err.Error())
-		return Department{}, errs.NewError(err)
+		return Department{}, err
 	}
 
 	return srv.repository.GetOne(&Department{ Code: input.Code })
@@ -55,7 +54,7 @@ func (srv *service) Update(input PutBody) (Department, error) {
 	err := srv.repository.Delete(&model, nil)
 	if err != nil {
 		logger.Error(err.Error())
-		return Department{}, errs.NewError(err)
+		return Department{}, err
 	}
 
 	return srv.repository.GetOne(&Department{ Code: input.Code })
@@ -69,7 +68,7 @@ func (srv *service) Delete(input DeleteBody) error {
 	err := srv.repository.Delete(&model, nil)
 	if err != nil {
 		logger.Error(err.Error())
-		return errs.NewError(err)
+		return err
 	}
 	return nil
 }

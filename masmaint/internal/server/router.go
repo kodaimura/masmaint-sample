@@ -30,6 +30,8 @@ func SetWebRouter(r *gin.RouterGroup) {
 
 
 func SetApiRouter(r *gin.RouterGroup) {
+	r.Use(middleware.ApiResponseMiddleware())
+
 	employeeController := employee.NewController()
 	departmentController := department.NewController()
 

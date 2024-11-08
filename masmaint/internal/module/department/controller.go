@@ -24,7 +24,6 @@ func (ctr *controller) GetPage(c *gin.Context) {
 //GET /api/department
 func (ctr *controller) Get(c *gin.Context) {
 	ret, err := ctr.service.Get()
-
 	if err != nil {
 		c.Error(errs.NewError(err))
 		return
@@ -43,7 +42,6 @@ func (ctr *controller) Post(c *gin.Context) {
 	}
 
 	ret, err := ctr.service.Create(req)
-
 	if err != nil {
 		c.Error(errs.NewError(err))
 		return
@@ -62,7 +60,6 @@ func (ctr *controller) Put(c *gin.Context) {
 	}
 
 	ret, err := ctr.service.Update(req)
-
 	if err != nil {
 		c.Error(errs.NewError(err))
 		return

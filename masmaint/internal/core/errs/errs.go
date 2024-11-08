@@ -15,6 +15,13 @@ func NewError(err error) error {
     if err == nil {
         return nil
     }
+	switch err.(type) {
+	case BadRequestError:
+	case NotFoundError:
+	case UniqueConstraintError:
+	case UnexpectedError:
+		return err
+	}
 
 	if jsonErr, ok := err.(*json.UnmarshalTypeError); ok {
 		return NewBadRequestError(jsonErr.Field, jsonErr.Type.String())

@@ -1,26 +1,28 @@
+import { api } from '/js/api.js';
+
 /* 初期設定 */
 window.addEventListener('DOMContentLoaded', (event) => {
-	setUp();
+	getRows();
 });
 
 /* リロードボタン押下 */
 document.getElementById('reload').addEventListener('click', (event) => {
 	clearMessage();
 	document.getElementById('records').innerHTML = '';
-	setUp();
+	getRows();
 })
 
 /* 保存モーダル確定ボタン押下 */
 document.getElementById('modal-save-ok').addEventListener('click', (event) => {
 	clearMessage();
-	doPutAll();
-	doPost();
+	putRows();
+	postRow();
 })
 
 /* 削除モーダル確定ボタン押下 */
 document.getElementById('modal-delete-dk').addEventListener('click', (event) => {
 	clearMessage();
-	doDeleteAll();
+	deleteRows();
 })
 
 /* チェックボックスの選択一覧取得 */
@@ -30,7 +32,7 @@ const getDeleteTarget = () => {
 
 	for (let x of dels) {
 		if (x.checked) {
-			ret.push(x.value);
+			ret.push(JSON.parse(x.value));
 		}
 	}
 	return ret
@@ -116,22 +118,19 @@ const createTr = (elem) => {
 
 
 /* セットアップ */
-const setUp = async () => {
-	fetch('api/department')
-	.then(response => response.json())
-	.then(data  => renderTbody(data))
-	.then(() => {
-		addChangedAction('name');
-		addChangedAction('description');
-		addChangedAction('manager_id');
-		addChangedAction('location');
-		addChangedAction('budget');
-	});
+const getRows = async () => {
+	const rows = await api.get('department');
+	renderTbody(rows);
+	addChangedAction('name');
+	addChangedAction('description');
+	addChangedAction('manager_id');
+	addChangedAction('location');
+	addChangedAction('budget');
 }
 
 
 /* 一括更新 */
-const doPutAll = async () => {
+const putRows = async () => {
 	let successCount = 0;
 	let errorCount = 0;
 	
@@ -167,19 +166,9 @@ const doPutAll = async () => {
 				updated_at: updated_at[i].value,
 			}
 
-			await fetch('api/department', {
-				method: 'PUT',
-				headers: {'Content-Type': 'application/json'},
-				body: JSON.stringify(requestBody)
-			})
-			.then(response => {
-				if (!response.ok){
-					throw new Error(response.statusText);
-				}
-  				return response.json();
-  			})
-			.then(data => {
-				code[i].value = data.code;
+            try {
+                const data = await api.put('department', requestBody);
+                code[i].value = data.code;
 				name[i].value = data.name;
 				name_bk[i].value = data.name;
 				description[i].value = data.description;
@@ -200,9 +189,9 @@ const doPutAll = async () => {
 				budget[i].classList.remove('changed');
 
 				successCount += 1;
-			}).catch(error => {
-				errorCount += 1;				
-			})
+            } catch (e) {
+                errorCount += 1;
+            }
 		}
 	}
 
@@ -212,7 +201,7 @@ const doPutAll = async () => {
 
 
 /* 新規登録 */
-const doPost = async () => {
+const postRow = async () => {
 	let code = document.getElementById('code_new').value;
 	let name = document.getElementById('name_new').value;
 	let description = document.getElementById('description_new').value;
@@ -236,19 +225,9 @@ const doPost = async () => {
 			budget: budget ? parseFloat(budget) : null,
 		}
 
-		fetch('api/department', {
-			method: 'POST',
-			headers: {'Content-Type': 'application/json'},
-			body: JSON.stringify(requestBody)
-		})
-		.then(response => {
-			if (!response.ok){
-				throw new Error(response.statusText);
-			}
-  			return response.json();
-  		})
-		.then(data => {
-			document.getElementById('new').remove();
+        try {
+            const data = await api.post('department', requestBody);
+            document.getElementById('new').remove();
 
 			let tmpElem = document.createElement('tbody');
 			tmpElem.innerHTML = createTr(data);
@@ -260,36 +239,29 @@ const doPost = async () => {
 			document.getElementById('records').appendChild(tmpElem.firstChild);
 
 			renderMessage('登録', 1, true);
-		}).catch(error => {
-			renderMessage('登録', 1, false);
-		})
+        } catch (e) {
+            renderMessage('登録', 1, false);
+        }
 	}
 }
 
 
 /* 一括削除 */
-const doDeleteAll = async () => {
-	let ls = getDeleteTarget();
+const deleteRows = async () => {
+	let rows = getDeleteTarget();
 	let successCount = 0;
 	let errorCount = 0;
 
-	for (let x of ls) {
-		await fetch('api/department', {
-			method: 'DELETE',
-			headers: {'Content-Type': 'application/json'},
-			body: x
-		})
-		.then(response => {
-			if (!response.ok){
-				throw new Error(response.statusText);
-			}
-			successCount += 1;
-  		}).catch(error => {
-			errorCount += 1;
-		});
+	for (let row of rows) {
+        try {
+            await api.delete('department', row);
+            successCount += 1;
+        } catch (e) {
+            errorCount += 1;
+        }
 	}
 
-	setUp();
+	getRows();
 
 	renderMessage('削除', successCount, true);
 	renderMessage('削除', errorCount, false);

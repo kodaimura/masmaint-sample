@@ -1,26 +1,28 @@
+import { api } from '/js/api.js';
+
 /* 初期設定 */
 window.addEventListener('DOMContentLoaded', (event) => {
-	setUp();
+	getRows();
 });
 
 /* リロードボタン押下 */
 document.getElementById('reload').addEventListener('click', (event) => {
 	clearMessage();
 	document.getElementById('records').innerHTML = '';
-	setUp();
+	getRows();
 })
 
 /* 保存モーダル確定ボタン押下 */
 document.getElementById('modal-save-ok').addEventListener('click', (event) => {
 	clearMessage();
-	doPutAll();
-	doPost();
+	putRows();
+	postRow();
 })
 
 /* 削除モーダル確定ボタン押下 */
 document.getElementById('modal-delete-dk').addEventListener('click', (event) => {
 	clearMessage();
-	doDeleteAll();
+	deleteRows();
 })
 
 /* チェックボックスの選択一覧取得 */
@@ -30,7 +32,7 @@ const getDeleteTarget = () => {
 
 	for (let x of dels) {
 		if (x.checked) {
-			ret.push(x.value);
+			ret.push(JSON.parse(x.value));
 		}
 	}
 	return ret
@@ -124,26 +126,23 @@ const createTr = (elem) => {
 
 
 /* セットアップ */
-const setUp = () => {
-	fetch('api/employee')
-	.then(response => response.json())
-	.then(data  => renderTbody(data))
-	.then(() => {
-		addChangedAction('first_name');
-		addChangedAction('last_name');
-		addChangedAction('email');
-		addChangedAction('phone_number');
-		addChangedAction('address');
-		addChangedAction('hire_date');
-		addChangedAction('job_title');
-		addChangedAction('department_code');
-		addChangedAction('salary');
-	});
+const getRows = async () => {
+    const rows = await api.get('employee');
+	renderTbody(rows);
+	addChangedAction('first_name');
+	addChangedAction('last_name');
+	addChangedAction('email');
+	addChangedAction('phone_number');
+	addChangedAction('address');
+	addChangedAction('hire_date');
+	addChangedAction('job_title');
+	addChangedAction('department_code');
+	addChangedAction('salary');
 }
 
 
 /* 一括更新 */
-const doPutAll = async () => {
+const putRows = async () => {
 	let successCount = 0;
 	let errorCount = 0;
 	
@@ -195,19 +194,9 @@ const doPutAll = async () => {
 				updated_at: updated_at[i].value,
 			}
 
-			await fetch('api/employee', {
-				method: 'PUT',
-				headers: {'Content-Type': 'application/json'},
-				body: JSON.stringify(requestBody)
-			})
-			.then(response => {
-				if (!response.ok){
-					throw new Error(response.statusText);
-				}
-  				return response.json();
-  			})
-			.then(data => {
-				id[i].value = data.id;
+            try {
+                const data = await api.put('employee', requestBody);
+                id[i].value = data.id;
 				first_name[i].value = data.first_name;
 				first_name_bk[i].value = data.first_name;
 				last_name[i].value = data.last_name;
@@ -240,9 +229,9 @@ const doPutAll = async () => {
 				salary[i].classList.remove('changed');
 
 				successCount += 1;
-			}).catch(error => {
-				errorCount += 1;				
-			})
+            } catch (e) {
+                errorCount += 1;
+            }
 		}
 	}
 
@@ -252,7 +241,7 @@ const doPutAll = async () => {
 
 
 /* 新規登録 */
-const doPost = () => {
+const postRow = async () => {
 	let first_name = document.getElementById('first_name_new').value;
 	let last_name = document.getElementById('last_name_new').value;
 	let email = document.getElementById('email_new').value;
@@ -285,19 +274,9 @@ const doPost = () => {
 			salary: salary ? parseFloat(salary) : null,
 		}
 
-		fetch('api/employee', {
-			method: 'POST',
-			headers: {'Content-Type': 'application/json'},
-			body: JSON.stringify(requestBody)
-		})
-		.then(response => {
-			if (!response.ok){
-				throw new Error(response.statusText);
-			}
-  			return response.json();
-  		})
-		.then(data => {
-			document.getElementById('new').remove();
+        try {
+            const data = await api.post('employee', requestBody);
+            document.getElementById('new').remove();
 
 			let tmpElem = document.createElement('tbody');
 			tmpElem.innerHTML = createTr(data);
@@ -309,36 +288,29 @@ const doPost = () => {
 			document.getElementById('records').appendChild(tmpElem.firstChild);
 
 			renderMessage('登録', 1, true);
-		}).catch(error => {
-			renderMessage('登録', 1, false);
-		})
+        } catch (e) {
+            renderMessage('登録', 1, false);
+        }
 	}
 }
 
 
 /* 一括削除 */
-const doDeleteAll = async () => {
-	let ls = getDeleteTarget();
+const deleteRows = async () => {
+	let rows = getDeleteTarget();
 	let successCount = 0;
 	let errorCount = 0;
 
-	for (let x of ls) {
-		await fetch('api/employee', {
-			method: 'DELETE',
-			headers: {'Content-Type': 'application/json'},
-			body: x
-		})
-		.then(response => {
-			if (!response.ok){
-				throw new Error(response.statusText);
-			}
-			successCount += 1;
-  		}).catch(error => {
-			errorCount += 1;
-		});
+	for (let row of rows) {
+        try {
+            await api.delete('employee', row);
+            successCount += 1;
+        } catch (e) {
+            errorCount += 1;
+        }
 	}
 
-	setUp();
+	getRows();
 
 	renderMessage('削除', successCount, true);
 	renderMessage('削除', errorCount, false);

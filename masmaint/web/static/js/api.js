@@ -70,8 +70,8 @@ class Api {
         return this.apiFetch(endpoint, 'PUT', body);
     };
     
-    delete = async (endpoint) => {
-        return this.apiFetch(endpoint, 'DELETE', null);
+    delete = async (endpoint, body = null) => {
+        return this.apiFetch(endpoint, 'DELETE', body);
     };
 
     handleHttpError = (error) => {

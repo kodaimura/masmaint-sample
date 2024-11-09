@@ -116,7 +116,7 @@ const createTr = (elem) => {
 
 
 /* セットアップ */
-const setUp = () => {
+const setUp = async () => {
 	fetch('api/department')
 	.then(response => response.json())
 	.then(data  => renderTbody(data))
@@ -212,7 +212,7 @@ const doPutAll = async () => {
 
 
 /* 新規登録 */
-const doPost = () => {
+const doPost = async () => {
 	let code = document.getElementById('code_new').value;
 	let name = document.getElementById('name_new').value;
 	let description = document.getElementById('description_new').value;

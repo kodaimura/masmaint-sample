@@ -1,6 +1,6 @@
 {{define "modal"}}
 <!-- 削除確認モーダル -->
-<div class="modal" tabindex="-1" id="ModalDelete">
+<div class="modal" tabindex="-1" id="modal-delete">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -12,14 +12,14 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">キャンセル</button>
-                <button type="button" class="btn btn-danger" data-bs-dismiss="modal" id="ModalDeleteOk">削除</button>
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal" id="modal-delete-dk">削除</button>
             </div>
         </div>
     </div>
 </div>
 
 <!-- 保存確認モーダル -->
-<div class="modal" tabindex="-1" id="ModalSave">
+<div class="modal" tabindex="-1" id="modal-save">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -31,7 +31,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">キャンセル</button>
-                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="ModalSaveOk">保存</button>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="modal-save-ok">保存</button>
             </div>
         </div>
     </div>

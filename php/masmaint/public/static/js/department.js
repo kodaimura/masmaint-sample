@@ -11,14 +11,14 @@ document.getElementById('reload').addEventListener('click', (event) => {
 })
 
 /* 保存モーダル確定ボタン押下 */
-document.getElementById('ModalSaveOk').addEventListener('click', (event) => {
+document.getElementById('modal-save-ok').addEventListener('click', (event) => {
 	clearMessage();
 	doPutAll();
 	doPost();
 })
 
 /* 削除モーダル確定ボタン押下 */
-document.getElementById('ModalDeleteOk').addEventListener('click', (event) => {
+document.getElementById('modal-delete-dk').addEventListener('click', (event) => {
 	clearMessage();
 	doDeleteAll();
 })

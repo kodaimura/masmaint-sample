@@ -1,38 +1,51 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-{{template "head" .}}
+    {{template "head" .}}
 </head>
+
 <body>
     {{template "header" .}}
-    <h2 class="ps-2 my-2">department（部署マスタ）</h2>
-    <hr class="mt-0 mb-2">
-    <div class="w-100 vh-100 px-3">
-        <div id=message></div>
-        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#ModalDeleteAll">削除</button>
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ModalSaveAll">保存</button>
-        <button type="button" class="btn btn-secondary" id="reload">リロード</button>
-        <div class="table-responsive mt-2" style="height:70%">
-        <table class="table table-hover table-bordered table-sm">
-            <thead>
-                <tr class="fixed-table-header bg-light">
-                    <th>削除</th>
-                    <th>code<spnn style='color:red;'>*</spnn></th>
-                    <th>name<spnn style='color:red;'>*</spnn></th>
-                    <th>description</th>
-                    <th>manager_id</th>
-                    <th>location</th>
-                    <th>budget<spnn style='color:red;'>*</spnn></th>
-                    <th>created_at</th>
-                    <th>updated_at</th>
-                </tr>
-            </thead>
-            <tbody id="records">
-            </tbody>
-        </table>
-        </div>
+    <div class="container-fluid">
+        {{template "menu" .}}
+        <main>
+            <div class="w-100 px-3 py-3">
+                <h1 class="h4">department</h1>
+                <div id="message"></div>
+                <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                    data-bs-target="#ModalDeleteAll">削除</button>
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                    data-bs-target="#ModalSaveAll">保存</button>
+                <button type="button" class="btn btn-secondary" id="reload">リロード</button>
+                <div class="table-responsive mt-2" style="max-height: calc(100vh - 170px);">
+                    <table class="table table-hover table-bordered table-sm">
+                        <thead>
+                            <tr class="fixed-table-header bg-light">
+                                <th>削除</th>
+                                <th>code<spnn style='color:red;'>*</spnn>
+                                </th>
+                                <th>name<spnn style='color:red;'>*</spnn>
+                                </th>
+                                <th>description</th>
+                                <th>manager_id</th>
+                                <th>location</th>
+                                <th>budget<spnn style='color:red;'>*</spnn>
+                                </th>
+                                <th>created_at</th>
+                                <th>updated_at</th>
+                            </tr>
+                        </thead>
+                        <tbody id="records">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
     </div>
+    {{template "modal" .}}
     <script src="js/department.js"></script>
     {{template "footer" .}}
 </body>
+
 </html>

@@ -5,26 +5,31 @@ html {
     width: -webkit-fill-available;
 }
 
-body {
-    min-height: 100vh;
-    min-height: -webkit-fill-available;
-    min-width: 100vw;
-    min-width: -webkit-fill-available;
+main {
+    padding-top: 50px;
+    overflow-x: auto;
+    padding-left: 220px;
 }
 
-main {
+header{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 50px;
+    font-weight: 500;
+    background-color: #555;
+    color: white;
     display: flex;
-    flex-wrap: nowrap;
-    height: 100vh;
-    height: -webkit-fill-available;
-    max-height: 100vh;
-    overflow-x: auto;
-    overflow-y: hidden;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 15px;
 }
 
 footer{
-    position: absolute;
+    position: fixed;
     bottom: 0;
+    z-index: 20;
 }
 
 table input{
@@ -57,4 +62,16 @@ table td {
     height: 30px;
     display: flex;
     align-items: center;
+}
+
+.sidemenu {
+    position: fixed;
+    top: 50px;
+    left: 0;
+    bottom: 0;
+    width: 220px;
+    background-color: #fafafa;
+    padding-top: 10px;
+    z-index: 10;
+    height: calc(100vh - 50px);
 }

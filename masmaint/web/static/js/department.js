@@ -11,14 +11,14 @@ document.getElementById('reload').addEventListener('click', (event) => {
 })
 
 /* 保存モーダル確定ボタン押下 */
-document.getElementById('ModalSaveAllOk').addEventListener('click', (event) => {
+document.getElementById('ModalSaveOk').addEventListener('click', (event) => {
 	clearMessage();
 	doPutAll();
 	doPost();
 })
 
 /* 削除モーダル確定ボタン押下 */
-document.getElementById('ModalDeleteAllOk').addEventListener('click', (event) => {
+document.getElementById('ModalDeleteOk').addEventListener('click', (event) => {
 	clearMessage();
 	doDeleteAll();
 })
@@ -231,9 +231,9 @@ const doPost = () => {
 			code: code,
 			name: name,
 			description: description,
-			manager_id: manager_id,
+			manager_id: manager_id ? parseInt(manager_id) : null,
 			location: location,
-			budget: budget,
+			budget: budget ? parseFloat(budget) : null,
 		}
 
 		fetch('api/department', {

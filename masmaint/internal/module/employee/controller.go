@@ -25,7 +25,7 @@ func (ctr *controller) GetPage(c *gin.Context) {
 func (ctr *controller) Get(c *gin.Context) {
 	ret, err := ctr.service.Get()
 	if err != nil {
-		c.Error(errs.NewError(err))
+		c.Error(errs.NewServiceError(err))
 		return
 	}
 
@@ -37,13 +37,13 @@ func (ctr *controller) Get(c *gin.Context) {
 func (ctr *controller) Post(c *gin.Context) {
 	var req PostBody
 	if err := c.ShouldBindJSON(&req); err != nil {
-		c.Error(errs.NewError(err))
+		c.Error(errs.NewBindError(err, &req))
 		return
 	}
 
 	ret, err := ctr.service.Create(req)
 	if err != nil {
-		c.Error(errs.NewError(err))
+		c.Error(errs.NewServiceError(err))
 		return
 	}
 
@@ -55,13 +55,13 @@ func (ctr *controller) Post(c *gin.Context) {
 func (ctr *controller) Put(c *gin.Context) {
 	var req PutBody
 	if err := c.ShouldBindJSON(&req); err != nil {
-		c.Error(errs.NewError(err))
+		c.Error(errs.NewBindError(err, &req))
 		return
 	}
 
 	ret, err := ctr.service.Update(req)
 	if err != nil {
-		c.Error(errs.NewError(err))
+		c.Error(errs.NewServiceError(err))
 		return
 	}
 
@@ -73,12 +73,12 @@ func (ctr *controller) Put(c *gin.Context) {
 func (ctr *controller) Delete(c *gin.Context) {
 	var req DeleteBody
 	if err := c.ShouldBindJSON(&req); err != nil {
-		c.Error(errs.NewError(err))
+		c.Error(errs.NewBindError(err, &req))
 		return
 	}
 
 	if err := ctr.service.Delete(req); err != nil {
-		c.Error(err)
+		c.Error(errs.NewServiceError(err))
 		return
 	}
 

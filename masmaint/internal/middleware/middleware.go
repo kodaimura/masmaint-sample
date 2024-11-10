@@ -60,7 +60,7 @@ func ApiResponseMiddleware() gin.HandlerFunc {
 			case errs.BadRequestError:
 				c.JSON(http.StatusBadRequest, gin.H{
 					"error": e.Error(), 
-					"details": gin.H{ "field": e.Field, "type": e.Type },
+					"details": gin.H{ "field": e.Field },
 				})
 			case errs.NotFoundError:
 				c.JSON(http.StatusNotFound, gin.H{

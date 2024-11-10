@@ -8,18 +8,17 @@ import (
 /////////////////////////////////////////////////////////////////////////
 type BadRequestError struct {
 	Field string
-	Type string
 }
 
-func NewBadRequestError(field, expectType string) error {
-	return BadRequestError{Field: field, Type: expectType}
+func NewBadRequestError(field string) error {
+	return BadRequestError{Field: field}
 }
 
 func (e BadRequestError) Error() string {
 	if e.Field == "" {
 		return "error: The content of the request is invalid."
 	}
-	return fmt.Sprintf("error: Field '%s' should be of type %s", e.Field, e.Type)
+	return fmt.Sprintf("error: Field '%s' binding failed.", e.Field)
 }
 
 /////////////////////////////////////////////////////////////////////////

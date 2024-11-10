@@ -2,7 +2,7 @@ package employee
 
 
 type PostBody struct {
-	FirstName string `json:"first_name"`
+	FirstName string `json:"first_name" binding:"required"`
 	LastName *string `json:"last_name"`
 	Email *string `json:"email"`
 	PhoneNumber *string `json:"phone_number"`
@@ -14,8 +14,8 @@ type PostBody struct {
 }
 
 type PutBody struct {
-	Id int `json:"id"`
-	FirstName string `json:"first_name"`
+	Id int `json:"id" binding:"required"`
+	FirstName string `json:"first_name" binding:"required"`
 	LastName *string `json:"last_name"`
 	Email *string `json:"email"`
 	PhoneNumber *string `json:"phone_number"`
@@ -27,5 +27,5 @@ type PutBody struct {
 }
 
 type DeleteBody struct {
-	Id int `json:"id"`
+	Id int `json:"id" binding:"required"`
 }

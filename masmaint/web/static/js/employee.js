@@ -12,22 +12,22 @@ document.getElementById('reload').addEventListener('click', (event) => {
     getRows();
 })
 
-/* 保存モーダル確定ボタン押下 */
+/* 保存モーダル確定押下 */
 document.getElementById('modal-save-ok').addEventListener('click', (event) => {
     clearMessage();
     putRows();
     postRow();
 })
 
-/* 削除モーダル確定ボタン押下 */
+/* 削除モーダル確定押下 */
 document.getElementById('modal-delete-dk').addEventListener('click', (event) => {
     clearMessage();
     deleteRows();
 })
 
 /* チェックボックスの選択一覧取得 */
-const getDeleteTarget = () => {
-    let dels = document.getElementsByName('del');
+const getDeleteTargetRows = () => {
+    const dels = document.getElementsByName('del');
     let ret = [];
 
     for (let x of dels) {
@@ -40,7 +40,7 @@ const getDeleteTarget = () => {
 
 const renderMessage = (msg, count, isSuccess) => {
     if (count !== 0) {
-        let message = document.createElement('div');
+        const message = document.createElement('div');
         message.textContent = `${count}件の${msg}に${isSuccess ? '成功' : '失敗'}しました。`
         message.className = `alert alert-${isSuccess ? 'success' : 'danger'} alert-custom my-1`;
         document.getElementById('message').appendChild(message);
@@ -55,10 +55,10 @@ const nullToEmpty = (s) => {
     return (s == null) ? '' : s;
 }
 
-/* チェンジアクション */
-const changeAction = (event) => {
-    let target = event.target;
-    let target_bk = target.nextElementSibling;
+/* changeイベントハンドラ */
+const handleChange = (event) => {
+    const target = event.target;
+    const target_bk = target.nextElementSibling;
 
     if (target_bk == null) return
 
@@ -70,10 +70,10 @@ const changeAction = (event) => {
 }
 
 /* <tbody></tbody>内のレコードにチェンジアクション追加 */
-const addChangedAction = (columnName) => {
-    let elems = document.getElementsByName(columnName);
+const addChangeEvent = (columnName) => {
+    const elems = document.getElementsByName(columnName);
     for (const elem of elems) {
-        elem.addEventListener('change', changeAction);
+        elem.addEventListener('change', handleChange);
     }
 }
 
@@ -137,15 +137,15 @@ const getRows = async () => {
     document.getElementById('records').innerHTML = '';
     const rows = await api.get('employee');
     renderTbody(rows);
-    addChangedAction('first_name');
-    addChangedAction('last_name');
-    addChangedAction('email');
-    addChangedAction('phone_number');
-    addChangedAction('address');
-    addChangedAction('hire_date');
-    addChangedAction('job_title');
-    addChangedAction('department_code');
-    addChangedAction('salary');
+    addChangeEvent('first_name');
+    addChangeEvent('last_name');
+    addChangeEvent('email');
+    addChangeEvent('phone_number');
+    addChangeEvent('address');
+    addChangeEvent('hire_date');
+    addChangeEvent('job_title');
+    addChangeEvent('department_code');
+    addChangeEvent('salary');
 }
 
 
@@ -293,7 +293,7 @@ const postRow = async () => {
 
             document.getElementById('new').remove();
             const tr = createTr(data);
-            tr.addEventListener('change', changeAction);
+            tr.addEventListener('change', handleChange);
             document.getElementById('records').appendChild(tr);
             document.getElementById('records').appendChild(createTrNew());
 
@@ -310,7 +310,7 @@ const postRow = async () => {
 
 /* 一括削除 */
 const deleteRows = async () => {
-    let rows = getDeleteTarget();
+    const rows = getDeleteTargetRows();
     let successCount = 0;
     let errorCount = 0;
 

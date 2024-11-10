@@ -7,7 +7,7 @@ type PostBody struct {
 	Description *string `json:"description"`
 	ManagerId *int `json:"manager_id"`
 	Location *string `json:"location"`
-	Budget float64 `json:"budget" binding:"required"`
+	Budget *float64 `json:"budget"`
 }
 
 type PutBody struct {
@@ -16,7 +16,7 @@ type PutBody struct {
 	Description *string `json:"description"`
 	ManagerId *int `json:"manager_id"`
 	Location *string `json:"location"`
-	Budget float64 `json:"budget" binding:"required"`
+	Budget *float64 `json:"budget"`
 }
 
 type DeleteBody struct {

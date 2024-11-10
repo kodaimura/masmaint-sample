@@ -1,4 +1,5 @@
 import { api } from '/js/api.js';
+import { parseFloatOrReturnOriginal, parseIntOrReturnOriginal } from './script.js';
 
 /* 初期設定 */
 window.addEventListener('DOMContentLoaded', (event) => {
@@ -159,9 +160,9 @@ const putRows = async () => {
 				code: code[i].value,
 				name: name[i].value,
 				description: description[i].value,
-				manager_id: manager_id[i].value,
+				manager_id: parseIntOrReturnOriginal(manager_id[i].value),
 				location: location[i].value,
-				budget: budget[i].value,
+				budget: parseFloatOrReturnOriginal(budget[i].value),
 				created_at: created_at[i].value,
 				updated_at: updated_at[i].value,
 			}
@@ -220,9 +221,9 @@ const postRow = async () => {
 			code: code,
 			name: name,
 			description: description,
-			manager_id: manager_id ? parseInt(manager_id) : null,
+			manager_id: parseIntOrReturnOriginal(manager_id),
 			location: location,
-			budget: budget ? parseFloat(budget) : null,
+			budget: parseFloatOrReturnOriginal(budget),
 		}
 
         try {

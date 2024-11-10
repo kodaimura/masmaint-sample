@@ -1,4 +1,5 @@
 import { api } from '/js/api.js';
+import { parseFloatOrReturnOriginal, parseIntOrReturnOriginal } from './script.js';
 
 /* 初期設定 */
 window.addEventListener('DOMContentLoaded', (event) => {
@@ -180,7 +181,7 @@ const putRows = async () => {
 			|| (salary[i].value !== salary_bk[i].value)) {
 
 			let requestBody = {
-				id: id[i].value,
+				id: parseIntOrReturnOriginal(id[i].value),
 				first_name: first_name[i].value,
 				last_name: last_name[i].value,
 				email: email[i].value,
@@ -189,7 +190,7 @@ const putRows = async () => {
 				hire_date: hire_date[i].value,
 				job_title: job_title[i].value,
 				department_code: department_code[i].value,
-				salary: salary[i].value,
+				salary: parseFloatOrReturnOriginal(salary[i].value),
 				created_at: created_at[i].value,
 				updated_at: updated_at[i].value,
 			}
@@ -271,7 +272,7 @@ const postRow = async () => {
 			hire_date: hire_date,
 			job_title: job_title,
 			department_code: department_code,
-			salary: salary ? parseFloat(salary) : null,
+			salary: parseFloatOrReturnOriginal(salary),
 		}
 
         try {

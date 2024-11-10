@@ -134,6 +134,7 @@ const createTr = (elem) => {
 
 /* セットアップ */
 const getRows = async () => {
+    document.getElementById('records').innerHTML = '';
     const rows = await api.get('employee');
     renderTbody(rows);
     addChangedAction('first_name');
@@ -299,7 +300,7 @@ const postRow = async () => {
             renderMessage('登録', 1, true);
         } catch (e) {
             Object.keys(rowMap).forEach(key => {
-                rowMap[key].classList.toggle('error', key === e.details.field);
+                rowMap[key].classList.toggle('error', key === e.details.field || `employee.${key}` === e.details.column);
             });
             renderMessage('登録', 1, false);
         }

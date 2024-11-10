@@ -9,7 +9,7 @@ type PostBody struct {
 	Address *string `json:"address"`
 	HireDate *string `json:"hire_date"`
 	JobTitle *string `json:"job_title"`
-	DepartmentCode *string `db:"json:"department_code"`
+	DepartmentCode *string `json:"department_code"`
 	Salary *float64 `json:"salary"`
 }
 
@@ -22,7 +22,7 @@ type PutBody struct {
 	Address *string `json:"address"`
 	HireDate *string `json:"hire_date"`
 	JobTitle *string `json:"job_title"`
-	DepartmentCode *string `db:"json:"department_code"`
+	DepartmentCode *string `json:"department_code"`
 	Salary *float64 `json:"salary"`
 }
 

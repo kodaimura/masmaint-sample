@@ -47,8 +47,12 @@ table td {
     min-width: 50px;
 }
 
-.changed {
-    background-color: #ffc107;
+input.changed {
+    background-color: rgba(255, 193, 7, 0.6);
+}
+
+input.error {
+    background-color: rgba(255, 105, 105, 0.6);
 }
 
 .fixed-table-header {

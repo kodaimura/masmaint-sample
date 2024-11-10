@@ -51,7 +51,7 @@ func (srv *service) Update(input PutBody) (Department, error) {
 	var model Department
 	utils.MapFields(&model, input)
 
-	err := srv.repository.Delete(&model, nil)
+	err := srv.repository.Update(&model, nil)
 	if err != nil {
 		logger.Error(err.Error())
 		return Department{}, err

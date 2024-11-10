@@ -58,13 +58,25 @@ func ApiResponseMiddleware() gin.HandlerFunc {
 
 			switch e := err.(type) {
 			case errs.BadRequestError:
-				c.JSON(http.StatusBadRequest, gin.H{"error": e.Error(), "field": e.Field, "type": e.Type})
+				c.JSON(http.StatusBadRequest, gin.H{
+					"error": e.Error(), 
+					"details": gin.H{ "field": e.Field, "type": e.Type },
+				})
 			case errs.NotFoundError:
-				c.JSON(http.StatusNotFound, gin.H{"error": e.Error()})
+				c.JSON(http.StatusNotFound, gin.H{
+					"error": e.Error(),
+					"details": gin.H{},
+				})
 			case errs.UniqueConstraintError:
-				c.JSON(http.StatusConflict, gin.H{"error": e.Error(), "column": e.Column})
+				c.JSON(http.StatusConflict, gin.H{
+					"error": e.Error(),
+					"details": gin.H{ "column": e.Column },
+				})
 			default:
-				c.JSON(http.StatusInternalServerError, gin.H{"error": e.Error()})
+				c.JSON(http.StatusInternalServerError, gin.H{
+					"error": e.Error(),
+					"details": gin.H{},
+				})
 			}
 		}
 	}

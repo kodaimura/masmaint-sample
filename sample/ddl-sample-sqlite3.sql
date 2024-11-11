@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS department (
 	description TEXT,
 	manager_id INTEGER,
 	location TEXT,
-	budget NUMERIC NOT NULL,
+	budget NUMERIC,
 	created_at TEXT NOT NULL DEFAULT (DATETIME('now', 'localtime')),
 	updated_at TEXT NOT NULL DEFAULT (DATETIME('now', 'localtime')),
 	PRIMARY KEY(code)

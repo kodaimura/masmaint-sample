@@ -1,8 +1,2 @@
-*.log
-*.db
-*.sqlite3
-.env
-local.env
 .DS_Store
-main
 

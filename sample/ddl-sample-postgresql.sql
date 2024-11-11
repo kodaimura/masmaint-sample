@@ -5,6 +5,17 @@ create function set_update_time() returns trigger AS '
     END;
 ' language 'plpgsql';
 
+CREATE TABLE department (
+  code TEXT PRIMARY KEY,
+  name TEXT NOT NULL,
+  description TEXT,
+  manager_id INTEGER,
+  location TEXT,
+  budget NUMERIC(10, 2),
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
 CREATE TABLE employee (
   id SERIAL PRIMARY KEY,
   first_name TEXT NOT NULL,
@@ -16,17 +27,6 @@ CREATE TABLE employee (
   job_title TEXT,
   department_code TEXT,
   salary NUMERIC(10, 2),
-  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
-);
-
-CREATE TABLE department (
-  code TEXT PRIMARY KEY,
-  name TEXT NOT NULL,
-  description TEXT,
-  manager_id INTEGER,
-  location TEXT,
-  budget NUMERIC(10, 2) NOT NULL,
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );

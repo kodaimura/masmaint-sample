@@ -1,4 +1,4 @@
-package department
+package supplier
 
 import (
 	"masmaint/internal/core/logger"
@@ -6,9 +6,9 @@ import (
 )
 
 type Service interface {
-	Get() ([]Department, error)
-	Create(input PostBody) (Department, error)
-	Update(input PutBody) (Department, error)
+	Get() ([]Supplier, error)
+	Create(input PostBody) (Supplier, error)
+	Update(input PutBody) (Supplier, error)
 	Delete(input DeleteBody) error
 }
 
@@ -23,46 +23,46 @@ func NewService() Service {
 }
 
 
-func (srv *service) Get() ([]Department, error) {
-	rows, err := srv.repository.Get(&Department{})
+func (srv *service) Get() ([]Supplier, error) {
+	rows, err := srv.repository.Get(&Supplier{})
 	if err != nil {
 		logger.Error(err.Error())
-		return []Department{}, err
+		return []Supplier{}, err
 	}
 	return rows, nil
 }
 
 
-func (srv *service) Create(input PostBody) (Department, error) {
-	var model Department
+func (srv *service) Create(input PostBody) (Supplier, error) {
+	var model Supplier
 	utils.MapFields(&model, input)
 
-	err := srv.repository.Insert(&model, nil)
+	id, err := srv.repository.Insert(&model, nil)
 	if err != nil {
 		logger.Error(err.Error())
-		return Department{}, err
+		return Supplier{}, err
 	}
 
-	return srv.repository.GetOne(&Department{ Code: input.Code })
+	return srv.repository.GetOne(&Supplier{ Id: id })
 }
 
 
-func (srv *service) Update(input PutBody) (Department, error) {
-	var model Department
+func (srv *service) Update(input PutBody) (Supplier, error) {
+	var model Supplier
 	utils.MapFields(&model, input)
 
 	err := srv.repository.Update(&model, nil)
 	if err != nil {
 		logger.Error(err.Error())
-		return Department{}, err
+		return Supplier{}, err
 	}
 
-	return srv.repository.GetOne(&Department{ Code: input.Code })
+	return srv.repository.GetOne(&Supplier{ Id: input.Id })
 }
 
 
 func (srv *service) Delete(input DeleteBody) error {
-	var model Department
+	var model Supplier
 	utils.MapFields(&model, input)
 
 	err := srv.repository.Delete(&model, nil)

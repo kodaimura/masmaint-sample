@@ -7,24 +7,33 @@ import (
 	"masmaint/internal/core/jwt"
 	"masmaint/internal/middleware"
 
-	"masmaint/internal/module/employee"
-	"masmaint/internal/module/department"
+	"masmaint/internal/module/customer"
+	"masmaint/internal/module/product_category"
+	"masmaint/internal/module/product"
+	"masmaint/internal/module/supplier"
+	"masmaint/internal/module/payment_method"
 )
 
 /*
  Routing for "/" 
 */
 func SetWebRouter(r *gin.RouterGroup) {
-	employeeController := employee.NewController()
-	departmentController := department.NewController()
+	customerController := customer.NewController()
+	product_categoryController := product_category.NewController()
+	productController := product.NewController()
+	supplierController := supplier.NewController()
+	payment_methodController := payment_method.NewController()
 
 	r.GET("/login", func(c *gin.Context) { c.HTML(200, "login.html", gin.H{}) })
 
 	auth := r.Group("", middleware.JwtAuthMiddleware())
 	{
 		auth.GET("/", func(c *gin.Context) { c.HTML(200, "index.html", gin.H{}) })
-		auth.GET("/employee", employeeController.GetPage)
-		auth.GET("/department", departmentController.GetPage)
+		auth.GET("/customer", customerController.GetPage)
+		auth.GET("/product_category", product_categoryController.GetPage)
+		auth.GET("/product", productController.GetPage)
+		auth.GET("/supplier", supplierController.GetPage)
+		auth.GET("/payment_method", payment_methodController.GetPage)
 	}
 }
 
@@ -32,8 +41,11 @@ func SetWebRouter(r *gin.RouterGroup) {
 func SetApiRouter(r *gin.RouterGroup) {
 	r.Use(middleware.ApiResponseMiddleware())
 
-	employeeController := employee.NewController()
-	departmentController := department.NewController()
+	customerController := customer.NewController()
+	product_categoryController := product_category.NewController()
+	productController := product.NewController()
+	supplierController := supplier.NewController()
+	payment_methodController := payment_method.NewController()
 
 	//カスタム推奨
 	r.POST("/login", func(c *gin.Context) { 
@@ -56,14 +68,29 @@ func SetApiRouter(r *gin.RouterGroup) {
 
 	auth := r.Group("", middleware.JwtAuthApiMiddleware())
 	{
-		auth.GET("/employee", employeeController.Get)
-		auth.POST("/employee", employeeController.Post)
-		auth.PUT("/employee", employeeController.Put)
-		auth.DELETE("/employee", employeeController.Delete)
+		auth.GET("/customer", customerController.Get)
+		auth.POST("/customer", customerController.Post)
+		auth.PUT("/customer", customerController.Put)
+		auth.DELETE("/customer", customerController.Delete)
 
-		auth.GET("/department", departmentController.Get)
-		auth.POST("/department", departmentController.Post)
-		auth.PUT("/department", departmentController.Put)
-		auth.DELETE("/department", departmentController.Delete)
+		auth.GET("/product_category", product_categoryController.Get)
+		auth.POST("/product_category", product_categoryController.Post)
+		auth.PUT("/product_category", product_categoryController.Put)
+		auth.DELETE("/product_category", product_categoryController.Delete)
+
+		auth.GET("/product", productController.Get)
+		auth.POST("/product", productController.Post)
+		auth.PUT("/product", productController.Put)
+		auth.DELETE("/product", productController.Delete)
+
+		auth.GET("/supplier", supplierController.Get)
+		auth.POST("/supplier", supplierController.Post)
+		auth.PUT("/supplier", supplierController.Put)
+		auth.DELETE("/supplier", supplierController.Delete)
+
+		auth.GET("/payment_method", payment_methodController.Get)
+		auth.POST("/payment_method", payment_methodController.Post)
+		auth.PUT("/payment_method", payment_methodController.Put)
+		auth.DELETE("/payment_method", payment_methodController.Delete)
 	}
 }

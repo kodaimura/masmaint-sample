@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	{{template "head" .}}
+</head>
+
+<body>
+	{{template "header" .}}
+	<div class="container-fluid">
+		{{template "menu" .}}
+		<main>
+			<div class="w-100 px-3 py-3">
+				<h1 class="h4">customer</h1>
+				<div id="message"></div>
+				<button type="button" class="btn btn-danger" data-bs-toggle="modal"
+					data-bs-target="#modal-delete">削除</button>
+				<button type="button" class="btn btn-primary" data-bs-toggle="modal"
+					data-bs-target="#modal-save">保存</button>
+				<button type="button" class="btn btn-secondary" id="reload">リロード</button>
+				<div class="table-responsive mt-2" style="max-height: calc(100vh - 190px);">
+					<table class="table table-hover table-bordered table-sm">
+						<thead class="fixed-table-header bg-light">
+							<tr>
+								<th>削除</th>
+								<th>id</th>
+								<th>name<spnn class="text-danger">*</spnn></th>
+								<th>email<spnn class="text-danger">*</spnn></th>
+								<th>phone</th>
+								<th>address</th>
+								<th>is_active<spnn class="text-danger">*</spnn></th>
+								<th>created_at</th>
+								<th>updated_at</th>
+							</tr>
+						</thead>
+						<tbody id="records">
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</main>
+	</div>
+	{{template "modal" .}}
+	<script type="module" src="js/customer.js"></script>
+	{{template "footer" .}}
+</body>
+
+</html>

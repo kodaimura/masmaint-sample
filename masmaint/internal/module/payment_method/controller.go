@@ -1,4 +1,4 @@
-package employee
+package payment_method
 
 import (
 	"github.com/gin-gonic/gin"
@@ -15,13 +15,13 @@ func NewController() *controller {
 }
 
 
-//GET /employee
+//GET /payment_method
 func (ctr *controller) GetPage(c *gin.Context) {
-	c.HTML(200, "employee.html", gin.H{})
+	c.HTML(200, "payment_method.html", gin.H{})
 }
 
 
-//GET /api/employee
+//GET /api/payment_method
 func (ctr *controller) Get(c *gin.Context) {
 	ret, err := ctr.service.Get()
 	if err != nil {
@@ -33,7 +33,7 @@ func (ctr *controller) Get(c *gin.Context) {
 }
 
 
-//POST /api/employee
+//POST /api/payment_method
 func (ctr *controller) Post(c *gin.Context) {
 	var req PostBody
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -51,7 +51,7 @@ func (ctr *controller) Post(c *gin.Context) {
 }
 
 
-//PUT /api/employee
+//PUT /api/payment_method
 func (ctr *controller) Put(c *gin.Context) {
 	var req PutBody
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -69,7 +69,7 @@ func (ctr *controller) Put(c *gin.Context) {
 }
 
 
-//DELETE /api/employee
+//DELETE /api/payment_method
 func (ctr *controller) Delete(c *gin.Context) {
 	var req DeleteBody
 	if err := c.ShouldBindJSON(&req); err != nil {

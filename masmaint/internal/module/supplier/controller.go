@@ -1,4 +1,4 @@
-package department
+package supplier
 
 import (
 	"github.com/gin-gonic/gin"
@@ -15,13 +15,13 @@ func NewController() *controller {
 }
 
 
-//GET /department
+//GET /supplier
 func (ctr *controller) GetPage(c *gin.Context) {
-	c.HTML(200, "department.html", gin.H{})
+	c.HTML(200, "supplier.html", gin.H{})
 }
 
 
-//GET /api/department
+//GET /api/supplier
 func (ctr *controller) Get(c *gin.Context) {
 	ret, err := ctr.service.Get()
 	if err != nil {
@@ -33,7 +33,7 @@ func (ctr *controller) Get(c *gin.Context) {
 }
 
 
-//POST /api/department
+//POST /api/supplier
 func (ctr *controller) Post(c *gin.Context) {
 	var req PostBody
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -51,7 +51,7 @@ func (ctr *controller) Post(c *gin.Context) {
 }
 
 
-//PUT /api/department
+//PUT /api/supplier
 func (ctr *controller) Put(c *gin.Context) {
 	var req PutBody
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -69,7 +69,7 @@ func (ctr *controller) Put(c *gin.Context) {
 }
 
 
-//DELETE /api/department
+//DELETE /api/supplier
 func (ctr *controller) Delete(c *gin.Context) {
 	var req DeleteBody
 	if err := c.ShouldBindJSON(&req); err != nil {

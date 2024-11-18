@@ -1,41 +1,94 @@
-CREATE TABLE IF NOT EXISTS department (
-	code TEXT,
-	name TEXT NOT NULL,
-	description TEXT,
-	manager_id INTEGER,
-	location TEXT,
-	budget NUMERIC,
-	created_at TEXT NOT NULL DEFAULT (DATETIME('now', 'localtime')),
-	updated_at TEXT NOT NULL DEFAULT (DATETIME('now', 'localtime')),
-	PRIMARY KEY(code)
+CREATE TABLE customer (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    email TEXT NOT NULL UNIQUE,
+    phone TEXT DEFAULT NULL,
+    address TEXT DEFAULT NULL,
+    is_active INTEGER NOT NULL DEFAULT 1,
+    created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+    updated_at TEXT DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE IF NOT EXISTS employee (
-	id INTEGER PRIMARY KEY AUTOINCREMENT,
-	first_name TEXT NOT NULL,
-	last_name TEXT,
-	email TEXT,
-	phone_number TEXT,
-	address TEXT,
-	hire_date TEXT,
-	job_title TEXT,
-	department_code TEXT,
-	salary NUMERIC,
-	created_at TEXT NOT NULL DEFAULT (DATETIME('now', 'localtime')),
-	updated_at TEXT NOT NULL DEFAULT (DATETIME('now', 'localtime'))
+CREATE TABLE product_category (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL UNIQUE,
+    parent_category_id INTEGER DEFAULT NULL,
+    description TEXT DEFAULT NULL,
+    sort_order INTEGER NOT NULL DEFAULT 0,
+    is_active INTEGER NOT NULL DEFAULT 1,
+    created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+    updated_at TEXT DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE product (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL UNIQUE,
+    description TEXT DEFAULT NULL,
+    price REAL NOT NULL CHECK(price >= 0),
+    stock_quantity INTEGER NOT NULL DEFAULT 0,
+    category_id INTEGER NOT NULL,
+    created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+    updated_at TEXT DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (category_id) REFERENCES product_category(id)
+);
 
-CREATE TRIGGER IF NOT EXISTS trg_department_upd AFTER UPDATE ON department
+CREATE TABLE supplier (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL UNIQUE,
+    contact_person TEXT DEFAULT NULL,
+    phone TEXT DEFAULT NULL,
+    email TEXT DEFAULT NULL,
+    address TEXT DEFAULT NULL,
+    is_active INTEGER NOT NULL DEFAULT 1,
+    created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+    updated_at TEXT DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE payment_method (
+    code TEXT PRIMARY KEY,
+    name TEXT NOT NULL UNIQUE,
+    description TEXT DEFAULT NULL,
+    is_active INTEGER NOT NULL DEFAULT 1,
+    created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+    updated_at TEXT DEFAULT CURRENT_TIMESTAMP
+);
+
+-- customer テーブルの updated_at 更新トリガー
+CREATE TRIGGER update_customer_updated_at
+AFTER UPDATE ON customer
+FOR EACH ROW
 BEGIN
-	UPDATE department
-	SET updated_at = DATETIME('now', 'localtime')
-	WHERE rowid == NEW.rowid;
+    UPDATE customer SET updated_at = CURRENT_TIMESTAMP WHERE id = OLD.id;
 END;
 
-CREATE TRIGGER IF NOT EXISTS trg_employee_upd AFTER UPDATE ON employee
+-- product_category テーブルの updated_at 更新トリガー
+CREATE TRIGGER update_product_category_updated_at
+AFTER UPDATE ON product_category
+FOR EACH ROW
 BEGIN
-	UPDATE employee
-	SET updated_at = DATETIME('now', 'localtime')
-	WHERE rowid == NEW.rowid;
+    UPDATE product_category SET updated_at = CURRENT_TIMESTAMP WHERE id = OLD.id;
+END;
+
+-- product テーブルの updated_at 更新トリガー
+CREATE TRIGGER update_product_updated_at
+AFTER UPDATE ON product
+FOR EACH ROW
+BEGIN
+    UPDATE product SET updated_at = CURRENT_TIMESTAMP WHERE id = OLD.id;
+END;
+
+-- supplier テーブルの updated_at 更新トリガー
+CREATE TRIGGER update_supplier_updated_at
+AFTER UPDATE ON supplier
+FOR EACH ROW
+BEGIN
+    UPDATE supplier SET updated_at = CURRENT_TIMESTAMP WHERE id = OLD.id;
+END;
+
+-- payment_method テーブルの updated_at 更新トリガー
+CREATE TRIGGER update_payment_method_updated_at
+AFTER UPDATE ON payment_method
+FOR EACH ROW
+BEGIN
+    UPDATE payment_method SET updated_at = CURRENT_TIMESTAMP WHERE code = OLD.code;
 END;

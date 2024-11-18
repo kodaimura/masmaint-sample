@@ -18,10 +18,10 @@ import (
 */
 func SetWebRouter(r *gin.RouterGroup) {
 	customerController := customer.NewController()
-	product_categoryController := product_category.NewController()
+	productCategoryController := product_category.NewController()
 	productController := product.NewController()
 	supplierController := supplier.NewController()
-	payment_methodController := payment_method.NewController()
+	paymentMethodController := payment_method.NewController()
 
 	r.GET("/login", func(c *gin.Context) { c.HTML(200, "login.html", gin.H{}) })
 
@@ -29,10 +29,10 @@ func SetWebRouter(r *gin.RouterGroup) {
 	{
 		auth.GET("/", func(c *gin.Context) { c.HTML(200, "index.html", gin.H{}) })
 		auth.GET("/customer", customerController.GetPage)
-		auth.GET("/product_category", product_categoryController.GetPage)
+		auth.GET("/product_category", productCategoryController.GetPage)
 		auth.GET("/product", productController.GetPage)
 		auth.GET("/supplier", supplierController.GetPage)
-		auth.GET("/payment_method", payment_methodController.GetPage)
+		auth.GET("/payment_method", paymentMethodController.GetPage)
 	}
 }
 
@@ -41,10 +41,10 @@ func SetApiRouter(r *gin.RouterGroup) {
 	r.Use(middleware.ApiResponseMiddleware())
 
 	customerController := customer.NewController()
-	product_categoryController := product_category.NewController()
+	productCategoryController := product_category.NewController()
 	productController := product.NewController()
 	supplierController := supplier.NewController()
-	payment_methodController := payment_method.NewController()
+	paymentMethodController := payment_method.NewController()
 
 	//カスタム推奨
 	r.POST("/login", func(c *gin.Context) { 
@@ -69,10 +69,10 @@ func SetApiRouter(r *gin.RouterGroup) {
 		auth.PUT("/customer", customerController.Put)
 		auth.DELETE("/customer", customerController.Delete)
 
-		auth.GET("/product_category", product_categoryController.Get)
-		auth.POST("/product_category", product_categoryController.Post)
-		auth.PUT("/product_category", product_categoryController.Put)
-		auth.DELETE("/product_category", product_categoryController.Delete)
+		auth.GET("/product_category", productCategoryController.Get)
+		auth.POST("/product_category", productCategoryController.Post)
+		auth.PUT("/product_category", productCategoryController.Put)
+		auth.DELETE("/product_category", productCategoryController.Delete)
 
 		auth.GET("/product", productController.Get)
 		auth.POST("/product", productController.Post)
@@ -84,9 +84,9 @@ func SetApiRouter(r *gin.RouterGroup) {
 		auth.PUT("/supplier", supplierController.Put)
 		auth.DELETE("/supplier", supplierController.Delete)
 
-		auth.GET("/payment_method", payment_methodController.Get)
-		auth.POST("/payment_method", payment_methodController.Post)
-		auth.PUT("/payment_method", payment_methodController.Put)
-		auth.DELETE("/payment_method", payment_methodController.Delete)
+		auth.GET("/payment_method", paymentMethodController.Get)
+		auth.POST("/payment_method", paymentMethodController.Post)
+		auth.PUT("/payment_method", paymentMethodController.Put)
+		auth.DELETE("/payment_method", paymentMethodController.Delete)
 	}
 }

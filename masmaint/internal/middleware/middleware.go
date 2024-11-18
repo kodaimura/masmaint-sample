@@ -29,9 +29,12 @@ func BasicAuthMiddleware() gin.HandlerFunc {
 func JwtAuthMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		if err := jwt.Auth(c); err != nil {
-			c.Redirect(303, "/login")
-			c.Abort()
-			return
+			//c.Redirect(303, "/login")
+			//c.Abort()
+			//return
+
+			//サンプルのため認証スキップ
+			c.Next()
 		}
 		c.Next()
 	}
@@ -41,9 +44,12 @@ func JwtAuthMiddleware() gin.HandlerFunc {
 func JwtAuthApiMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		if err := jwt.Auth(c); err != nil {
-			c.JSON(401, gin.H{"error": err.Error()})
-			c.Abort()
-			return
+			//c.JSON(401, gin.H{"error": err.Error()})
+			//c.Abort()
+			//return
+
+			//サンプルのため認証スキップ
+			c.Next()
 		}
 		c.Next()
 	}

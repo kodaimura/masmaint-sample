@@ -2,8 +2,8 @@ package server
 
 import (
 	"github.com/gin-gonic/gin"
-	"masmaint/config"
-	"masmaint/internal/core/jwt"
+	//"masmaint/config"
+	//"masmaint/internal/core/jwt"
 	"masmaint/internal/middleware"
 
 	"masmaint/internal/module/customer"
@@ -23,7 +23,7 @@ func SetWebRouter(r *gin.RouterGroup) {
 	supplierController := supplier.NewController()
 	paymentMethodController := payment_method.NewController()
 
-	r.GET("/login", func(c *gin.Context) { c.HTML(200, "login.html", gin.H{}) })
+	//r.GET("/login", func(c *gin.Context) { c.HTML(200, "login.html", gin.H{}) })
 
 	auth := r.Group("", middleware.JwtAuthMiddleware())
 	{
@@ -47,6 +47,7 @@ func SetApiRouter(r *gin.RouterGroup) {
 	paymentMethodController := payment_method.NewController()
 
 	//カスタム推奨
+	/*
 	r.POST("/login", func(c *gin.Context) { 
 		var body map[string]string
 		c.ShouldBindJSON(&body)
@@ -61,6 +62,7 @@ func SetApiRouter(r *gin.RouterGroup) {
 			c.JSON(401, gin.H{"error": "ユーザ名またはパスワードが異なります。"})
 		}
 	})
+	*/
 
 	auth := r.Group("", middleware.JwtAuthApiMiddleware())
 	{

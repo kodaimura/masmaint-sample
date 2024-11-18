@@ -1,7 +1,6 @@
 package server
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"masmaint/config"
 	"masmaint/internal/core/jwt"
@@ -53,9 +52,6 @@ func SetApiRouter(r *gin.RouterGroup) {
 		c.ShouldBindJSON(&body)
 		name := body["username"]
 		pass := body["password"]
-		fmt.Println(name)
-
-		fmt.Println(pass)
 
 		cf := config.GetConfig()
 		if name == cf.AuthUser && pass == cf.AuthPass {

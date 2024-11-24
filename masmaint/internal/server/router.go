@@ -25,7 +25,7 @@ func SetWebRouter(r *gin.RouterGroup) {
 
 	//r.GET("/login", func(c *gin.Context) { c.HTML(200, "login.html", gin.H{}) })
 
-	auth := r.Group("", middleware.JwtAuthMiddleware())
+	auth := r.Group("", middleware.JwtAuth())
 	{
 		auth.GET("/", func(c *gin.Context) { c.HTML(200, "index.html", gin.H{}) })
 		auth.GET("/customer", customerController.GetPage)
@@ -38,7 +38,7 @@ func SetWebRouter(r *gin.RouterGroup) {
 
 
 func SetApiRouter(r *gin.RouterGroup) {
-	r.Use(middleware.ApiResponseMiddleware())
+	r.Use(middleware.ApiResponse())
 
 	customerController := customer.NewController()
 	productCategoryController := product_category.NewController()
@@ -64,7 +64,7 @@ func SetApiRouter(r *gin.RouterGroup) {
 	})
 	*/
 
-	auth := r.Group("", middleware.JwtAuthApiMiddleware())
+	auth := r.Group("", middleware.ApiJwtAuth())
 	{
 		auth.GET("/customer", customerController.Get)
 		auth.POST("/customer", customerController.Post)

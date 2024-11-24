@@ -1,8 +1,10 @@
 package product_category
 
 import (
+	"masmaint/internal/module"
 	"masmaint/internal/core/logger"
 	"masmaint/internal/core/utils"
+	"masmaint/internal/core/errs"
 )
 
 type Service interface {
@@ -27,7 +29,7 @@ func (srv *service) Get() ([]ProductCategory, error) {
 	rows, err := srv.repository.Get(&ProductCategory{})
 	if err != nil {
 		logger.Error(err.Error())
-		return []ProductCategory{}, err
+		return []ProductCategory{},  errs.NewUnexpectedError(err.Error())
 	}
 	return rows, nil
 }
@@ -39,11 +41,19 @@ func (srv *service) Create(input PostBody) (ProductCategory, error) {
 
 	id, err := srv.repository.Insert(&model, nil)
 	if err != nil {
+		if column, ok := module.GetConflictColumn(err); ok {
+			return ProductCategory{}, errs.NewConflictError(column)
+		}
 		logger.Error(err.Error())
-		return ProductCategory{}, err
+		return ProductCategory{}, errs.NewUnexpectedError(err.Error())
 	}
 
-	return srv.repository.GetOne(&ProductCategory{ Id: id })
+	row, err := srv.repository.GetOne(&ProductCategory{ Id: id })
+	if err != nil {
+		logger.Error(err.Error())
+		return ProductCategory{}, errs.NewUnexpectedError(err.Error())
+	}
+	return row, nil
 }
 
 
@@ -53,11 +63,19 @@ func (srv *service) Update(input PutBody) (ProductCategory, error) {
 
 	err := srv.repository.Update(&model, nil)
 	if err != nil {
+		if column, ok := module.GetConflictColumn(err); ok {
+			return ProductCategory{}, errs.NewConflictError(column)
+		}
 		logger.Error(err.Error())
-		return ProductCategory{}, err
+		return ProductCategory{}, errs.NewUnexpectedError(err.Error())
 	}
 
-	return srv.repository.GetOne(&ProductCategory{ Id: input.Id })
+	row, err := srv.repository.GetOne(&ProductCategory{ Id: input.Id })
+	if err != nil {
+		logger.Error(err.Error())
+		return ProductCategory{}, errs.NewUnexpectedError(err.Error())
+	}
+	return row, nil
 }
 
 
@@ -68,7 +86,7 @@ func (srv *service) Delete(input DeleteBody) error {
 	err := srv.repository.Delete(&model, nil)
 	if err != nil {
 		logger.Error(err.Error())
-		return err
+		return errs.NewUnexpectedError(err.Error())
 	}
 	return nil
 }

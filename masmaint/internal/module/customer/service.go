@@ -1,8 +1,10 @@
 package customer
 
 import (
+	"masmaint/internal/module"
 	"masmaint/internal/core/logger"
 	"masmaint/internal/core/utils"
+	"masmaint/internal/core/errs"
 )
 
 type Service interface {
@@ -27,7 +29,7 @@ func (srv *service) Get() ([]Customer, error) {
 	rows, err := srv.repository.Get(&Customer{})
 	if err != nil {
 		logger.Error(err.Error())
-		return []Customer{}, err
+		return []Customer{},  errs.NewUnexpectedError(err.Error())
 	}
 	return rows, nil
 }
@@ -39,11 +41,19 @@ func (srv *service) Create(input PostBody) (Customer, error) {
 
 	id, err := srv.repository.Insert(&model, nil)
 	if err != nil {
+		if column, ok := module.GetConflictColumn(err); ok {
+			return Customer{}, errs.NewConflictError(column)
+		}
 		logger.Error(err.Error())
-		return Customer{}, err
+		return Customer{}, errs.NewUnexpectedError(err.Error())
 	}
 
-	return srv.repository.GetOne(&Customer{ Id: id })
+	row, err := srv.repository.GetOne(&Customer{ Id: id })
+	if err != nil {
+		logger.Error(err.Error())
+		return Customer{}, errs.NewUnexpectedError(err.Error())
+	}
+	return row, nil
 }
 
 
@@ -53,11 +63,19 @@ func (srv *service) Update(input PutBody) (Customer, error) {
 
 	err := srv.repository.Update(&model, nil)
 	if err != nil {
+		if column, ok := module.GetConflictColumn(err); ok {
+			return Customer{}, errs.NewConflictError(column)
+		}
 		logger.Error(err.Error())
-		return Customer{}, err
+		return Customer{}, errs.NewUnexpectedError(err.Error())
 	}
 
-	return srv.repository.GetOne(&Customer{ Id: input.Id })
+	row, err := srv.repository.GetOne(&Customer{ Id: input.Id })
+	if err != nil {
+		logger.Error(err.Error())
+		return Customer{}, errs.NewUnexpectedError(err.Error())
+	}
+	return row, nil
 }
 
 
@@ -68,7 +86,7 @@ func (srv *service) Delete(input DeleteBody) error {
 	err := srv.repository.Delete(&model, nil)
 	if err != nil {
 		logger.Error(err.Error())
-		return err
+		return errs.NewUnexpectedError(err.Error())
 	}
 	return nil
 }

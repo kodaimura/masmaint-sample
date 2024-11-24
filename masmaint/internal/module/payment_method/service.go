@@ -29,7 +29,7 @@ func (srv *service) Get() ([]PaymentMethod, error) {
 	rows, err := srv.repository.Get(&PaymentMethod{})
 	if err != nil {
 		logger.Error(err.Error())
-		return []PaymentMethod{},  errs.NewUnexpectedError(err.Error())
+		return []PaymentMethod{}, errs.NewUnexpectedError(err.Error())
 	}
 	return rows, nil
 }

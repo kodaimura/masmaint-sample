@@ -29,7 +29,7 @@ func (srv *service) Get() ([]Customer, error) {
 	rows, err := srv.repository.Get(&Customer{})
 	if err != nil {
 		logger.Error(err.Error())
-		return []Customer{},  errs.NewUnexpectedError(err.Error())
+		return []Customer{}, errs.NewUnexpectedError(err.Error())
 	}
 	return rows, nil
 }

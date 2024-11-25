@@ -206,7 +206,11 @@ const putRows = async () => {
 				successCount += 1;
 			} catch (e) {
 				Object.keys(rowMap).forEach(key => {
-					rowMap[key].classList.toggle('error', key === e.details.field);
+					rowMap[key].classList.toggle(
+						'error',
+						[e.details.field, e.details.column].includes(key) ||
+						[e.details.field, e.details.column].includes(`product.${key}`)
+					);
 				});
 				errorCount += 1;
 			}
@@ -249,7 +253,11 @@ const postRow = async () => {
 			renderMessage('登録', 1, true);
 		} catch (e) {
 			Object.keys(rowMap).forEach(key => {
-				rowMap[key].classList.toggle('error', key === e.details.field || `product.${key}` === e.details.column);
+				rowMap[key].classList.toggle(
+					'error',
+					[e.details.field, e.details.column].includes(key) ||
+					[e.details.field, e.details.column].includes(`product.${key}`)
+                );
 			});
 			renderMessage('登録', 1, false);
 		}

@@ -11,4 +11,4 @@ services:
     tty: true
     environment:
       ENV: local
-    command: sh -c "go mod tidy && go run cmd/masmaint/main.go"
+    command: sh -c "go run cmd/masmaint/main.go"

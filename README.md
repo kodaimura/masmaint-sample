@@ -12,7 +12,7 @@ DB_NAME="sqlite3のファイルのパス"
 ## 起動
 ```
 cd path/to/masmaint
-make dev
+make up
 ```
 http://localhost:3000  
 
